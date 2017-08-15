@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Rust Pills — Download de arquivos</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Mais um crawler está surgindo na praça. Decidi fazer em Rust, só pra exercitar. Por agora a tarefa aqui é simples: dada um lista de URLs, baixa-se o conteúdo de todas e salva-se localmente. Bora construir isso.">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores e sysadmins</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Rust Pills — Download de arquivos</h2>
+
+<h3>Mais um crawler está surgindo na praça. Decidi fazer em Rust, só pra exercitar. Por agora a tarefa aqui é simples: dada um lista de URLs, baixa-se o conteúdo de todas e salva-se localmente. Bora construir isso.</h3>
+
+<p><img src="images/suplemento-ferro.jpg" alt="Rust Pills"></p>
+
+<h4>A Tarefa</h4>
+
+<p>Recapitulando, dada uma lista de URLs, faz-se o download dos arquivos e os salva localmente em disco. Opa, mas não um por um, isso será feito usando concorrência.</p>
+
+<p>Há alguns passos a seguir até o objetivo final, que serão seguidos aqui, com muita refatoração e incrementos.</p>
+
+<h4>A biblioteca</h4>
+
+<p>Será usada uma biblioteca pronta para o grande problema aqui: fazer o download de um arquivo via HTTP. A escolhida é a biblioteca hyper, que possui rotinas tanto para cliente como para ervidor. Existem outras opções, mas essa é a biblioteca padrão de fato.</p>
+
+<h4>A Estrutura</h4>
+
+<p>Em primeiro lugar, deve-se criar o projeto:</p>
+<pre><code class="language-rust">
+$ cargo new crawler --bin
+     Created binary (application) `crawler` project
+
+</code></pre>
+<p>A estrutura criada:</p>
+<pre><code class="language-rust">
+$ tree crawler&#x2F;
+crawler&#x2F;
+├── Cargo.toml
+└── src
+ └── main.rs
+
+1 directory, 2 files
+
+</code></pre>
+<p>O primeiro esboço do programa deve aceitar uma lista de URLs e trabalhar sobre ela:</p>
+<pre><code class="language-rust">
+&#x2F;&#x2F;! Crawler — My own crawler in Rust!
+
+use std::env; &#x2F;&#x2F; argumentos env::args
+
+fn main() {
+    &#x2F;&#x2F; Pega os argumentos, mas ignorando o primeiro
+    &#x2F;&#x2F; que é o nome do programa.
+    let mut args = env::args();
+    args.next();
+
+    &#x2F;&#x2F; imprime os argumetos
+    for url in args {
+        println!(“{}”, url);
+    }
+}
+
+</code></pre>
+<p>Salve como <code class="prettyprint">crawler/src/main.rs</code>.</p>
+
+<p>Apenas como lembrete, nesse ponto ainda temos um programa simples, sem dependências, portanto pode-se compilá-lo diretamente com o comando rustc. Será gerado um arquivo binário executável com o mesmo nome do arquivo fonte, sem o sufixo.</p>
+
+<p>Compilando e executando:</p>
+<pre><code class="language-rust">
+$ cargo build
+ Compiling crawler v0.1.0 (file:&#x2F;&#x2F;&#x2F;home&#x2F;paulohrpinheiro&#x2F;Dropbox&#x2F;projetos&#x2F;crawler)
+ Finished debug [unoptimized + debuginfo] target(s) in 0.46 secs
+$ target&#x2F;debug&#x2F;crawler primeiro segundo terceiro quarto
+primeiro
+segundo
+terceiro
+quarto
+
+</code></pre>
+<p>Agora o objetivo é pegar cada argumento que o programa receber e tentar fazer o download do conteúdo. Nova nova versão:</p>
+<pre><code class="language-rust">
+&#x2F;&#x2F;! Crawler — My own crawler in Rust!
+
+extern crate hyper; &#x2F;&#x2F; biblioteca (crate) não padrão
+
+use std::env; &#x2F;&#x2F; argumentos env::args
+
+fn main() {
+    &#x2F;&#x2F; Pega os argumentos, mas ignorando o primeiro
+    &#x2F;&#x2F; que é o nome do programa.
+    let mut args = env::args();
+    args.next();
+
+    &#x2F;&#x2F; Pega o conteúdo de cada URL
+    for url in args {
+        println!(“{}”, url);
+
+        &#x2F;&#x2F; “pega” a URL
+        let client = hyper::Client::new();
+        match client.get(&amp;url).send() {
+            Ok(content) =&gt; println!(“{:?}”, content),
+            Err(error) =&gt; println!(“{:?}”, error),
+        }
+
+        println!(“”);
+     }
+}
+
+</code></pre>
+<p>Deve-se informar o cargo a nova dependência (hyper), e a versão desejada. Basta editar o arquivo Cargo.toml e adicionar a entrada em dependencies:</p>
+<pre><code class="language-rust">
+[package]
+name = &quot;crawler&quot;
+version = &quot;0.1.0&quot;
+authors = [&quot;Paulo H. R. Pinheiro &lt;paulohrpinheiro@gmail.com&gt;&quot;]
+
+[dependencies]
+hyper = &quot;0.9&quot;
+
+</code></pre>
+<p>Compilando, vê-se que o cargo resolve as dependências, baixa e compila o que for necessário. Eu tive um problema com o openssl, pois não tinha o pacote openssl-devel (uso Fedora) instalado:</p>
+<pre><code class="language-rust">
+$ cargo build
+   Compiling bitflags v0.7.0
+   Compiling gcc v0.3.38
+   Compiling lazy_static v0.2.2
+   Compiling semver v0.1.20
+   Compiling winapi v0.2.8
+   Compiling unicode-normalization v0.1.2
+   Compiling typeable v0.1.2
+   Compiling language-tags v0.2.2
+   Compiling winapi-build v0.1.1
+   Compiling rustc-serialize v0.3.21
+   Compiling httparse v1.2.0
+   Compiling openssl v0.7.14
+   Compiling pkg-config v0.3.8
+   Compiling rustc_version v0.1.7
+   Compiling traitobject v0.0.1
+   Compiling openssl-sys-extras v0.7.14
+   Compiling kernel32-sys v0.2.2
+   Compiling unicase v1.4.0
+   Compiling matches v0.1.4
+   Compiling unicode-bidi v0.2.3
+   Compiling libc v0.2.17
+   Compiling openssl-sys v0.7.17
+Build failed, waiting for other jobs to finish...
+error: failed to run custom build command for `openssl v0.7.14`
+process didn&#x27;t exit successfully: `&#x2F;home&#x2F;paulohrpinheiro&#x2F;Dropbox&#x2F;projetos&#x2F;crawler&#x2F;target&#x2F;debug&#x2F;build&#x2F;openssl-5464f8f6e728c35a&#x2F;build-script-build` (exit code: 101)
+--- stdout
+TARGET = Some(&quot;x86_64-unknown-linux-gnu&quot;)
+OPT_LEVEL = Some(&quot;0&quot;)
+PROFILE = Some(&quot;debug&quot;)
+TARGET = Some(&quot;x86_64-unknown-linux-gnu&quot;)
+debug=true opt-level=0
+HOST = Some(&quot;x86_64-unknown-linux-gnu&quot;)
+TARGET = Some(&quot;x86_64-unknown-linux-gnu&quot;)
+TARGET = Some(&quot;x86_64-unknown-linux-gnu&quot;)
+HOST = Some(&quot;x86_64-unknown-linux-gnu&quot;)
+CC_x86_64-unknown-linux-gnu = None
+CC_x86_64_unknown_linux_gnu = None
+HOST_CC = None
+CC = None
+HOST = Some(&quot;x86_64-unknown-linux-gnu&quot;)
+TARGET = Some(&quot;x86_64-unknown-linux-gnu&quot;)
+HOST = Some(&quot;x86_64-unknown-linux-gnu&quot;)
+CFLAGS_x86_64-unknown-linux-gnu = None
+CFLAGS_x86_64_unknown_linux_gnu = None
+HOST_CFLAGS = None
+CFLAGS = None
+running: &quot;cc&quot; &quot;-O0&quot; &quot;-ffunction-sections&quot; &quot;-fdata-sections&quot; &quot;-g&quot; &quot;-m64&quot; &quot;-fPIC&quot; &quot;-o&quot; &quot;&#x2F;home&#x2F;paulohrpinheiro&#x2F;Dropbox&#x2F;projetos&#x2F;crawler&#x2F;target&#x2F;debug&#x2F;build&#x2F;openssl-5464f8f6e728c35a&#x2F;out&#x2F;src&#x2F;c_helpers.o&quot; &quot;-c&quot; &quot;src&#x2F;c_helpers.c&quot;
+cargo:warning=src&#x2F;c_helpers.c:1:25: fatal error: openssl&#x2F;ssl.h: No such file or directory
+cargo:warning= #include &lt;openssl&#x2F;ssl.h&gt;
+cargo:warning=                         ^
+cargo:warning=compilation terminated.
+ExitStatus(ExitStatus(256))
+
+command did not execute successfully, got: exit code: 1
+
+--- stderr
+thread &#x27;main&#x27; panicked at &#x27;explicit panic&#x27;, &#x2F;home&#x2F;paulohrpinheiro&#x2F;.cargo&#x2F;registry&#x2F;src&#x2F;github.com-1ecc6299db9ec823&#x2F;gcc-0.3.38&#x2F;src&#x2F;lib.rs:958
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+
+</code></pre>
+<p>Instalado o openssl-devel (em meu caso <code class="prettyprint">sudo dnf install openssl-devel</code>), voltemos à compilação:</p>
+<pre><code class="language-rust">
+$ cargo build
+   Compiling idna v0.1.0
+   Compiling log v0.3.6
+   Compiling num_cpus v1.1.0
+   Compiling time v0.1.35
+   Compiling mime v0.2.2
+   Compiling hpack v0.2.0
+   Compiling openssl v0.7.14
+   Compiling openssl-sys-extras v0.7.14
+   Compiling openssl-sys v0.7.17
+   Compiling url v1.2.3
+   Compiling solicit v0.4.4
+   Compiling cookie v0.2.5
+   Compiling openssl-verify v0.1.0
+   Compiling hyper v0.9.12
+   Compiling crawler v0.1.0 (file:&#x2F;&#x2F;&#x2F;home&#x2F;paulohrpinheiro&#x2F;Dropbox&#x2F;projetos&#x2F;crawler)
+    Finished debug [unoptimized + debuginfo] target(s) in 39.63 secs
+
+</code></pre>
+<p>Executando o programa com algumas URLs:</p>
+<pre><code class="language-rust">
+$ target&#x2F;debug&#x2F;crawler http:&#x2F;&#x2F;nonexist.nemaquinemnachina https:&#x2F;&#x2F;paulohrpinheiro.github.io https:&#x2F;&#x2F;api.github.com&#x2F;zen
+http:&#x2F;&#x2F;nonexist.nemaquinemnachina
+Io(Error { repr: Custom(Custom { kind: Other, error: StringError(&quot;failed to lookup address information: Name or service not known&quot;) }) })
+
+https:&#x2F;&#x2F;paulohrpinheiro.github.io
+Response { status: Ok, headers: Headers { X-GitHub-Request-Id: 17EB2719:767D:69B12B1:58306ED8, Date: Sat, 19 Nov 2016 15:52:29 GMT, Connection: keep-alive, Content-Length: 2662, Vary: Accept-Encoding, Last-Modified: Thu, 17 Nov 2016 01:02:36 GMT, X-Cache-Hits: 1, Via: 1.1 varnish, Server: GitHub.com, X-Served-By: cache-atl6221-ATL, Access-Control-Allow-Origin: *, Expires: Sat, 19 Nov 2016 15:35:13 GMT, X-Fastly-Request-ID: 9fe5d7c6fe7ee4d17b01c1a30db131df80af6efa, Content-Type: text&#x2F;html; charset=utf-8, Cache-Control: max-age=600, X-Timer: S1479570749.034835,VS0,VE0, X-Cache: HIT, Age: 292, Accept-Ranges: bytes, }, version: Http11, url: &quot;https:&#x2F;&#x2F;paulohrpinheiro.github.io&#x2F;&quot;, status_raw: RawStatus(200, &quot;OK&quot;), message: Http11Message { is_proxied: false, method: None, stream: Wrapper { obj: Some(Reading(SizedReader(remaining=2662))) } } }
+
+https:&#x2F;&#x2F;api.github.com&#x2F;zen
+Response { status: Forbidden, headers: Headers { Connection: close, Cache-Control: no-cache, Content-Type: text&#x2F;html, }, version: Http10, url: &quot;https:&#x2F;&#x2F;api.github.com&#x2F;zen&quot;, status_raw: RawStatus(403, &quot;Forbidden&quot;), message: Http11Message { is_proxied: false, method: None, stream: Wrapper { obj: Some(Reading(EofReader)) } } }
+
+</code></pre>
+<p>O endereço inexistente, tudo bem, o segundo endereço tá legal, mas tem algum erro no terceiro, mas ao menos de certa forma funcionou, porque esse erro foi gerado ao conectar-se, e o pior, no curl funciona:</p>
+<pre><code class="language-rust">
+$ curl https:&#x2F;&#x2F;api.github.com&#x2F;zen
+Mind your words, they are important.
+
+</code></pre>
+<p>Lendo a documentação da API do github, encontra-se o seguinte:</p>
+
+<blockquote>
+<p>All API requests MUST include a valid User-Agent header. Requests with no User-Agent header will be rejected. We request that you use your GitHub username, or the name of your application, for the User-Agent header value. This allows us to contact you if there are problems.</p>
+</blockquote>
+
+<p>Próximo passo é arrumar isso, incluindo uma entrada de User-Agent em nossa requisição HTTP, o que faremos com <code class="prettyprint">Headers:set()</code>`:</p>
+<pre><code class="language-rust">
+&#x2F;&#x2F;! Crawler — My own crawler in Rust!
+
+extern crate hyper; &#x2F;&#x2F; biblioteca (crate) não padrão.
+
+use std::env;       &#x2F;&#x2F; argumentos env::args.
+
+fn main() {
+    &#x2F;&#x2F; Pega os argumentos, mas ignorando o primeiro
+    &#x2F;&#x2F; que é o nome do programa.
+    let mut args = env::args();
+    args.next();
+
+    &#x2F;&#x2F; Pega o conteúdo de cada URL
+    for url in args {
+        println!(&quot;{}&quot;, url);
+
+        &#x2F;&#x2F; Somos um respeitável e conhecido bot
+        let mut headers = hyper::header::Headers::new();
+        headers.set(
+            hyper::header::UserAgent(
+                &quot;paulohrpinheiro-rustbot&quot;.to_string()
+            )
+        );
+
+        &#x2F;&#x2F; “pega” a URL
+        let client = hyper::Client::new();
+        match client.get(&amp;url).headers(headers).send() {
+            Ok(content) =&gt; println!(&quot;{:?}&quot;, content),
+            Err(error) =&gt; println!(&quot;{:?}&quot;, error),
+        }
+
+        println!(&quot;&quot;);
+    }
+}
+
+</code></pre>
+<p>Compilando e executando:</p>
+<pre><code class="language-rust">
+$ target&#x2F;debug&#x2F;crawler http:&#x2F;&#x2F;nonexist.nemaquinemnachina http:&#x2F;&#x2F;www.pudim.com.br https:&#x2F;&#x2F;api.github.com&#x2F;zen
+http:&#x2F;&#x2F;nonexist.nemaquinemnachina
+Io(Error { repr: Custom(Custom { kind: Other, error: StringError(&quot;failed to lookup address information: Name or service not known&quot;) }) })
+
+http:&#x2F;&#x2F;www.pudim.com.br
+Response { status: Ok, headers: Headers { Server: Apache&#x2F;2.4.16 (Amazon) PHP&#x2F;5.5.30, Content-Type: text&#x2F;html; charset=UTF-8, Date: Sat, 19 Nov 2016 20:18:31 GMT, Content-Length: 851, Last-Modified: Wed, 23 Dec 2015 01:18:20 GMT, Accept-Ranges: bytes, ETag: &quot;353-527867f65e8ad&quot;, }, version: Http11, url: &quot;http:&#x2F;&#x2F;www.pudim.com.br&#x2F;&quot;, status_raw: RawStatus(200, &quot;OK&quot;), message: Http11Message { is_proxied: false, method: None, stream: Wrapper { obj: Some(Reading(SizedReader(remaining=851))) } } }
+
+https:&#x2F;&#x2F;api.github.com&#x2F;zen
+Response { status: Ok, headers: Headers { X-RateLimit-Reset: 1479589054, X-Served-By: 13d09b732ebe76f892093130dc088652, X-RateLimit-Remaining: 56, X-Frame-Options: deny, X-Content-Type-Options: nosniff, Server: GitHub.com, Vary: Accept-Encoding, Strict-Transport-Security: max-age=31536000; includeSubdomains; preload, Content-Type: text&#x2F;plain;charset=utf-8, X-GitHub-Request-Id: BB6D95DD:31E3:17041A1E:5830B397, Date: Sat, 19 Nov 2016 20:18:32 GMT, Access-Control-Allow-Origin: *, Content-Security-Policy: default-src &#x27;none&#x27;, Status: 200 OK, X-RateLimit-Limit: 60, Access-Control-Expose-Headers: ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, Content-Length: 26, X-XSS-Protection: 1; mode=block, }, version: Http11, url: &quot;https:&#x2F;&#x2F;api.github.com&#x2F;zen&quot;, status_raw: RawStatus(200, &quot;OK&quot;), message: Http11Message { is_proxied: false, method: None, stream: Wrapper { obj: Some(Reading(SizedReader(remaining=26))) } } }
+
+</code></pre>
+<p>Tudo em riba funcionando, agora o objetico éimprimir o conteúdo do que foi pego, usando <code class="prettyprint">Request::read_to_string</code>, e melhorando um pouco a saída:</p>
+<pre><code class="language-rust">
+&#x2F;&#x2F;! Crawler — My own crawler in Rust!
+
+extern crate hyper; &#x2F;&#x2F; biblioteca (crate) não padrão
+
+use std::env;       &#x2F;&#x2F; argumentos env::args
+use std::io::Read;  &#x2F;&#x2F; para usar read_to_string
+
+fn get_url_content(url: &amp;str) -&gt; Result&lt;String, String&gt; {
+    let mut content = String::new();
+
+    &#x2F;&#x2F; Somos um respeitável e conhecido bot
+    let mut headers = hyper::header::Headers::new();
+    headers.set(
+        hyper::header::UserAgent(
+            &quot;paulohrpinheiro-rustbot&quot;.to_string()
+        )
+    );
+
+    &#x2F;&#x2F; Pega conteúdo
+    let client = hyper::Client::new();
+    match client.get(url).headers(headers).send() {
+        Err(error) =&gt; Err(format!(&quot;{:?}&quot;, error)),
+        Ok(mut response) =&gt; {
+            match response.read_to_string(&amp;mut content) {
+                Ok(_) =&gt; Ok(content),
+                Err(error) =&gt; Err(format!(&quot;{:?}&quot;, error)),
+            }
+        },
+    }
+}
+
+fn main() {
+    &#x2F;&#x2F; Pega os argumentos, mas ignorando o primeiro
+    &#x2F;&#x2F; que é o nome do programa.
+    let mut args = env::args();
+    args.next();
+
+    &#x2F;&#x2F; Pega o conteúdo de cada URL
+    for url in args {
+        println!(&quot;{}&quot;, url);
+
+        match get_url_content(&amp;url) {
+            Err(error)  =&gt; println!(&quot;{}&quot;, error),
+            Ok(content) =&gt; println!(&quot;{}&quot;, content),
+        }
+
+        println!(&quot;\n\n&quot;);
+     }
+}
+
+</code></pre>
+<p>Eis a saída agora:</p>
+<pre><code class="language-rust">
+$ target&#x2F;debug&#x2F;crawler http:&#x2F;&#x2F;nonexist.nemaquinemnachina http:&#x2F;&#x2F;www.pudim.com.br https:&#x2F;&#x2F;api.github.com&#x2F;zen
+http:&#x2F;&#x2F;nonexist.nemaquinemnachina
+Io(Error { repr: Custom(Custom { kind: Other, error: StringError(&quot;failed to lookup address information: Name or service not known&quot;) }) })
+
+http:&#x2F;&#x2F;www.pudim.com.br
+&lt;html&gt;
+&lt;html xmlns=&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;1999&#x2F;xhtml&quot;&gt;
+&lt;head&gt;
+    &lt;title&gt;Pudim&lt;&#x2F;title&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;estilo.css&quot;&gt;
+&lt;&#x2F;head&gt;
+&lt;body&gt;
+&lt;div&gt;
+    &lt;div class=&quot;container&quot;&gt;
+        &lt;div class=&quot;image&quot;&gt;
+            &lt;img src=&quot;pudim.jpg&quot; alt=&quot;&quot;&gt;
+        &lt;&#x2F;div&gt;
+        &lt;div class=&quot;email&quot;&gt;
+            &lt;a href=&quot;pudim@pudim.com.br&quot;&gt;pudim@pudim.com.br&lt;&#x2F;a&gt;
+        &lt;&#x2F;div&gt;
+    &lt;&#x2F;div&gt;
+&lt;&#x2F;div&gt;
+&lt;script&gt;
+    (function(i,s,o,g,r,a,m){i[&#x27;GoogleAnalyticsObject&#x27;]=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,&#x27;script&#x27;,&#x27;&#x2F;&#x2F;www.google-analytics.com&#x2F;analytics.js&#x27;,&#x27;ga&#x27;);
+
+ga(&#x27;create&#x27;, &#x27;UA-28861757-1&#x27;, &#x27;auto&#x27;);
+    ga(&#x27;send&#x27;, &#x27;pageview&#x27;);
+
+&lt;&#x2F;script&gt;
+&lt;&#x2F;body&gt;
+&lt;&#x2F;html&gt;
+
+https:&#x2F;&#x2F;api.github.com&#x2F;zen
+Favor focus over features.
+
+</code></pre>
+<p>Legal, mas falta a concorrência… O plano é o seguinte: primeiro será implementada a gravação do conteúdo em arquivos locais, depois implementa-se a concorência, usando <em>threads</em>.</p>
+
+<p>Mas agora, a tarefa é salvar os arquivos. Na versão atual, o arquivo é mantido inteiro em memória. O nome do arquivo será a última parte do endereço. Se a última parte for o nome do site, esse será o nome do arquivo. E a função que pega os arquivos, portanto, não retornará o conteúdo, apenas um status, deixando em caso de sucesso, o arquivo salvo. Ah, em caso de sucesso retorna o nome do arquivo criado. Ficou assim:</p>
+<pre><code class="language-rust">
+&#x2F;&#x2F;! Crawler — My own crawler in Rust!
+
+extern crate hyper;         &#x2F;&#x2F; biblioteca (crate) não padrão
+
+use std::env;               &#x2F;&#x2F; argumentos env::args
+use std::io::{Read, Write}; &#x2F;&#x2F; para IO de arquivos
+use std::fs::File;          &#x2F;&#x2F; para criar arquivos
+use std::path::Path;        &#x2F;&#x2F; configurar nome de arquivo
+
+const ROBOT_NAME:  &amp;&#x27;static str  = &quot;paulohrpinheiro-crawler&quot;;
+const BUFFER_SIZE: usize = 512;
+
+fn download_content(url: &amp;str) -&gt; Result&lt;String, String&gt; {
+    &#x2F;&#x2F; Somos um respeitável e conhecido bot
+    let mut headers = hyper::header::Headers::new();
+    headers.set(hyper::header::UserAgent(ROBOT_NAME.to_string()));
+
+    &#x2F;&#x2F; Pega cabeçalhos (e possivelmente algum dado já)
+    let client = hyper::Client::new();
+    let mut response;
+
+    match client.get(url).headers(headers).send() {
+        Err(error) =&gt; return Err(format!(&quot;{:?}&quot;, error)),
+        Ok(res)    =&gt; response = res,
+    }
+
+    &#x2F;&#x2F; Cria arquivo para salvar conteúdo
+    let filename = Path::new(&amp;url).file_name().unwrap();
+    let mut localfile;
+
+    match File::create(filename) {
+        Err(error)     =&gt; return Err(format!(&quot;{:?}&quot;, error)),
+        Ok(filehandle) =&gt; localfile = filehandle,
+    }
+
+    &#x2F;&#x2F; pega conteúdo e salva em arquivo
+    loop {
+        let mut buffer = [0; BUFFER_SIZE];
+
+        match response.read(&amp;mut buffer) {
+            Err(read_error) =&gt; return Err(format!(&quot;{:?}&quot;, read_error)),
+            Ok(bytes_read)  =&gt; {
+                if bytes_read == 0 {
+                    &#x2F;&#x2F; não tem mais o que ler
+                    break;
+                }
+                &#x2F;&#x2F; vamos tentar escrever o que pegamos
+                match localfile.write(&amp;buffer[0..bytes_read]) {
+                    Err(write_error) =&gt; return Err(format!(&quot;{:?}&quot;, write_error)),
+                    Ok(bytes_write)  =&gt; {
+                        if bytes_write != bytes_read {
+                            return Err(&quot;Error in write.&quot;.to_string());
+                        }
+                    },
+                }
+            },
+        }
+    }
+
+    return Ok(String::from(filename.to_str().unwrap()));
+}
+
+fn main() {
+    &#x2F;&#x2F; Pega os argumentos, mas ignorando o primeiro
+    &#x2F;&#x2F; que é o nome do programa.
+    let mut args = env::args();
+    args.next();
+
+    &#x2F;&#x2F; Pega o conteúdo de cada URL
+    for url in args {
+        print!(&quot;{} - &quot;, url);
+
+        match download_content(&amp;url) {
+            Err(error)   =&gt; println!(&quot;{:?}&quot;, error),
+            Ok(filename) =&gt; println!(&quot;{:?}&quot;, filename),
+        }
+
+        print!(&quot;\n\n&quot;);
+    }
+}
+
+</code></pre>
+<p>Executando e vendo os arquivos gerados:</p>
+<pre><code class="language-rust">
+$ target&#x2F;debug&#x2F;crawler http:&#x2F;&#x2F;nonexist.nemaquinemnachina http:&#x2F;&#x2F;www.pudim.com.br https:&#x2F;&#x2F;api.github.com&#x2F;zen
+http:&#x2F;&#x2F;nonexist.nemaquinemnachina - &quot;Io(Error { repr: Custom(Custom { kind: Other, error: StringError(\&quot;failed to lookup address information: Name or service not known\&quot;) }) })&quot;
+
+http:&#x2F;&#x2F;www.pudim.com.br - &quot;www.pudim.com.br&quot;
+
+https:&#x2F;&#x2F;api.github.com&#x2F;zen - &quot;zen&quot;
+
+$ cat zen
+Design for failure.$
+$
+$ cat www.pudim.com.br
+&lt;html&gt;
+&lt;html xmlns=&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;1999&#x2F;xhtml&quot;&gt;
+&lt;head&gt;
+    &lt;title&gt;Pudim&lt;&#x2F;title&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;estilo.css&quot;&gt;
+&lt;&#x2F;head&gt;
+&lt;body&gt;
+&lt;div&gt;
+    &lt;div class=&quot;container&quot;&gt;
+        &lt;div class=&quot;image&quot;&gt;
+            &lt;img src=&quot;pudim.jpg&quot; alt=&quot;&quot;&gt;
+        &lt;&#x2F;div&gt;
+        &lt;div class=&quot;email&quot;&gt;
+            &lt;a href=&quot;pudim@pudim.com.br&quot;&gt;pudim@pudim.com.br&lt;&#x2F;a&gt;
+        &lt;&#x2F;div&gt;
+    &lt;&#x2F;div&gt;
+&lt;&#x2F;div&gt;
+&lt;script&gt;
+    (function(i,s,o,g,r,a,m){i[&#x27;GoogleAnalyticsObject&#x27;]=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,&#x27;script&#x27;,&#x27;&#x2F;&#x2F;www.google-analytics.com&#x2F;analytics.js&#x27;,&#x27;ga&#x27;);
+
+ga(&#x27;create&#x27;, &#x27;UA-28861757-1&#x27;, &#x27;auto&#x27;);
+    ga(&#x27;send&#x27;, &#x27;pageview&#x27;);
+
+&lt;&#x2F;script&gt;
+&lt;&#x2F;body&gt;
+$
+
+</code></pre>
+<p>Agora ficou legal, mas falta a cereja do bolo: concorrência. Muito simples, como está explicado nessa página:</p>
+
+<blockquote>
+<p>Concurrency
+Rust&#39;s memory safety features also apply to its concurrency story too. Even concurrent Rust programs must be memory…
+https://doc.rust-lang.org/book/concurrency.html</p>
+</blockquote>
+
+<p>As alterações foram mínimas.</p>
+
+<p>Primeiro, declara-se um vetor para salvar os handlers, criamos as threads, e finalmente esperamos cada thread terminar:</p>
+<pre><code class="language-rust">
+let mut workers = vec![];
+
+(...)
+
+workers.push(thread::spawn(move || {
+    (...)
+}));
+
+for worker in workers {
+    let _ = worker.join();
+}
+
+</code></pre>
+<p>O clojure move serve para garantir a propriedade dos ponteiros envolvidos no bloco de código.</p>
+
+<blockquote>
+<p>Closures
+But we don&#39;t have to. Why is this? Basically, it was chosen for ergonomic reasons. While specifying the full type for…
+https://doc.rust-lang.org/book/closures.html#move-closures</p>
+</blockquote>
+
+<p>Finalmente, nosso programa:</p>
+<pre><code class="language-rust">
+&#x2F;&#x2F;! Crawler — My own crawler in Rust!
+
+extern crate hyper;         &#x2F;&#x2F; biblioteca (crate) não padrão
+
+use std::env;               &#x2F;&#x2F; argumentos env::args
+use std::io::{Read, Write}; &#x2F;&#x2F; para IO de arquivos
+use std::fs::File;          &#x2F;&#x2F; para criar arquivos
+use std::path::Path;        &#x2F;&#x2F; configurar nome de arquivo
+use std::thread;            &#x2F;&#x2F; concorrência
+
+const ROBOT_NAME:  &amp;&#x27;static str  = &quot;paulohrpinheiro-crawler&quot;;
+const BUFFER_SIZE: usize = 512;
+
+fn download_content(url: &amp;str) -&gt; Result&lt;String, String&gt; {
+    &#x2F;&#x2F; Somos um respeitável e conhecido bot
+    let mut headers = hyper::header::Headers::new();
+    headers.set(hyper::header::UserAgent(ROBOT_NAME.to_string()));
+
+    &#x2F;&#x2F; Pega cabeçalhos (e possivelmente algum dado já)
+    let client = hyper::Client::new();
+    let mut response;
+
+    match client.get(url).headers(headers).send() {
+        Err(error) =&gt; return Err(format!(&quot;{:?}&quot;, error)),
+        Ok(res)    =&gt; response = res,
+    }
+
+    &#x2F;&#x2F; Cria arquivo para salvar conteúdo
+    let filename = Path::new(&amp;url).file_name().unwrap();
+    let mut localfile;
+
+    match File::create(filename) {
+        Err(error)     =&gt; return Err(format!(&quot;{:?}&quot;, error)),
+        Ok(filehandle) =&gt; localfile = filehandle,
+    }
+
+&#x2F;&#x2F; pega conteúdo e salva em arquivo
+    loop {
+        let mut buffer = [0; BUFFER_SIZE];
+
+        match response.read(&amp;mut buffer) {
+            Err(read_error) =&gt; return Err(format!(&quot;{:?}&quot;, read_error)),
+            Ok(bytes_read)  =&gt; {
+                if bytes_read == 0 {
+                    &#x2F;&#x2F; não tem mais o que ler
+                    break;
+                }
+                &#x2F;&#x2F; vamos tentar escrever o que pegamos
+                match localfile.write(&amp;buffer[0..bytes_read]) {
+                    Err(write_error) =&gt; return Err(format!(&quot;{:?}&quot;, write_error)),
+                    Ok(bytes_write)  =&gt; {
+                        if bytes_write != bytes_read {
+                            return Err(&quot;Error in write.&quot;.to_string());
+                        }
+                    },
+                }
+            },
+        }
+    }
+
+    return Ok(String::from(filename.to_str().unwrap()));
+}
+
+fn main() {
+    &#x2F;&#x2F; Pega os argumentos, mas ignorando o primeiro
+    &#x2F;&#x2F; que é o nome do programa.
+    let mut args = env::args();
+    args.next();
+
+    &#x2F;&#x2F; vetor para as threads que serão criadas
+    let mut workers = vec![];
+
+    &#x2F;&#x2F; Pega o conteúdo de cada URL
+    for url in args {
+        workers.push(thread::spawn(move || {
+            print!(&quot;{} - &quot;, url);
+
+            match download_content(&amp;url) {
+                Err(error)   =&gt; println!(&quot;{:?}&quot;, error),
+                Ok(filename) =&gt; println!(&quot;{:?}&quot;, filename),
+            }
+
+        print!(&quot;\n\n&quot;);
+        }));
+
+}
+
+    &#x2F;&#x2F; espera cada thread acabar
+    for worker in workers {
+        let _ = worker.join();
+    }
+}
+
+</code></pre>
+<p>Executando:</p>
+<pre><code class="language-rust">
+$ target&#x2F;debug&#x2F;crawler http:&#x2F;&#x2F;nonexist.nemaquinemnachina https:&#x2F;&#x2F;fastdl.mongodb.org&#x2F;src&#x2F;mongodb-src-r3.2.11.tar.gz http:&#x2F;&#x2F;ftp.unicamp.br&#x2F;pub&#x2F;apache&#x2F;&#x2F;httpd&#x2F;httpd-2.4.23.tar.gz https:&#x2F;&#x2F;www.isc.org&#x2F;downloads&#x2F;file&#x2F;bind-9-10-4-p4&#x2F;
+https:&#x2F;&#x2F;fastdl.mongodb.org&#x2F;src&#x2F;mongodb-src-r3.2.11.tar.gz - http:&#x2F;&#x2F;ftp.unicamp.br&#x2F;pub&#x2F;apache&#x2F;&#x2F;httpd&#x2F;httpd-2.4.23.tar.gz - http:&#x2F;&#x2F;nonexist.nemaquinemnachina - https:&#x2F;&#x2F;www.isc.org&#x2F;downloads&#x2F;file&#x2F;bind-9-10-4-p4&#x2F; - &quot;Io(Error { repr: Custom(Custom { kind: Other, error: StringError(\&quot;failed to lookup address information: Name or service not known\&quot;) }) })&quot;
+
+&quot;httpd-2.4.23.tar.gz&quot;
+
+&quot;bind-9-10-4-p4&quot;
+
+&quot;mongodb-src-r3.2.11.tar.gz&quot;
+
+</code></pre>
+<p>Para acompanhar o download, abra outro terminal e execute esse comando:</p>
+<pre><code class="language-rust">
+watch ls -lh
+
+</code></pre>
+<p>Como perceberá, os downloads estão ocorrendo em paralelo.</p>
+
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Rust Pills — Download de arquivos"
+    data-url="https://paulohrpinheiro.xyz/texts/rust/2016-11-21-download-arquivos.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Rust Pills — Download de arquivos"
+    data-url="https://paulohrpinheiro.xyz/texts/rust/2016-11-21-download-arquivos.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Rust Pills — Download de arquivos"
+    data-url="https://paulohrpinheiro.xyz/texts/rust/2016-11-21-download-arquivos.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Rust Pills — Download de arquivos"
+    data-url="https://paulohrpinheiro.xyz/texts/rust/2016-11-21-download-arquivos.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Rust Pills — Download de arquivos"
+    data-url="https://paulohrpinheiro.xyz/texts/rust/2016-11-21-download-arquivos.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2017, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+</body>
+</html>

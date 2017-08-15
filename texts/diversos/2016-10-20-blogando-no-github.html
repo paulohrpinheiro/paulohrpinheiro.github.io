@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Blogando no github</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Qual a forma mais rápida e com menos dependências de montar um blog usando o github? Essa era uma dúvida que me acompanhava por um bom tempo. Hoje falarei sobre como sanei essa dúvida.">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores e sysadmins</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Blogando no github</h2>
+
+<h3>Qual a forma mais rápida e com menos dependências de montar um blog usando o github? Essa era uma dúvida que me acompanhava por um bom tempo. Hoje falarei sobre como sanei essa dúvida.</h3>
+
+<p><img src="images/github.jpg" alt="GitHub"></p>
+
+<h4>Motivação</h4>
+
+<p>Tenho um blog com domínio próprio (http://www.sysincloud.it) que funciona no <a href="http://www.openshift">OpenShift</a>.  Usei um <a href="https://developers.openshift.com/overview/basic-terminology.html">cartridge</a> com <a href="http://www.ghost.org">Ghost</a>, que funciona em <a href="http://www.nodejs.org">Node.JS</a> tendo como banco dados uma instância de <a href="https://www.mysql.com/">MySQL</a>.</p>
+
+<p>Tudo muito bem, mas sempre me incomodei com isso. O maior objetivo era ter um blog mas sem usar <a href="http://www.wordpress.org">WordPress</a>. O Ghost é muito rápido e fácil de configurar e usar.</p>
+
+<p>Mas ainda assim, era uma plataforma em que eu precisava me logar, digitar, ou colar, os textos, preencher alguns formulários... Tudo lindo, o visual é demais, só que feria meu coração de dinossauro acostumado aos terminais emulados.</p>
+
+<h4>Primeira tentativa</h4>
+
+<p>Pesquisei vários geradores de site estáticos, inclusive o <a href="https://jenkins.io/solutions/github/">Jenkis</a> recomendado pelo GitHub. Instalei ele e depois de um tempo enorme instalando pacotes (gems) ruby, desesti. Era como usar uma marreta para pregar uma tachinha.</p>
+
+<p>O que estava certo é que iria usar o https://gitbub.io para hospedar meu novo blog.</p>
+
+<p>Pensei em escrever o meu próprio gerador - desesti rápido - e pensei em criar um script com um makefile que agisse como um gerador estático. Foi pensando no makefile que decidi por as mãos na massa.</p>
+
+<h4>Anti-SEO</h4>
+
+<p>Verificando a origem dos leitores de meus textos percebi que quase 100% vem das publicações que coloco em redes sociais (Linkedin, Twitter e Facebook, aliás, FB é esmagador) e do <em>DevALL</em>, que só perde pro <em>Facebook</em>.</p>
+
+<p>Então não preciso de um blog otimizado para buscas no <em>Google</em>. Minhas referências vem desses sistemas apenas. E isso com quase dois anos de blog.</p>
+
+<h4>A solução</h4>
+
+<p><em>escrever na unha!</em></p>
+
+<p>Estava já acostumado, por questão de organização antes de ter o meu blog, a primeiro salvar meus textos no github, e mandar o link para o responsável pela publicação. Tudo muito simples. E o visual da página do github me agrada. Como escreve basicamente para programadores, é o que preciso.</p>
+
+<p>Migrei todos o s textos, um a um, cuidando de detalhes como data de publicação, imagem associada, e uma rápida revisão. Como já estavam todos em markdown, foi uma transição tranquila.</p>
+
+<p>Mas blog precisa de divulgação :) Eu gosto do <a href="https://www.devall.com.br">DevAll</a>, um agregador de blogs técnicos. Para aparecer por lá tem que ter um <em>feed RSS</em>.</p>
+
+<p>Pensei comigo, porque não fazer meu proóprio <em>RSS</em>? Pesquisei um pouco e não é nada de demais ter um arquivo <em>RSS</em>:</p>
+
+<ul>
+<li><p><a href="http://www.hardware.com.br/dicas/criando-feed-rss.html">Criando um feed RSS manualmente</a></p></li>
+<li><p><a href="https://validator.w3.org/feed/docs/rss2.html">Especificação RSS 2.0</a>.</p></li>
+</ul>
+
+<p>Escrevi um primeiro texto apenas para testar minha ideia, meu MVP de blog. E escrevi o feed, um arquivo em minha página no github. A primeira versão de meu arquivo ficou assim:</p>
+<pre><code class="language-diversos">
+&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;rss version=&quot;2.0&quot;&gt;
+&lt;channel&gt;
+
+&lt;title&gt;Paulo Henrique Rodrigues Pinheiro&lt;&#x2F;title&gt;
+&lt;link&gt;http:&#x2F;&#x2F;paulohrpinheiro.github.io&lt;&#x2F;link&gt;
+&lt;description&gt;Programação para programadores: C, Perl, Python, Ruby, Rust. Linux na veia!&lt;&#x2F;description&gt;
+&lt;language&gt;pt-br&lt;&#x2F;language&gt;
+
+
+&lt;item&gt;
+&lt;title&gt;Sobre o livro Test-Driven Development: Teste e Design no Mundo Real com Ruby&lt;&#x2F;title&gt;
+&lt;link&gt;https:&#x2F;&#x2F;github.com&#x2F;paulohrpinheiro&#x2F;artigos&#x2F;blob&#x2F;master&#x2F;resenhas&#x2F;test-driven-development.md&lt;&#x2F;link&gt;
+&lt;description&gt;Divulgando um livro que acabei de ler e que achei legal pra caramba!&lt;&#x2F;description&gt;
+&lt;pubDate&gt;Thu, 06 Oct 2016 23:04:54 -0300&lt;&#x2F;pubDate&gt;
+&lt;&#x2F;item&gt;
+
+
+&lt;&#x2F;channel&gt;
+&lt;&#x2F;rss&gt;
+
+</code></pre>
+<p>Agora com esse texto aqui, ele ficará assim:</p>
+<pre><code class="language-diversos">
+&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;rss version=&quot;2.0&quot;&gt;
+&lt;channel&gt;
+
+&lt;title&gt;Paulo Henrique Rodrigues Pinheiro&lt;&#x2F;title&gt;
+&lt;link&gt;http:&#x2F;&#x2F;paulohrpinheiro.github.io&lt;&#x2F;link&gt;
+&lt;description&gt;Programação para programadores: C, Perl, Python, Ruby, Rust. Linux na veia!&lt;&#x2F;description&gt;
+&lt;language&gt;pt-br&lt;&#x2F;language&gt;
+
+
+&lt;item&gt;
+&lt;title&gt;Blogando no github&lt;&#x2F;title&gt;
+&lt;link&gt;https:&#x2F;&#x2F;github.com&#x2F;paulohrpinheiro&#x2F;artigos&#x2F;blob&#x2F;master&#x2F;diversos&#x2F;blogando-no-github.md&lt;&#x2F;link&gt;
+&lt;description&gt;Qual a forma mais rápida e com menos dependências de montar um
+blog usando o github? Essa era uma dúvida que me acompanhava por um bom tempo.
+Hoje falarei sobre como sanei essa dúvida.&lt;&#x2F;description&gt;
+&lt;pubDate&gt;Thu, 20 Oct 2016 10:53:32 -0300&lt;&#x2F;pubDate&gt;
+&lt;&#x2F;item&gt;
+
+&lt;item&gt;
+&lt;title&gt;Sobre o livro Test-Driven Development: Teste e Design no Mundo Real com Ruby&lt;&#x2F;title&gt;
+&lt;link&gt;https:&#x2F;&#x2F;github.com&#x2F;paulohrpinheiro&#x2F;artigos&#x2F;blob&#x2F;master&#x2F;resenhas&#x2F;test-driven-development.md&lt;&#x2F;link&gt;
+&lt;description&gt;Divulgando um livro que acabei de ler e que achei legal pra caramba!&lt;&#x2F;description&gt;
+&lt;pubDate&gt;Thu, 06 Oct 2016 23:04:54 -0300&lt;&#x2F;pubDate&gt;
+&lt;&#x2F;item&gt;
+
+
+&lt;&#x2F;channel&gt;
+&lt;&#x2F;rss&gt;
+
+</code></pre>
+<p>Para &quot;inscrever-se&quot; em meu blog, basta acompanhar o feed em https://paulohrpinheiro.github.io/rss.</p>
+
+<p>Agora, abro qualquer editor, usualmente o vim, ou o atom, digito o que quero, commit &amp; purge, tá no ar. Altero o arquivo de <em>RSS</em>, tá disponível pra quem acompanha meu <em>FEED</em>. Pode-se ainda usar páginas wiki no github, mas preferi fazer simples assim, antipattern :P</p>
+
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Blogando no github"
+    data-url="https://paulohrpinheiro.xyz/texts/diversos/2016-10-20-blogando-no-github.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Blogando no github"
+    data-url="https://paulohrpinheiro.xyz/texts/diversos/2016-10-20-blogando-no-github.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Blogando no github"
+    data-url="https://paulohrpinheiro.xyz/texts/diversos/2016-10-20-blogando-no-github.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Blogando no github"
+    data-url="https://paulohrpinheiro.xyz/texts/diversos/2016-10-20-blogando-no-github.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Blogando no github"
+    data-url="https://paulohrpinheiro.xyz/texts/diversos/2016-10-20-blogando-no-github.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2017, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+</body>
+</html>

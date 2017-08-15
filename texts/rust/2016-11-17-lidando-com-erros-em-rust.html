@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Lidando com erros em Rust</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Como retornar de funções em Rust valores e status.">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores e sysadmins</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Lidando com erros em Rust</h2>
+
+<h3>Como retornar de funções em Rust valores e status.</h3>
+
+<p><img src="images/rust-brasa.jpg" alt="Descrição"></p>
+
+<p>Na linguagem <em>C</em> encontramos muitas formas de retornar valores e status. Variáveis globais para o retorno de erro, passagem de ponteiro para estrutura ou tipo para que seja alterado, e então o retorno da função indica o que ocorreu, ou então a função retorna um ponteiro para um tipo ou estrutura e altera uma variável global de erro, e por aí vai.</p>
+
+<p>Em linguagens como <em>Ruby</em> e <em>Python</em>,  temos as exceções, então recebemos nossos retornos e nos protegemos capturando as possíveis exceções que possam ocorrer.</p>
+
+<p>Em <em>Rust</em> temos um encapsulamento do <em>status</em> com o retorno. A função pode retornar um estrutura que indica sucesso, e nesse caso o retorno, e também se houve erro, e uma mensagem ou código, enfim, algum objeto.</p>
+
+<p><a href="https://doc.rust-lang.org/stable/book/"><strong>O</strong> Livro</a>, tem um longo capítulo dedicado ao <a href="https://doc.rust-lang.org/stable/book/error-handling.html">tratamento de erros</a>.</p>
+
+<p>Antes de tratar erros, vamos ver alguns conceitos da linguagem que são usados na estratégia <em>Rust</em> para driblar erros.</p>
+
+<h3>Encontro de padrões</h3>
+
+<p>Temos esses exemplos em <a href="https://doc.rust-lang.org/stable/book/match.html"><strong>O</strong> livro</a>:</p>
+<pre><code class="language-rust">
+let x = 5;
+
+match x {
+    1 =&gt; println!(&quot;one&quot;),
+    2 =&gt; println!(&quot;two&quot;),
+    3 =&gt; println!(&quot;three&quot;),
+    4 =&gt; println!(&quot;four&quot;),
+    5 =&gt; println!(&quot;five&quot;),
+    _ =&gt; println!(&quot;something else&quot;),
+}
+
+</code></pre>
+<p>Pode-se colocar um bloco de código, entre <code class="prettyprint">{}</code> para cada padrão. Esse é um exemplo de padrão literal, uma coisa mais direta. Observe que o padrão <code class="prettyprint">_</code> é o &quot;pega-qualquer-coisa-que-sobrou&quot;.</p>
+
+<p>Pode-se verificar mais de um padrão em um mesmo caso de teste, usando-se <code class="prettyprint">|</code>:</p>
+<pre><code class="language-rust">
+let x = 1;
+
+match x {
+    1 | 2 =&gt; println!(&quot;one or two&quot;),
+    3 =&gt; println!(&quot;three&quot;),
+    _ =&gt; println!(&quot;anything&quot;),
+}
+
+</code></pre>
+<p>Agora, vamos a mais um elemento da linguagem, e então começa a diversão!</p>
+
+<h3>O tipo <code class="prettyprint">Result&lt;&gt;</code></h3>
+
+<p>Como dito acima, nada de variáveis globais, ponteiros e demais técnicas. A função retorna um pacote, que em caso de sucesso contém algum objeto de retorno, e em caso de falha um objeto para identificar a falha. Pode ser um número, um texto, um <em>enum</em>, qualquer coisa. Em minha memória, algo bem parecido com o <a href="https://www.tutorialspoint.com/cprogramming/c_unions.htm"><code class="prettyprint">union</code> da linguagem <em>C</em></a>.</p>
+
+<p>O tipo <a href="https://doc.rust-lang.org/stable/std/result/"><code class="prettyprint">Result</code> é definido dessa maneira</a> na biblioteca padrão do <em>Rust</em>:</p>
+<pre><code class="language-rust">
+enum Result&lt;T, E&gt; {
+   Ok(T),
+   Err(E),
+}
+
+</code></pre>
+<p>Quando preciso retornar de uma função posso, por exemplo, fazer isso:</p>
+
+<ul>
+<li>Em caso de erro: <code class="prettyprint">return Err(error_code)</code>.</li>
+<li>Em caso de valor válido: <code class="prettyprint">return Ok(response)</code>.</li>
+</ul>
+
+<h3>Juntando tudo</h3>
+
+<p>Começa a ficar divertido  quando testamos uma estrutura <em>Result</em> para verificar como a função chamada se comportou:</p>
+<pre><code class="language-rust">
+match some_function(some_argument) {
+    Ok(value) =&gt; println!(&quot;got a value: {}&quot;, value),
+    Err(_) =&gt; println!(&quot;an error occurred&quot;),
+}
+
+</code></pre>
+<p>O uso do <code class="prettyprint">_</code> é necessário para deixarmos claro que não nos interessa saber o que foi retornado em caso de erro, que interessa apenas saber que houve algum erro. Se for usado algum nome de variável, e não usá-la, o compilador irá gerar avisos (<em>warnings</em>).</p>
+
+<h3>Que tal usar <code class="prettyprint">enum</code>?</h3>
+
+<p>Um importante componente da linguagem é o <a href="https://doc.rust-lang.org/stable/book/enums.html"><code class="prettyprint">enum</code></a>. Com ele podemos deixar o código bem mais legível e um pouco mais protegido de erros provenientes da confusão com códigos numéricos de erro.</p>
+
+<p>Por exemplo, podemos definir alguns símbolos para poder saber o que realmente está acontecendo:</p>
+<pre><code class="language-rust">
+#[derive(Debug)]
+#[derive(PartialEq)]
+pub enum ProblemsError {
+    InvalidOperator,
+    DivideByZero,
+}
+
+</code></pre>
+<p>Trata-se uma estrutura pública, portanto usa-se <code class="prettyprint">pub</code>. Os símbolos definidos são <code class="prettyprint">ProblemsError</code>, o nome de nosso <code class="prettyprint">enum</code>, que contém os símbolos <code class="prettyprint">InvalidOperator</code> e <code class="prettyprint">DivideByZero</code>.</p>
+
+<p>O <a href="http://doc.rust-lang.org/std/fmt/trait.Debug.html"><code class="prettyprint">#[derive(Debug)]</code></a> permite que os símbolos tenham seus nomes impressos nas rotinas de <em>debug</em>, por exemplo, nos testes funcionais. Já  o <a href="https://doc.rust-lang.org/std/cmp/trait.PartialEq.html"><code class="prettyprint">#[derive(PartialEq)]</code></a> nos permite fazer comparação de igualdade com a estrutura criada.</p>
+
+<p>Para referenciar os símbolos usamos, por exemplo, <code class="prettyprint">ProblemsError::DivideByZero</code>.</p>
+
+<p>Aqui um exemplo maior, tirado de meu projeto <a href="https://github.com/paulohrpinheiro/test-driven-learning">Test Driven Learning</a>:</p>
+<pre><code class="language-rust">
+&#x2F;&#x2F;&#x2F;  A função `operacao` deve receber dois parâmetros. O primeiro parâmetro é
+&#x2F;&#x2F;&#x2F;  um caractere indicando a operação aritmética básica a ser realizada (&#x27;+&#x27;,
+&#x2F;&#x2F;&#x2F;  &#x27;-&#x27;, &#x27;\*&#x27;, &#x27;&#x2F;&#x27;). O segundo parâmetro é um *array* de números inteiros, para
+&#x2F;&#x2F;&#x2F;  os quais a operação deve ser aplicada. A função deve retornar o resultado
+&#x2F;&#x2F;&#x2F;  da operação no *array*. Chame as funções já criadas para cada operação. Em
+&#x2F;&#x2F;&#x2F;  caso de operação inválida, gere uma exceção.
+&#x2F;&#x2F;&#x2F;
+&#x2F;&#x2F;&#x2F; Examples
+&#x2F;&#x2F;&#x2F;
+&#x2F;&#x2F;&#x2F; ```
+&#x2F;&#x2F;&#x2F; extern crate rust;
+&#x2F;&#x2F;&#x2F;
+&#x2F;&#x2F;&#x2F; assert_eq!(Some(3), rust::problems::operacao(&#x27;+&#x27;, vec![1, 2]).ok());
+&#x2F;&#x2F;&#x2F; assert_eq!(Some(-1), rust::problems::operacao(&#x27;-&#x27;, vec![1, 2]).ok());
+&#x2F;&#x2F;&#x2F; assert_eq!(Some(2), rust::problems::operacao(&#x27;*&#x27;, vec![1, 2]).ok());
+&#x2F;&#x2F;&#x2F; assert_eq!(Some(0), rust::problems::operacao(&#x27;&#x2F;&#x27;, vec![1, 2]).ok());
+&#x2F;&#x2F;&#x2F; assert_eq!(Err(rust::problems::ProblemsError::InvalidOperator), rust::problems::operacao(&#x27;=&#x27;, vec![1, 2]));
+pub fn operacao(operador: char, lista:Vec&lt;i32&gt;) -&gt; Result&lt;i32, ProblemsError&gt; {
+    match operador {
+        &#x27;+&#x27; =&gt; Ok(soma(lista)),
+        &#x27;-&#x27; =&gt; Ok(subtracao(lista)),
+        &#x27;*&#x27; =&gt; Ok(multiplicacao(lista)),
+        &#x27;&#x2F;&#x27; =&gt; divisao(lista), &#x2F;&#x2F; returns Result
+        _   =&gt; Err(ProblemsError::InvalidOperator),
+    }
+}
+
+</code></pre>
+<blockquote>
+<p>Para entender os comentários com códigos, por favor veja o texto <a href="https://github.com/paulohrpinheiro/artigos/blob/master/rust/testes-funcionais-em-rust.md">Testes funcionais em Rust</a>.</p>
+</blockquote>
+
+<p>Em minha função eu recebo um caractere com o símbolo da operação e traduzo para uma função que execute a tarefa. Usamos o <code class="prettyprint">match</code> para encontrar o padrão, e nas operações em que não encontramos problemas, retornamos o resultado encapsulado por um <code class="prettyprint">Ok()</code>. Exceção nesse caso é a função <code class="prettyprint">divisao</code>, que pode retornar um erro se um dividendo for zero. Por fim, se é passado um operador não conhecido <code class="prettyprint">_</code>, encapsulamos o código de erro com <code class="prettyprint">Err()</code>.</p>
+
+<p>Observe-se também a declaração de retorno da função:</p>
+<pre><code class="language-rust">
+Result&lt;i32, ProblemsError&gt;
+
+</code></pre>
+<p>O tipo <code class="prettyprint">i32</code> designa um inteiro de 32 bits, e <code class="prettyprint">ProblemsError</code> é o nosso <code class="prettyprint">enum</code>.</p>
+
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Lidando com erros em Rust"
+    data-url="https://paulohrpinheiro.xyz/texts/rust/2016-11-17-lidando-com-erros-em-rust.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Lidando com erros em Rust"
+    data-url="https://paulohrpinheiro.xyz/texts/rust/2016-11-17-lidando-com-erros-em-rust.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Lidando com erros em Rust"
+    data-url="https://paulohrpinheiro.xyz/texts/rust/2016-11-17-lidando-com-erros-em-rust.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Lidando com erros em Rust"
+    data-url="https://paulohrpinheiro.xyz/texts/rust/2016-11-17-lidando-com-erros-em-rust.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Lidando com erros em Rust"
+    data-url="https://paulohrpinheiro.xyz/texts/rust/2016-11-17-lidando-com-erros-em-rust.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2017, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+</body>
+</html>

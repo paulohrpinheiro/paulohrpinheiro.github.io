@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Começando em JavaScript</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Até altero algum código em *JavaScript*, mas nunca aprendi de fato. Aqui vão algumas experiências, de um pequeno projeto que fiz em *JavaScript*, sem saber nada dele.">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores e sysadmins</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Começando em JavaScript</h2>
+
+<h3>Até altero algum código em <em>JavaScript</em>, mas nunca aprendi de fato. Aqui vão algumas experiências, de um pequeno projeto que fiz em <em>JavaScript</em>, sem saber nada dele.</h3>
+
+<p><img src="images/javascript.jpg" alt="Javascript!"></p>
+
+<p>O meu amado projeto <a href="https://github.com/paulohrpinheiro/test-driven-learning">Test Driven Learning</a> estava um pouco bagunçado, então decidi dar uma arrumada nas coisas e incluir mais uma linguagem: <em>JavaScript</em>.</p>
+
+<p>Pensei que fosse demorar dias, afinal nunca programei com essa linguagem nada de mais profundo, só coisas na superfície, em geral adaptando código pronto.</p>
+
+<p>E saiu, até com testes:</p>
+
+<p>https://github.com/paulohrpinheiro/test-driven-learning/blob/master/000_novice/javascript/problems.js</p>
+
+<p>Minha primeira questão foi descobrir como fazer testes de unidade. Todos os <em>frameworks</em> de teste que encontrei, ou são para <em>WEB</em> ou são para <em>Node.JS</em>.</p>
+
+<p>Eu só queria testar funções simples, em linha de comando usando o <a href="https://developers.google.com/v8/">v8</a>. Decidi voltar às raízes escrevendo comandos <code class="prettyprint">assert</code>. Mas não encontrei tais funções... Pesquisando, algumas propostas:</p>
+
+<p>http://stackoverflow.com/questions/15313418/javascript-assert</p>
+
+<p>https://code.tutsplus.com/tutorials/quick-and-easy-javascript-testing-with-assert--net-14050</p>
+
+<p>Do segundo endereço, adaptei e fiz meu primeiro <em>assert</em> dessa maneira:</p>
+<pre><code class="language-javascript">
+function assert(outcome, description) {
+    print(outcome ? &#x27;pass&#x27; : &#x27;fail&#x27;);
+}
+
+</code></pre>
+<p>Como isso, poderia, por exemplo, verificar coisas dessa maneira (estou usando o comando <code class="prettyprint">d8</code>, da bilioteva <em>V8</em>:</p>
+<pre><code class="language-javascript">
+$ d8
+V8 version 3.14.5.10 [console: readline]
+d8&gt; function assert(outcome, description) { print(outcome ? &#x27;pass&#x27; : &#x27;fail&#x27;); }
+d8&gt; assert((1+1)===3, &quot;Verificando se 1+1 é igual a três.&quot;)
+fail
+d8&gt; assert((1+1)===2, &quot;Verificando se 1+1 é igual a dois.&quot;)
+pass
+
+</code></pre>
+<p>Isso já é legal, só que com um contador de erros e acertos fica melhor. Alterei para essa versão:</p>
+<pre><code class="language-javascript">
+var fail = 0;
+var pass = 0;
+
+function assert(outcome, description) {
+    var r;
+
+    if(outcome) {
+        pass++;
+        r = &#x27;PASS&#x27;;
+    }
+    else {
+        fail++;
+        r = &#x27;FAIL&#x27;;
+    }
+
+    print(description + &#x27;: &#x27; + r);
+}
+
+assert((1+1)===3, &quot;Verificando se 1+1 é igual a três.&quot;);
+assert((1+1)===2, &quot;Verificando se 1+1 é igual a dois.&quot;);
+
+print(&#x27;\nResults:&#x27;);
+print(&#x27;\tPASS :&#x27;, pass);
+print(&#x27;\tFAIL :&#x27;, fail);
+print(&#x27;\tTOTAL:&#x27;, fail+pass);
+
+if(fail) {
+    print(&#x27;FAIL TESTS.&#x27;);
+}
+else {
+    print(&#x27;PASS TESTS.&#x27;)
+}
+
+</code></pre>
+<p>Ficou interessante. Continuei na tarefa em que me propus e cheguei a um ponto em que minha especificação exigia gerar exceções ao invés de erros. Aprendi fácil como gerá-las, mas meu <em>assert</em> não resolvia mais a parada toda.</p>
+
+<p>Fui pensando em algumas alternativas, como cercar esses <em>asserts</em> com <code class="prettyprint">try</code>/<code class="prettyprint">catch</code>, mas não ficou bom. E a saída óbvia, criar outra função que capture a exceção, se houver.</p>
+
+<p>Pra isso eu não poderia chamar minha função passando a chamada das funcções a verificar, eu teria que dentro desse novo <em>assert</em>, chamar a função. Para isso, vamos pesquisar como chamar uma função <em>por referência</em> passando argumentos que não sei quantos são.</p>
+
+<p>Encontrei esse ótimo texto:</p>
+
+<p>http://www.raphaelfabeni.com.br/dicas-rapidas-javascript-2/</p>
+
+<p>Era do <code class="prettyprint">apply</code> que eu precisava:</p>
+
+<p>https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Function/apply</p>
+
+<p>Refatoremos novamente o código:</p>
+<pre><code class="language-javascript">
+var fail = 0;
+var pass = 0;
+
+function doFail(message) {
+    fail++;
+    print(message + &#x27;: FAIL&#x27;);
+}
+
+function doPass(message) {
+    pass++;
+    print(message + &#x27;: PASS&#x27;);
+}
+
+function assert(functionRef, functionParams, expected, description) {
+    result = functionRef.apply(null, functionParams)
+
+    if(expected===result) {
+        doPass(description);
+    }
+    else {
+        doFail(description);
+    }
+}
+
+function assertAnyException(functionRef, functionParams, description) {
+    try {
+        result = functionRef.apply(null, functionParams);
+        doFail(description);
+    }
+    catch (e) {
+        doPass(description);
+    }
+}
+
+function soma(numeros) {
+    var resultadoSoma = 0;
+
+    for(var i=0; i&lt;numeros.length; i++) {
+        resultadoSoma+=numeros[i];
+    }
+
+    return resultadoSoma;
+}
+
+function arrayTemConteudo(meuArray) {
+    if(!meuArray) {
+        throw new Error(&#x27;Erro!&#x27;);
+    }
+}
+
+assert(soma, [[1,1]], 3, &quot;Verificando se 1+1 é igual a três.&quot;);
+assert(soma, [[1,1]], 2, &quot;Verificando se 1+1 é igual a dois.&quot;);
+assertAnyException(arrayTemConteudo, [], &#x27;Gera exceção.&#x27;);
+assertAnyException(arrayTemConteudo, [1,2,3], &#x27;Não gera exceção.&#x27;);
+
+print(&#x27;\nResults:&#x27;);
+print(&#x27;\tPASS :&#x27;, pass);
+print(&#x27;\tFAIL :&#x27;, fail);
+print(&#x27;\tTOTAL:&#x27;, fail+pass);
+
+if(fail) {
+    print(&#x27;FAIL TESTS.&#x27;);
+}
+else {
+    print(&#x27;PASS TESTS.&#x27;)
+}
+
+</code></pre>
+<p>Executando (salvei como <code class="prettyprint">tests.js</code>):</p>
+<pre><code class="language-javascript">
+$ d8 ~&#x2F;tests.js
+Verificando se 1+1 é igual a três.: FAIL
+Verificando se 1+1 é igual a dois.: PASS
+Gera exceção.: PASS
+Não gera exceção.: FAIL
+
+Results:
+    PASS : 2
+    FAIL : 2
+    TOTAL: 4
+FAIL TESTS.
+
+</code></pre>
+<p>Um detalhe é que quando devo passar um <em>array</em> como parâmetro, ele deve ser passado dentro de outro <em>array</em>, senão estaríamos passando cada elemento do <em>array</em> como parâmetro da função.</p>
+
+<p>E outro detalhe, é que quando comparando retornos que sejam <em>array</em>, a forma mais rápida, e que atende apenas nesse meu caso limitado, é usar <code class="prettyprint">JSON.stringify()</code>:</p>
+<pre><code class="language-javascript">
+result = JSON.stringify(functionRef.apply(null, functionParams))
+
+</code></pre>
+<p>Um brinde que veio com <em>apply</em>, foi justamente como usá-lo para passar todos os elementos de um <em>array</em> como se fossem parâmetros indiduais. Por exemplo:</p>
+<pre><code class="language-javascript">
+$ d8
+V8 version 3.14.5.10 [console: readline]
+d8&gt; a = [10,20,1000000000,30,40,];
+10,20,1000000000,30,40
+d8&gt; Math.max(a)
+NaN
+d8&gt; Math.max.apply(null, a)
+1000000000
+
+</code></pre>
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Começando em JavaScript"
+    data-url="https://paulohrpinheiro.xyz/texts/javascript/2016-11-05-comecando-em-javascript.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Começando em JavaScript"
+    data-url="https://paulohrpinheiro.xyz/texts/javascript/2016-11-05-comecando-em-javascript.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Começando em JavaScript"
+    data-url="https://paulohrpinheiro.xyz/texts/javascript/2016-11-05-comecando-em-javascript.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Começando em JavaScript"
+    data-url="https://paulohrpinheiro.xyz/texts/javascript/2016-11-05-comecando-em-javascript.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Começando em JavaScript"
+    data-url="https://paulohrpinheiro.xyz/texts/javascript/2016-11-05-comecando-em-javascript.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2017, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+</body>
+</html>

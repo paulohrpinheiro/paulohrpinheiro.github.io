@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Introdução ao unqlite - o que é?</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Quais são as características do unqlite?">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores e sysadmins</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Introdução ao unqlite - o que é?</h2>
+
+<h3>Quais são as características do unqlite?</h3>
+
+<p><img src="images/unqlite.jpg" alt="UnqLite"></p>
+
+<blockquote>
+<p>UnQLite is a in-process software library which implements a self-contained, serverless, zero-configuration, transactional NoSQL database engine. UnQLite is a document store database similar to MongoDB, Redis, CouchDB etc. as well a standard Key/Value store similar to BerkeleyDB, LevelDB, etc.
+http://unqlite.org/</p>
+</blockquote>
+
+<h4>Motivação</h4>
+
+<p>Após muitos anos administrando bancos de dados <em>MySQL</em> e eventualmente <em>PostgreSQL</em>, além de ter sido um &quot;usuário&quot; de <em>MSSQL</em> e <em>Oracle</em>, eu comecei a me questionar se eu realmente precisava de um banco de dados.</p>
+
+<p>Sim, eu preciso colocar meus dados em algum lugar seguro e acessá-los de forma simples e eficiente. Agora, eu realmente preciso de um servidor dedicado a isso? Preciso de um processo dedicado a isso? Preciso ficar liberando permissões e lidando com configurações de autenticação?</p>
+
+<p>É muito trabalho inútil. Em um ambiente em que a informação é armazenada e processada de múltiplas origens com diferentes níveis de acesso, com necessidade de replicação e alta disponibilidade, parece ser mais adequado usar isso.</p>
+
+<p>Por mais complicados que fossem os sistemas que eu trabalhei, nunca cheguei a esse tipo de requisito. Aplicações <em>WEB</em>, em geral, podem muito bem existir sem uma máquina ou processo dedicado aos dados.</p>
+
+<p>Muito tardiamente, fazendo um caminho inverso, descobri o <em>SqLite</em>, e ele me serviu bravamente. Rápido, estável, descomplicado. Nas linguagens que uso, seu uso é facilitado. <em>Python</em>, por exemplo, vem com ele por padrão.</p>
+
+<p>O <em>SqLite</em>, ao contrário do que se pensa, aguenta um tranco pesado, no site tem <a href="https://www.sqlite.org/whentouse.html">algumas informações interessantes</a>. Em geral, alguma configuração é necessária para um máximo desempenho, basta ler a documentação. <strong>RTFM</strong> antes de declarar que ele não é adequado para usar em de produção!</p>
+
+<p>Mas ainda é <em>SQL</em>... <em>SQL</em> é um coisa legal, poderosa, mas não gosto. Uso mas não gosto. Salva minha vida mas não gosto. Garante meu sustento mas não gosto!</p>
+
+<p>Uma das bibliotecas que mais me fascinou foi o <em>BerkeleyDB</em>, agora um produto <em>Oracle</em>. Não precisa de um servidor, não é <em>SQL</em>, difícil uma linguagem não implementar acesso a ele, e ainda tem <em>features</em> de alta disponibilidade.</p>
+
+<p>Há muito tempo, li um <em>paper</em> que explicava como toda autenticação do <em>google</em> funcionava usando as features de replicação e alta disponibilidade do <em>BerkekeyDB</em>. Infelizmente esse <em>paper</em> parece ter sido banido da Internet...</p>
+
+<p>E, mais recentemente, descobri o <em>MongoDB</em>, um banco de dados <em>NoSQL</em>. Fantástico ele, com replicação, alta disponibilidade, sem esquemas fixos, qualquer linguagem acessa ele.</p>
+
+<p>Mas, é um banco de dados tradicional no sentido de requerer processos e máquinas.</p>
+
+<h4>Descobrindo o unqlite</h4>
+
+<p>E não é que recentemente descobri o melhor desses mundos: uma forma de armazenar dados sem necessitar configurar um banco de dados, e sem usar <em>SQL</em>.</p>
+
+<p>Inicialmente, ele provê um mecanismo de armazenamento <em>key/value</em>, ou seja, em um arquivo, ele gerencia os dados baseados em chaves e conteúdo, mas com transações, atomicidade, e tudo mais que temos direito.</p>
+
+<p>Ele é escrito em <em>ANSI C</em>, primeiramente pensado para dispositivos com restrições de recursos, para ser uma alternativa <em>NoSQL</em> ao <em>SqLite</em>.</p>
+
+<p>Tudo que eu queria!</p>
+
+<h4>Características interessantes</h4>
+
+<p>Além de ganharmos atomicidade e transações, sem a necessidade de um processo dedicado a isso, e de ter um código muito simples e otimizado, que compila em praticamente qualquer coisa, tem licença <em>BSD</em>.</p>
+
+<p>Eu uso e recomendo tudo que o mundo <em>GPL</em> provê, mas sempre, quando procuro alguma biblioteca para usar, prefiro as com licença <em>BSD</em>. Penso que liberdade só é liberdade se não houver imposições. Mas isso é outra discussão. Para minha preferência, a licença adotada pela <a href="http://www.symisc.com">Symisc</a> (empresa que desenvolve o <em>unqlite</em>) é a melhor.</p>
+
+<p>Outra importante característica, é que existe uma outra biblioteca que implementa uma linguagem, a <a href="http://unqlite.org/jx9.html">jx9</a> para interagir com bases <em>unqlite</em> usando <em>JSON</em> para armazenamento.</p>
+
+<p>Aí a coisa ficou legal: temos uma biblioteca para persistência de dados que não usa <em>SQL</em>, mas que faz algo parecido com o <em>MongoDB</em>, que usa <em>javascript</em> como interface e trabalha com <em>JSON</em>.</p>
+
+<p>Nos próximos <em>posts</em>, passarei a uma abordagem prática, com exemplos de uso.</p>
+
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Introdução ao unqlite - o que é?"
+    data-url="https://paulohrpinheiro.xyz/texts/diversos/2016-03-01-introducao_unqlite.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Introdução ao unqlite - o que é?"
+    data-url="https://paulohrpinheiro.xyz/texts/diversos/2016-03-01-introducao_unqlite.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Introdução ao unqlite - o que é?"
+    data-url="https://paulohrpinheiro.xyz/texts/diversos/2016-03-01-introducao_unqlite.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Introdução ao unqlite - o que é?"
+    data-url="https://paulohrpinheiro.xyz/texts/diversos/2016-03-01-introducao_unqlite.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Introdução ao unqlite - o que é?"
+    data-url="https://paulohrpinheiro.xyz/texts/diversos/2016-03-01-introducao_unqlite.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2017, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+</body>
+</html>

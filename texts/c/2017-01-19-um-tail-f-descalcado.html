@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Um tail -f desfalcado</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Treinando com C para uma implementação pessoal do tail -f">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores e sysadmins</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Um tail -f desfalcado</h2>
+
+<h3>Treinando com C para uma implementação pessoal do tail -f</h3>
+
+<p><img src="images/stat.jpg" alt="struct stat"></p>
+
+<p>Como é que o comando <code class="prettyprint">tail</code> com a opção <code class="prettyprint">-f</code> faz seu serviço?</p>
+
+<p>É algo que não aprendi e resolvi dar uma fuçada. O que quero é saber se um arquivo que tenho aberto em meu programa, recebeu mais dados, especificamente em C.</p>
+
+<p>Achei muito interessante saber que, por exemplo no Linux, mágicas como essa podem ser feitas com a <a href="http://man7.org/linux/man-pages/man7/inotify.7.html">API inotify do Kernel</a>. O que vale também para <a href="https://www.freebsd.org/cgi/man.cgi?query=inotify&apropos=0&sektion=0&manpath=SuSE+Linux/i386+11.3&format=html">FreeBSD</a>, e, não pelo Kernel, no <a href="http://ports.su/devel/libinotify">OpenBSD</a>.</p>
+
+<p>Com essa API podemos monitorar o que acontece em diretórios (arquivos criados, apagados, alterados). Mas, cada alteração ocorrida, desencadeia um aviso. Cada uma. Como pretendo usar isso para ler arquivos de log, já não me parece uma boa solução.</p>
+
+<p>Enquanto vou pensando, resolvi fazer o básico. Como ficar lendo um arquivo, em C, que pode ser atualizado por outros processos?</p>
+
+<p>Pesquisa aqui e ali, e pegando uma cola no <a href="http://git.savannah.gnu.org/cgit/coreutils.git/tree/src/tail.c">código fonte do tail</a>, e lendo a <a href="http://man7.org/linux/man-pages/man2/read.2.html">man page da chamada read</a>, vi que não é tão complicado, é mais uma questão de ir conhecendo melhor o Unix.</p>
+
+<p>Em outras linguagens, como por exemplo <em>Perl</em>, temos isso pronto, com o pacote <a href="http://search.cpan.org/%7Eandya/File-Monitor-1.00/lib/File/Monitor.pm">File::Monitor</a>.</p>
+
+<p>Para esse primeiro passo, nada além do fato de que quando chamamos <code class="prettyprint">read</code> ele pode não ler nada (retornar zero bytes lidos) e isso não significa que é um erro, apenas indica que não tem mais nada pra ler, que chegamos ao final do arquivo.</p>
+
+<p>Essa noção de fim de arquivo não se aplica nessas chamadas, que realmente tratam tudo como arquivo, mas para a <em>família f</em> temos o <em>feof</em>, já que para o <em>fread</em> retornar zero bytes pode ser um erro.</p>
+
+<p>Portanto, posso ficar dando <code class="prettyprint">read</code> até dar erro ou retornar alguma coisa:</p>
+<pre><code class="language-c">
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;     &#x2F;* exit *&#x2F;
+#include &lt;unistd.h&gt;     &#x2F;* read&#x2F;close&#x2F;sleep *&#x2F;
+#include &lt;fcntl.h&gt;      &#x2F;* O_ constants *&#x2F;
+#include &lt;string.h&gt;     &#x2F;* memset *&#x2F;
+
+void exit_if_wrong_arguments(int argc, char *argv[]) {
+    if(argc&lt;2) {
+        fputs(&quot;Please, give-me a filename.&quot;, stderr);
+        exit(EXIT_FAILURE);
+    }
+
+    if(argc&gt;2) {
+        fputs(&quot;Please, give-me ONLY one filename.&quot;, stderr);
+        exit(EXIT_FAILURE);
+    }
+}
+
+int open_file_or_exit(char *filename)
+{
+    int fd;
+
+    fd = open(filename, O_RDONLY);
+
+    if(-1==fd) {
+        fprintf(stderr, &quot;Cannot open file [%s].\n&quot;, filename);
+        exit(EXIT_FAILURE);
+    }
+
+    return(fd);
+}
+
+int follow_file(int fd)
+{
+    #define BUFFER_LEN 513
+    char buffer[BUFFER_LEN];
+    ssize_t bytes_read_len;
+
+    while(1) {
+        memset((void *)buffer, 0, BUFFER_LEN);
+
+        bytes_read_len = read(fd, (void *)buffer, BUFFER_LEN-1);
+        if(-1==bytes_read_len) {
+            return 0;
+        }
+
+        if(0==bytes_read_len) {
+            sleep(1);
+        }
+        else {
+            printf(buffer);
+        }
+    }
+
+    return(1);
+}
+
+int main(int argc, char *argv[])
+{
+    int fd, status;
+
+    exit_if_wrong_arguments(argc, argv);
+
+    fd = open_file_or_exit(argv[1]);
+    if(!follow_file(fd)) {
+        fputs(&quot;Read file error. Exiting.&quot;, stderr);
+        status = EXIT_FAILURE;
+    } else {
+        status = EXIT_SUCCESS;
+    }
+
+    close(fd);
+
+    exit(status);
+}
+
+</code></pre>
+<p>Uma rápida explanação.</p>
+
+<p>A função <code class="prettyprint">exit_if_wrong_arguments</code> é só uma firula pra saber se tenho a quantidade certa de parâmetros (por enquanto, 1); se não tiver, encerra o programa.</p>
+
+<p>Já a <code class="prettyprint">open_file_or_exit</code> tenta abrir o arquivo, retornando o <em>file descriptor</em> se conseguir, caso contrário, encerra o programa.</p>
+
+<p>A a nossa mais importante, <code class="prettyprint">follow_file</code>, que fica lendo o arquivo indefinidamente. Se tem o que imprimir, imprime, se der algum erro, cai fora.</p>
+
+<p>E, não pode faltar :), nossa <code class="prettyprint">main</code>, que organiza tudo.</p>
+
+<p>Não é muito esperto, mas matou minha curiosidade. Para esse primeiro experimento, sem preocupações maiores, como por exemplo, o arquivo ser renomeado, como acontece no rotacionamento de <em>logs</em>.</p>
+
+<p>Mas tudo isso tem solução, nos próximos capítulos...</p>
+
+<p>Salvando o programa como <code class="prettyprint">rtspyfile.c</code>, pode-se compilar com <code class="prettyprint">make rtspyfile</code>, ou então, um comando mais metido a besta como <code class="prettyprint">gcc -o rtspyfile rtspyfile.c -ansi -pedantic-errors -Werror -O2</code>.</p>
+
+<p>E aqui, uma amostra do programa funcionando:</p>
+
+<p><img src="images/live.gif" alt="Live"></p>
+
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Um tail -f desfalcado"
+    data-url="https://paulohrpinheiro.xyz/texts/c/2017-01-19-um-tail-f-descalcado.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Um tail -f desfalcado"
+    data-url="https://paulohrpinheiro.xyz/texts/c/2017-01-19-um-tail-f-descalcado.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Um tail -f desfalcado"
+    data-url="https://paulohrpinheiro.xyz/texts/c/2017-01-19-um-tail-f-descalcado.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Um tail -f desfalcado"
+    data-url="https://paulohrpinheiro.xyz/texts/c/2017-01-19-um-tail-f-descalcado.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Um tail -f desfalcado"
+    data-url="https://paulohrpinheiro.xyz/texts/c/2017-01-19-um-tail-f-descalcado.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2017, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+</body>
+</html>

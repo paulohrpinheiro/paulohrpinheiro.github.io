@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Iniciando no Ruby</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Antes de sair por aí programando e instalando *gems* como um doido, convém habituar-se a preparar o ambiente para cada novo projeto.">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores e sysadmins</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Iniciando no Ruby</h2>
+
+<h3>Antes de sair por aí programando e instalando <em>gems</em> como um doido, convém habituar-se a preparar o ambiente para cada novo projeto.</h3>
+
+<p><img src="images/aprenda-ruby.jpg" alt="http://www.diolinux.com.br/2015/09/5-meios-de-aprender-programar-com-ruby.html"></p>
+
+<p>Vim do <a href="https://www.python.org">Python</a> e lá me acostumei com as <a href="https://docs.python.org/3/library/venv.html">virtualenv</a>. No mundo <em>Ruby</em> temos dois elementos, que, eu acredito, somados são superiores, e me lembram um pouco de como é feito em <a href="https://perlbrew.pl/">Perl</a>.</p>
+
+<p>A grande utilidade de garantir a versão do interpretador, é, especialmente, se você está desenvolvendo em uma máquina, e tem que  executar em outra. Garante-se a maior proximidade possível entre o ambiente de desenvolvimento e o de produção.</p>
+
+<p>Eu, por exemplo, agora estou num projeto no <a href="https://openshift.com">OpenShift</a>, e lá o <em>ruby</em> de maior versão é o 2.3.0, por enquanto. Pra minha comodidade, uso a mesma versão aqui e lá, já que a versão de minha distribuição está mais atualizada.</p>
+
+<p>A primeira coisa é controlar qual versão de <em>Ruby</em> você está usando em determinado projeto. Essa é a tarefa do <a href="https://rvm.io/">RVM - Ruby Version Manager</a>.</p>
+
+<p>Uma vez instalado (<a href="https://rvm.io/rvm/install">instruções na página do RVM</a>), a cada novo projeto começamos com:</p>
+<pre><code class="language-ruby">
+$ rvm list known
+# MRI Rubies
+[ruby-]1.8.6[-p420]
+[ruby-]1.8.7[-head] # security released on head
+[ruby-]1.9.1[-p431]
+[ruby-]1.9.2[-p330]
+[ruby-]1.9.3[-p551]
+[ruby-]2.0.0[-p648]
+[ruby-]2.1[.8]
+[ruby-]2.2[.4]
+[ruby-]2.3[.0]
+[ruby-]2.2-head
+ruby-head
+
+(mais uma penca de opções)
+
+</code></pre>
+<p>Sendo um usuário <em>Linux</em>, o que me interessa aqui são as opções em <em>MRI Rubies</em>. Vou na que me interessa:</p>
+<pre><code class="language-ruby">
+rvm install 2.3
+
+</code></pre>
+<p>Para usá-la, digite <code class="prettyprint">rvm use 2.3</code>, e para torná-la padrão, digite o comando <code class="prettyprint">rvm use 2.3 --default</code>. Para voltar a usar o interpretador instalado em seu sistema, execute o comando <code class="prettyprint">rvm system</code></p>
+
+<p>Agora vamos para o módulos, ou no jargão <em>Ruby</em>, <a href="https://rubygems.org/">Gems</a>. Cada projeto ou experimento que fazemos necessitam de algum código externo pronto.</p>
+
+<p>Para nosso novo projeto, vamos criar um <em>gemset</em> exclusivo, usando a versão 2.3 do <em>Ruby</em>:</p>
+<pre><code class="language-ruby">
+rvm use 2.3 # ou rvm use default
+rvm gemset create novoprojeto
+
+</code></pre>
+<p>Depois de criada essa estrutura, para &quot;entrar&quot; nela, basta um:</p>
+<pre><code class="language-ruby">
+rvm use 2.3@novoprojeto
+
+</code></pre>
+<p>Para não ficar digitando a toda troca de projeto, muito menos ficar lembrando que versão usar em cada um, e muito menos ficar criando scripts para ativar o ambiente adequado a cada projeto, pode-se criar arquivos de configuração na base do projeto.</p>
+
+<p>Por exemplo, se tenho um projeto em <code class="prettyprint">~/novoprojeto</code>, crio o arquivo <code class="prettyprint">~/novoprojeto/.ruby-gemset</code> contendo o nome do <em>gemset</em>:</p>
+<pre><code class="language-ruby">
+novoprojeto
+
+</code></pre>
+<p>E o arquivo <code class="prettyprint">~/novoprojeto/ruby-version</code> contendo a versão do <em>Ruby</em>:</p>
+<pre><code class="language-ruby">
+2.3
+
+</code></pre>
+<p>E toda vez que entrar nesse diretório, estarei usando a versão indicada com o conjunto de <em>gems</em> indicado, sem ter que executar qualquer comando.</p>
+
+<p>Se você mudar de diretório, para outro projeto, que tenha esses arquivos com versões diferentes, o <em>rvm</em> prepara tudo para você de forma transparente. Se por algum motivo, precisar do <em>ruby</em> instalado no sistema, basta um <code class="prettyprint">rvm system</code>.</p>
+
+<p>O <em>rvm</em> altera o seu <code class="prettyprint">.profile</code> para que possa trabalhar. Se for usar o <em>gnome-terminal</em>, altere as configurações dele para que execute sempre como um <em>login shell</em>, no meu caso, &quot;Executar comando como shell de sessão&quot;:</p>
+
+<p><img src="images/gnome-terminal.jpg" alt="Configuração gnome-terminal"></p>
+
+<p>-x-</p>
+
+<p><a href="https://www.facebook.com/groups/rubyonrailsbrasil/permalink/1022041501256694/?comment_id=1022100707917440&notif_t=group_comment&notif_id=1478605237928310">Dica do colega Igor Oliveira</a> de um tutorial sobre o tema: https://www.digitalocean.com/community/tutorials/how-to-install-ruby-on-rails-on-ubuntu-14-04-using-rvm</p>
+
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Iniciando no Ruby"
+    data-url="https://paulohrpinheiro.xyz/texts/ruby/2016-11-08-iniciando-no-ruby.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Iniciando no Ruby"
+    data-url="https://paulohrpinheiro.xyz/texts/ruby/2016-11-08-iniciando-no-ruby.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Iniciando no Ruby"
+    data-url="https://paulohrpinheiro.xyz/texts/ruby/2016-11-08-iniciando-no-ruby.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Iniciando no Ruby"
+    data-url="https://paulohrpinheiro.xyz/texts/ruby/2016-11-08-iniciando-no-ruby.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Iniciando no Ruby"
+    data-url="https://paulohrpinheiro.xyz/texts/ruby/2016-11-08-iniciando-no-ruby.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2017, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Usando *strings* e `doctest` em *Python2* e *Python3* simultaneamente.</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Usando strings de uma forma que funciona tanto no Python2 como no Python3, especialmente quando fazendo testes com `doctest`.">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores e sysadmins</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Usando <em>strings</em> e <code class="prettyprint">doctest</code> em <em>Python2</em> e <em>Python3</em> simultaneamente.</h2>
+
+<h3>Usando strings de uma forma que funciona tanto no Python2 como no Python3, especialmente quando fazendo testes com <code class="prettyprint">doctest</code>.</h3>
+
+<p><img src="images/tdd-in-python.jpg" alt="Descrição"></p>
+
+<h4>Usando <code class="prettyprint">doctest</code></h4>
+
+<p>É muito simples, pois na própria <em>docstring</em> de sua função você já escreve os testes. Por exemplo:</p>
+<pre><code class="language-python">
+# encoding: utf-8
+
+def dobro(x):
+    &quot;&quot;&quot;Retorna o dobro do número passado como argumento
+
+    &gt;&gt;&gt; dobro(2)
+    4
+    &gt;&gt;&gt; dobro(0)
+    0
+    &gt;&gt;&gt; dobro(1.5)
+    3.0
+    &gt;&gt;&gt; dobro(-2)
+    -4
+    &quot;&quot;&quot;
+    return (x*2)
+
+if __name__ == &#x27;__main__&#x27;:
+    import doctest
+    doctest.testmod(verbose=True)
+
+</code></pre>
+<p>Esse exemplo funciona tanto em <em>Python2</em> (por isso o <code class="prettyprint">encoding</code> na primeira linha) como no <em>Python3</em>. Salvando como <code class="prettyprint">/tmp/test1.py</code>:</p>
+<pre><code class="language-python">
+$ python &#x2F;tmp&#x2F;a.py
+Trying:
+    dobro(2)
+Expecting:
+    4
+ok
+Trying:
+    dobro(0)
+Expecting:
+    0
+ok
+Trying:
+    dobro(1.5)
+Expecting:
+    3.0
+ok
+Trying:
+    dobro(-2)
+Expecting:
+    -4
+ok
+1 items had no tests:
+    __main__
+1 items passed all tests:
+   4 tests in __main__.dobro
+4 tests in 2 items.
+4 passed and 0 failed.
+Test passed.
+
+</code></pre>
+<p><em>Tente executar também <code class="prettyprint">python3 /tmp/teste1.py</code>. A saída deve ser a mesma.</em></p>
+
+<p>Maravilhoso! Meu problema veio quando tive que fazer testes com funções que retornavam <em>strings</em>.</p>
+<pre><code class="language-python">
+# encoding: utf-8
+
+import doctest
+
+def cumprimenta(fulano):
+    &quot;&quot;&quot;Cumprimenta com &quot;Olá, Fulano!&quot;. Se fulano for vazio retorna &quot;Olá.&quot;
+
+    &gt;&gt;&gt; cumprimenta(&#x27;&#x27;)
+    &#x27;Olá.&#x27;
+    &gt;&gt;&gt; cumprimenta(&#x27;Paulo&#x27;)
+    &#x27;Olá, Paulo!&#x27;
+    &quot;&quot;&quot;
+    return &#x27;Olá, %s!&#x27;%fulano if fulano else &#x27;Olá.&#x27;
+
+doctest.testmod()
+
+</code></pre>
+<p>Com <em>PY2</em> temos essa saída:</p>
+<pre><code class="language-python">
+$ python2 &#x2F;tmp&#x2F;test2.py
+**********************************************************************
+File &quot;&#x2F;tmp&#x2F;test2.py&quot;, line 8, in __main__.cumprimenta
+Failed example:
+    cumprimenta(&#x27;&#x27;)
+Expected:
+    &#x27;Olá.&#x27;
+Got:
+    &#x27;Ol\xc3\xa1.&#x27;
+**********************************************************************
+File &quot;&#x2F;tmp&#x2F;test2.py&quot;, line 10, in __main__.cumprimenta
+Failed example:
+    cumprimenta(&#x27;Paulo&#x27;)
+Expected:
+    &#x27;Olá, Paulo!&#x27;
+Got:
+    &#x27;Ol\xc3\xa1, Paulo!&#x27;
+**********************************************************************
+1 items had failures:
+   2 of   2 in __main__.cumprimenta
+***Test Failed*** 2 failures.
+
+</code></pre>
+<p>Com <em>PY3</em> temos essa:</p>
+<pre><code class="language-python">
+$ python3 &#x2F;tmp&#x2F;test2.py
+$
+
+</code></pre>
+<p>Ou seja, tudo certo.</p>
+
+<p>Aqui entramos no terrível mundo das codificações de caracteres em <em>PY2</em>.  Nem vou mostrar o que tentei, pois é ridículo. Pesquisando com mais calma achei essa questão no <em>StackOverflow</em>:</p>
+
+<p>http://stackoverflow.com/questions/1733414/how-do-i-include-unicode-strings-in-python-doctests</p>
+
+<p>Moleza! E agora? Testemos isso:</p>
+<pre><code class="language-python">
+# encoding: utf-8
+
+from __future__ import print_function
+
+import doctest
+
+def cumprimenta(fulano):
+    &quot;&quot;&quot;Cumprimenta com &quot;Olá, Fulano!&quot;. Se fulano for vazio retorna &quot;Olá.&quot;
+
+    &gt;&gt;&gt; print(cumprimenta(&#x27;&#x27;))
+    Olá.
+    &gt;&gt;&gt; print(cumprimenta(&#x27;Paulo&#x27;))
+    Olá, Paulo!
+    &quot;&quot;&quot;
+    return &#x27;Olá, %s!&#x27;%fulano if fulano else &#x27;Olá.&#x27;
+
+doctest.testmod()
+
+</code></pre>
+<p>Adicionamos o modulo <strong>future</strong> para que o <code class="prettyprint">print</code> seja uma função no <em>PY2</em>.</p>
+
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Usando *strings* e `doctest` em *Python2* e *Python3* simultaneamente."
+    data-url="https://paulohrpinheiro.xyz/texts/python/2016-12-16-doctest-py2-e-py3.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Usando *strings* e `doctest` em *Python2* e *Python3* simultaneamente."
+    data-url="https://paulohrpinheiro.xyz/texts/python/2016-12-16-doctest-py2-e-py3.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Usando *strings* e `doctest` em *Python2* e *Python3* simultaneamente."
+    data-url="https://paulohrpinheiro.xyz/texts/python/2016-12-16-doctest-py2-e-py3.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Usando *strings* e `doctest` em *Python2* e *Python3* simultaneamente."
+    data-url="https://paulohrpinheiro.xyz/texts/python/2016-12-16-doctest-py2-e-py3.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Usando *strings* e `doctest` em *Python2* e *Python3* simultaneamente."
+    data-url="https://paulohrpinheiro.xyz/texts/python/2016-12-16-doctest-py2-e-py3.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2017, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+</body>
+</html>

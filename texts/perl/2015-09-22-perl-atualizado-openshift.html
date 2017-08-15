@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Trabalhando com uma versão atualizada de Perl no OpenShift</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Uma forma de trabalhar com uma instalação Perl atualizada rodando no OpenShift, válido também para a GetupCloud.">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores e sysadmins</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Trabalhando com uma versão atualizada de Perl no OpenShift</h2>
+
+<h3>Uma forma de trabalhar com uma instalação Perl atualizada rodando no OpenShift, válido também para a GetupCloud.</h3>
+
+<p><img src="images/seek-ajc-camel.jpg" alt="Camelo voador"></p>
+
+<h4>OpenShift</h4>
+
+<p>O <a href="http://www.openshift.com">OpenShift</a> é o
+<a href="http://www.openstack.com">OpenStack</a> funcionando em máquinas com
+<a href="http://www.redhat.com/en/technologies/linux-platforms/enterprise-linux">RedHat</a>
+na <a href="https://aws.amazon.com/pt/">Amazon</a>.</p>
+
+<p>Ele tem sido uma ferramenta indispensável para meu trabalho. Geralmente ao
+iniciar um novo projeto, é com ele que começo.</p>
+
+<p>Está tudo à mão. Repositório para o código, banco de dados, <em>devops</em>, <em>backup</em>,
+<em>logs</em>. E toda a configuração, após ter uma conta criada lá, pode ser feita
+pela linha de comando com o utilitário
+<a href="https://developers.openshift.com/en/managing-client-tools.html"><code class="prettyprint">rhc</code></a>.</p>
+
+<p>A <a href="https://www.openshift.com/app/account/new">criação de conta</a> é gratuita, o
+<a href="https://www.openshift.com/products/pricing/plan-comparison">produto oferecido no menor pacote oferece uma configuração
+razoável</a>, sem
+vencimento, e os limites são apenas de recursos. A assinatura não tem validação
+com cartão de crédito.</p>
+
+<p>Trata-se de um ambiente perfeito para uma demonstração ou protótipo, em um
+ambiente que pode ser facilmente compartilhado (é possível formar uma equipe
+com privilégios diferenciados), com certificado <em>SSL</em> válido.</p>
+
+<p>Sua aplicação funciona em um servidor <em>Linux</em> com acesso <em>shell</em> por <em>ssh</em>, e o
+melhor de tudo, um compilador <em>gcc</em>. Combine-se isso com o <a href="https://developers.openshift.com/en/diy-overview.html"><em>cartridge DIY (Do
+It Yourself)</em></a>, e
+podemos ter o que quisermos lá dentro.</p>
+
+<p>Um servidor <em>Apache</em> se comunica através da porta 8080 com sua instância, não
+importa o que seja, desde que converse <em>HTTP</em>.</p>
+
+<h4>Linguagens e suas versões</h4>
+
+<p>Quando se configura um novo ambiente (aplicação), deve-se escolher o que ela
+vai rodar. Os <em>cartridges WEB</em> podem ser uma linguagem (<em>Perl</em>, <em>Python</em>,
+<em>PHP</em>, <em>NodeJS</em>), ou uma aplicação já instalada junto com a linguagem (como o
+<a href="https://developers.openshift.com/en/php-wordpress.html"><em>WordPress</em> com
+<em>PHP</em></a>, ou o <a href="https://hub.openshift.com/quickstarts/119-ghost-0-6-4"><em>Ghost</em>
+com <em>NodeJS</em></a>) ou um
+banco de dados. Combinando-se vários <em>cartridges</em>, construimos a estrutura para
+nossa aplicação.</p>
+
+<p>Há, atualmente, uma trinca de linguagens que se acha quase em qualquer máquina
+<em>Unix</em>: <em>Perl</em>, <em>Python</em> e <em>Ruby.</em> Mais recorrente é ter que instalar um
+compilador <em>C</em> do que uma dessas linguagens.</p>
+
+<p>Então não há muito o que pensar nem justificar. Instalar pacotes, bibliotecas
+ou módulos é fácil em qualquer uma delas.</p>
+
+<p>Você não encontrará, no <em>OpenShift</em>, as versões mais atualizadas do que gosta,
+mas encontrará estabilidade e usabilidade. Então, se quiser um servidor escrito
+em <em>PyPy3</em>, ou em <em>Perl6</em>, ou na versão <em>dev</em> de sua linguagem preferida, é só
+compilar e usar.</p>
+
+<p>Existem alguns <a href="https://developers.openshift.com/en/get-involved-extend-openshift.html#examples"><em>cartridges</em> mantidos pela
+comunidade</a>,
+mas apenas são um pouco menos atrasados que os oficiais. Quer controle, faça
+você mesmo!</p>
+
+<h4><em>Perl</em></h4>
+
+<p>O que fiz em <em>Perl</em>, pode ser feito com qualquer linguagem que compile num <em>RedHat</em>. Se pretende usar <em>OpenShift</em> e não quer ficar preso a versões não atualizadas de sua linguagem preferida, compile sua linguagem e inicie um servidor <em>HTTP</em> na porta indicada pela variável de ambiente <code class="prettyprint">$OPENSHIFT_DIY_PORT</code>, no endereço <code class="prettyprint">OPENSHIFT_DIY_ADDRESS</code>.</p>
+
+<p>No momento em que esse texto está sendo escrito, o <em>Perl</em> no <em>OpenShift</em> é a versão 5.10, e a versão atual é 5.22, que contém <a href="https://metacpan.org/pod/release/RJBS/perl-5.22.0/pod/perldelta.pod">inúmeras melhorias</a>.</p>
+
+<h4>Mãos à obra</h4>
+
+<p>Nosso objetivo é ter o <em>Perl</em> mais recente, sem gambiarras (a não ser a de instalar um mais novo onde há um antigo).</p>
+
+<p>Para executar esse trabalho, vamos usar ferramentas padrão do <em>Perl</em>. Há um excelente guia em inglês sobre <a href="https://github.com/dns/OpenShift-DIY-Perl">como ter um <em>Perl</em> atualizado no <em>OpenShift</em></a>, mas fazendo algumas <em>gambiarras</em>, o que pretendo evitar. Mas foi a partir dessas instruções que aprendi o necessário.</p>
+
+<p>Usaremos as seguintes ferramentas:</p>
+
+<ul>
+<li><a href="http://search.cpan.org/%7Egugod/App-perlbrew-0.73/lib/App/perlbrew.pm"><em>PerlBrew</em></a>
+para gerenciar e construir novas versões.</li>
+<li><a href="http://search.cpan.org/%7Emiyagawa/Menlo-1.9001/script/cpanm-menlo"><em>CPAN
+Minus</em></a>
+para gerenciar os módulos que precisarmos.</li>
+</ul>
+
+<p>Vamos instalar o <em>PerlBrew</em> e compilar a mais recente versão disponível <em>Perl</em> (ele cuida de verificar isso), vamos configurar o ambiente para que quando nos loguemos via <em>shell</em>, facilmente iniciemos o ambiente com a nova versão (ou muito mais antiga, se precisar). E finalmente, vamos configurar <a href="https://developers.openshift.com/en/managing-action-hooks.html">nossos scripts de <em>start</em> e <em>stop</em></a> para
+trabalharem com o <em>Perl</em> novo.</p>
+
+<p>Primeiro, entre no shell de sua aplicação com o seguinte comando <code class="prettyprint">rhc ssh NOME_APP</code>. Então verifique a versão do Perl padrão com o comando <code class="prettyprint">perl -V</code>:</p>
+<pre><code class="language-perl">
+This is perl, v5.10.1 (*) built for x86_64-linux-thread-multi
+
+Copyright 1987-2009, Larry Wall
+
+Perl may be copied only under the terms of either the  Artistic License or the
+GNU General Public License, which may be found in the Perl 5 source kit.
+
+Complete documentation for Perl, including FAQ lists, should be found on
+this system using &quot;man perl&quot; or &quot;perldoc perl&quot;.  If you have access to the
+Internet, point your browser at http:&#x2F;&#x2F;www.perl.org&#x2F;, the Perl Home Page.
+
+</code></pre>
+<h5><em>PerlBrew</em></h5>
+
+<p>É preciso alterar o local padrão da nova instalação:</p>
+<pre><code class="language-perl">
+$ echo &#x27;export PERLBREW_ROOT=$OPENSHIFT_DATA_DIR&#x2F;perlbrew&#x27; &gt;&gt; $OPENSHIFT_DATA_DIR&#x2F;.bash_profile
+$ echo &#x27;export PERLBREW_HOME=$OPENSHIFT_DATA_DIR&#x2F;.perlbrew&#x27; &gt;&gt; $OPENSHIFT_DATA_DIR&#x2F;.bash_profile
+$ echo &#x27;alias perlbrew=$PERLBREW_ROOT&#x2F;bin&#x2F;perlbrew&#x27; &gt;&gt; $OPENSHIFT_DATA_DIR&#x2F;.bash_profile
+$ source $OPENSHIFT_DATA_DIR&#x2F;.bash_profile
+$ echo &#x27;export PERL_CPANM_HOME=$OPENSHIFT_DATA_DIR&#x2F;.cpanm&#x27; &gt;&gt; $OPENSHIFT_DATA_DIR&#x2F;.bash_profile
+
+</code></pre>
+<p>O que fizemos até aqui foi dizer onde queremos que o <em>PerlBrew</em> seja instalado bem como seu local de trabalho, no diretório com permissão de escrita (e que mantém o conteúdo entre <em>deploys</em>): <code class="prettyprint">$OPENSHIFT_DATA_DIR</code>, já que o <code class="prettyprint">$HOME</code> do <em>OpenShift</em> é <em>read-only</em>).</p>
+
+<p>Agora é baixar e instalar:</p>
+<pre><code class="language-perl">
+$ wget -O - http:&#x2F;&#x2F;install.perlbrew.pl | bash
+
+</code></pre>
+<p>Depois de instalado, pode-se verificar que versões de <em>Perl</em> estão disponíveis para compilação:</p>
+
+<h5><em>Perl</em></h5>
+<pre><code class="language-perl">
+$ perlbrew available
+perl-5.22.0
+perl-5.20.2
+perl-5.18.4
+perl-5.16.3
+perl-5.14.4
+perl-5.12.5
+perl-5.10.1
+perl-5.8.9
+perl-5.6.2
+perl5.005_04
+perl5.004_05
+perl5.003_07
+
+</code></pre>
+<p>E finalmente, instalar o <em>Perl</em> mais atual (ou, simplesmente, o mais adequado):</p>
+<pre><code class="language-perl">
+ $ perlbrew install --notest --noman perl-5.22.0
+ Fetching perl 5.22.0 as &#x2F;var&#x2F;lib&#x2F;openshift&#x2F;55e5156a7628e1d752000132&#x2F;app-root&#x2F;data&#x2F;&#x2F;perlbrew&#x2F;dists&#x2F;perl-5.22.0.tar.bz2
+ Download http:&#x2F;&#x2F;www.cpan.org&#x2F;src&#x2F;5.0&#x2F;perl-5.22.0.tar.bz2 to &#x2F;var&#x2F;lib&#x2F;openshift&#x2F;55e5156a7628e1d752000132&#x2F;app-root&#x2F;data&#x2F;&#x2F;perlbrew&#x2F;dists&#x2F;perl-5.22.0.tar.bz2
+ Installing &#x2F;var&#x2F;lib&#x2F;openshift&#x2F;55e5156a7628e1d752000132&#x2F;app-root&#x2F;data&#x2F;&#x2F;perlbrew&#x2F;build&#x2F;perl-5.22.0 into &#x2F;var&#x2F;lib&#x2F;openshift&#x2F;55e5156a7628e1d752000132&#x2F;app-root&#x2F;data&#x2F;&#x2F;perlbrew&#x2F;perls&#x2F;perl-5.22.0
+
+ This could take a while. You can run the following command on another shell to track the status:
+
+ tail -f &#x2F;var&#x2F;lib&#x2F;openshift&#x2F;55e5156a7628e1d752000132&#x2F;app-root&#x2F;data&#x2F;&#x2F;perlbrew&#x2F;build.perl-5.22.0.log
+
+</code></pre>
+<p>Após compilar e instalar, pode-se verificar se está tudo certo:</p>
+<pre><code class="language-perl">
+ $ perlbrew list
+ perl-5.22.0
+
+</code></pre>
+<p>Criar um apelido para essa versão:</p>
+<pre><code class="language-perl">
+ $ perlbrew alias create perl-5.22.0 production
+ $ perlbrew list
+ perl-5.22.0
+ production (5.22.0)
+
+</code></pre>
+<p>Ativar a nova versão e verificar:</p>
+<pre><code class="language-perl">
+ $ perlbrew switch production
+
+ A sub-shell is launched with production as the activated perl. Run &#x27;exit&#x27; to finish it.
+
+ bash-4.1$ perl -v
+
+ This is perl 5, version 22, subversion 0 (v5.22.0) built for x86_64-linux
+ (with 1 registered patch, see perl -V for more detail)
+
+ Copyright 1987-2015, Larry Wall
+
+ Perl may be copied only under the terms of either the Artistic License or the
+ GNU General Public License, which may be found in the Perl 5 source kit.
+
+ Complete documentation for Perl, including FAQ lists, should be found on
+ this system using &quot;man perl&quot; or &quot;perldoc perl&quot;.  If you have access to the
+ Internet, point your browser at http:&#x2F;&#x2F;www.perl.org&#x2F;, the Perl Home Page.
+
+ bash-4.1$
+
+</code></pre>
+<p>E finalmente temos nosso novo <em>Perl</em>!</p>
+
+<p>Mas espere, é preciso mais... Precisamos instalar nossos módulos preferidos, com o <em>CPAN</em>. Prefiro o <em>cpanm</em> ao invés do gerenciador padrão.</p>
+
+<h5><em>CPANM</em></h5>
+
+<p>Basta estar no ambiente com a nova versão instalada, e usá-la para instalar o
+pacote:</p>
+<pre><code class="language-perl">
+ bash-4.1$ curl -L https:&#x2F;&#x2F;git.io&#x2F;cpanm | perl - App::cpanminus
+ PERL_CPANM_HOME=&#x2F;var&#x2F;lib&#x2F;openshift&#x2F;55e5156a7628e1d752000132&#x2F;app-root&#x2F;data&#x2F;&#x2F;.cpanm
+ bash-4.1$ curl -L https:&#x2F;&#x2F;git.io&#x2F;cpanm | perl - App::cpanminus
+ % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+ Dload  Upload   Total   Spent    Left  Speed
+ 100  296k  100  296k    0     0  1162k      0 --:--:-- --:--:-- --:--:-- 5205k
+ --&gt; Working on App::cpanminus
+ Fetching http:&#x2F;&#x2F;www.cpan.org&#x2F;authors&#x2F;id&#x2F;M&#x2F;MI&#x2F;MIYAGAWA&#x2F;App-cpanminus-1.7039.tar.gz ... OK
+ Configuring App-cpanminus-1.7039 ... OK
+ Building and testing App-cpanminus-1.7039 ... OK
+ Successfully installed App-cpanminus-1.7039
+ 1 distribution installed
+
+</code></pre>
+<p>Agora é possível atualizar os pacotes necessários. Para nossa aplicação exemplo, vou usar o <a href="http://search.cpan.org/dist/Web-Simple/lib/Web/Simple.pm"><code class="prettyprint">Web::Simple</code></a>:</p>
+<pre><code class="language-perl">
+bash-4.1$ cpanm --notest Web::Simple Starman
+
+</code></pre>
+<p>Depois de algumas (muitas) dependências instaladas, o trabalho no servidor acabou, agora já é possível trabalhar apenas localmente, usando o <em>git</em>.</p>
+
+<p>Duas tarefas ainda restam:</p>
+
+<ol>
+<li>Escrever uma pequena aplicação em <em>Perl</em> para verificar se tudo está OK.</li>
+<li>Alterar os <em>scripts</em> que controlam a inicialização e finalização do serviço.</li>
+</ol>
+
+<h5>A Aplicação</h5>
+
+<p>Esta é uma livre adaptação do exemplo na página do módulo <code class="prettyprint">Web::Simple</code> (uma boa explicação sobre esse módulo está <a href="http://sao-paulo.pm.org/pub/web-simple">nesse artigo do Renato Cron</a>):</p>
+<pre><code class="language-perl">
+ #!&#x2F;usr&#x2F;bin&#x2F;env perl
+
+ package Server;
+ use Web::Simple;
+
+ sub dispatch_request {
+    GET =&gt; sub {
+        [ 200, [ &#x27;Content-type&#x27;, &#x27;text&#x2F;plain&#x27; ], [ &#x27;This is the article: http:&#x2F;&#x2F;www.sysincloud.it&#x2F;trabalhando-com-perl-no-openshift&#x2F;&#x27; ] ]
+    },
+   &#x27;&#x27; =&gt; sub {
+        [ 405, [ &#x27;Content-type&#x27;, &#x27;text&#x2F;plain&#x27; ], [ &#x27;Method not allowed&#x27; ] ]
+    }
+ }
+
+ Server-&gt;run_if_script;
+
+</code></pre>
+<p>Salvei como <code class="prettyprint">Server.pm</code> na raiz de meu diretório com o clone do projeto (<a href="https://developers.openshift.com/en/managing-modifying-applications.html">Trabalhando com <em>git</em> no <em>OpenShift</em></a>).</p>
+
+<p>No diretório <code class="prettyprint">.openshift/action_hooks</code>, dentro do clone do projeto, existem os arquivos <code class="prettyprint">start</code> e <code class="prettyprint">stop</code>.</p>
+
+<p>O <code class="prettyprint">start</code> deve ficar assim:</p>
+<pre><code class="language-perl">
+ #!&#x2F;bin&#x2F;bash
+
+ source $OPENSHIFT_DATA_DIR&#x2F;.bash_profile
+ source ${PERLBREW_ROOT}&#x2F;etc&#x2F;bashrc
+
+ perlbrew switch production
+
+ cd $OPENSHIFT_REPO_DIR&#x2F;
+ nohup starman -l $OPENSHIFT_DIY_IP:$OPENSHIFT_DIY_PORT --workers 5 --pid $OPENSHIFT_DATA_DIR&#x2F;server.pid Server|&amp; &#x2F;usr&#x2F;bin&#x2F;logshifter -tag diy &amp;
+
+</code></pre>
+<p>E o <code class="prettyprint">stop</code> assim:</p>
+<pre><code class="language-perl">
+ #!&#x2F;bin&#x2F;bash
+ source $OPENSHIFT_CARTRIDGE_SDK_BASH
+
+ PID=$OPENSHIFT_DATA_DIR&#x2F;server.pid
+
+ if [ ! -f $PID ]
+ then
+     client_result &quot;Application is already stopped&quot;
+ else
+     kill `cat $PID`
+ fi
+
+</code></pre>
+<p>Comita, dá <em>push</em> e acessa:</p>
+
+<p>http://diy-sysincloudit.rhcloud.com</p>
+
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Trabalhando com uma versão atualizada de Perl no OpenShift"
+    data-url="https://paulohrpinheiro.xyz/texts/perl/2015-09-22-perl-atualizado-openshift.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Trabalhando com uma versão atualizada de Perl no OpenShift"
+    data-url="https://paulohrpinheiro.xyz/texts/perl/2015-09-22-perl-atualizado-openshift.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Trabalhando com uma versão atualizada de Perl no OpenShift"
+    data-url="https://paulohrpinheiro.xyz/texts/perl/2015-09-22-perl-atualizado-openshift.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Trabalhando com uma versão atualizada de Perl no OpenShift"
+    data-url="https://paulohrpinheiro.xyz/texts/perl/2015-09-22-perl-atualizado-openshift.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Trabalhando com uma versão atualizada de Perl no OpenShift"
+    data-url="https://paulohrpinheiro.xyz/texts/perl/2015-09-22-perl-atualizado-openshift.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2017, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+
+<rss version="2.0">
+  <channel>
+    <title>Paulo Henrique Rodrigues Pinheiro</title>
+    <link>https://paulohrpinheiro.xyz</link>
+    <description>Blog sobre programação para programadores e sysadmins</description>
+    <language>pt-br</language>
+
+    <item>
+      <title>Ficando velho: carreira em TI e idade</title>
+      <link>https://paulohrpinheiro.xyz/texts/diversos/2017-06-11-ficando-velho-carreira-em-ti-e-idade.html</link>
+      <description>Sobre continuar na carreira em um cargo operacional, apesar da idade e experiência.</description>
+      <pubDate>Sun, 11 Jun 2017 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Reflexões geradas pelo livro &quot;Economia do Acesso&quot;</title>
+      <link>https://paulohrpinheiro.xyz/texts/diversos/2017-03-03-reflexões-geradas-pelo-livro-economia-doa-acesso.html</link>
+      <description>Minhas impressões geradas pelo livro &quot;Economia do Acesso&quot;, de Rodrigo Dantas, editado pela Casa do Código.</description>
+      <pubDate>Fri, 3 Mar 2017 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>O pokerface nosso de cada dia</title>
+      <link>https://paulohrpinheiro.xyz/texts/diversos/2017-01-16-o-poker-face-nosso-de-cada-dia.html</link>
+      <description>Lembrando as humilhações ao longo da carreira</description>
+      <pubDate>Mon, 16 Jan 2017 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Colaborando no github</title>
+      <link>https://paulohrpinheiro.xyz/texts/diversos/2016-11-03-colaborando-no-github.html</link>
+      <description>Uma interessante experiência no mundo do Software Livre.</description>
+      <pubDate>Thu, 3 Nov 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Blogando no github</title>
+      <link>https://paulohrpinheiro.xyz/texts/diversos/2016-10-20-blogando-no-github.html</link>
+      <description>Qual a forma mais rápida e com menos dependências de montar um blog usando o github? Essa era uma dúvida que me acompanhava por um bom tempo. Hoje falarei sobre como sanei essa dúvida.</description>
+      <pubDate>Thu, 20 Oct 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Programação Adlib: quando a inspiração vem e comanda o programador</title>
+      <link>https://paulohrpinheiro.xyz/texts/diversos/2016-03-06-programacao-adlib.html</link>
+      <description>Quando a inspiração guia o programador.</description>
+      <pubDate>Sun, 6 Mar 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Introdução ao unqlite - o que é?</title>
+      <link>https://paulohrpinheiro.xyz/texts/diversos/2016-03-01-introducao_unqlite.html</link>
+      <description>Quais são as características do unqlite?</description>
+      <pubDate>Tue, 1 Mar 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Resolução de ano novo: aprender uma nova forma de programar</title>
+      <link>https://paulohrpinheiro.xyz/texts/diversos/2016-02-02-resolucao-anonovo.html</link>
+      <description>O mercado está exigindo padrões cada vez mais elevados de qualidade na produção de software. O paradigma funcional é como um novo marco (novo para quem não conhece, pois vem de longe) na qualidade do processo de desenvolvimento.</description>
+      <pubDate>Tue, 2 Feb 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>O que é um bom programador?</title>
+      <link>https://paulohrpinheiro.xyz/texts/diversos/2015-10-27-bom-programador.html</link>
+      <description>Nesse texto, algumas idéias sobre o que penso ser um bom programador.</description>
+      <pubDate>Tue, 27 Oct 2015 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Cloud, agilidade e segurança fiscal</title>
+      <link>https://paulohrpinheiro.xyz/texts/diversos/2015-08-27-cloud-agilidade-seguranca.html</link>
+      <description>Foco, produtividade e legalidade no desenvolvimento de aplicações WEB.</description>
+      <pubDate>Thu, 27 Aug 2015 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Porque Sistemas na Nuvens</title>
+      <link>https://paulohrpinheiro.xyz/texts/diversos/2015-08-16-porque-sistemas-nas-nuvens.html</link>
+      <description>O que difere sistemas tradicionais de sistemas nas nuvens?</description>
+      <pubDate>Sun, 16 Aug 2015 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Consultoria Eficiente</title>
+      <link>https://paulohrpinheiro.xyz/texts/diversos/2015-08-15-consultoria-eficiente.html</link>
+      <description>Hoje me deparei com um especialista nos guiando (eu e minha esposa) para a</description>
+      <pubDate>Sat, 15 Aug 2015 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Startups e as dificuldades em engajar-se como CTO</title>
+      <link>https://paulohrpinheiro.xyz/texts/diversos/2015-08-12-startups-cto.html</link>
+      <description>O que caracteriza o sócio-técnico numa startup?</description>
+      <pubDate>Wed, 12 Aug 2015 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>O cara da informática, versão empreendedores</title>
+      <link>https://paulohrpinheiro.xyz/texts/diversos/2015-07-30-o-cara-da-informatica.html</link>
+      <description>Quando o faz-tudo é uma necessidade.</description>
+      <pubDate>Thu, 30 Jul 2015 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>A saga: deixando de ser um nerd útil para tornar-se empreendedor</title>
+      <link>https://paulohrpinheiro.xyz/texts/diversos/2015-07-21-a-saga.html</link>
+      <description>Deixando de ser funcionário e tornando-se empreendedor.</description>
+      <pubDate>Tue, 21 Jul 2015 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Na nuvem e de graça</title>
+      <link>https://paulohrpinheiro.xyz/texts/diversos/2015-07-17-na-nuvem-e-de-graca.html</link>
+      <description>Como empreender com projetos web na nuvem, sem custos com infraestrutura. Veja algumas sugestões de recursos gratuitos para empreender na WEB.</description>
+      <pubDate>Fri, 17 Jul 2015 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Uma nuvenzinha para simples hackeadas, nesse imenso céu</title>
+      <link>https://paulohrpinheiro.xyz/texts/diversos/2014-10-04-uma-nuvenzinha.html</link>
+      <description>Usando servidores em cloud.</description>
+      <pubDate>Sat, 4 Oct 2014 00:00:00 +0000</pubDate>
+    </item>
+
+  </channel>
+</rss>

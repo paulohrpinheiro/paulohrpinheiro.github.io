@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+
+<rss version="2.0">
+  <channel>
+    <title>Paulo Henrique Rodrigues Pinheiro</title>
+    <link>https://paulohrpinheiro.xyz</link>
+    <description>Blog sobre programação para programadores e sysadmins</description>
+    <language>pt-br</language>
+
+    <item>
+      <title>Data Science do Zero</title>
+      <link>https://paulohrpinheiro.xyz/texts/python/2017-07-23-data-science-do-zero.html</link>
+      <description>Um livro bem legal</description>
+      <pubDate>Sun, 23 Jul 2017 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Caipyra 2017</title>
+      <link>https://paulohrpinheiro.xyz/texts/python/2017-06-28-caipyra2017.html</link>
+      <description>Meu primeiro evento de Python</description>
+      <pubDate>Wed, 28 Jun 2017 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Lazy evaluation em python com django</title>
+      <link>https://paulohrpinheiro.xyz/texts/python/2017-01-17-lazy-evaluation-em-python-com-django.html</link>
+      <description>Uma experiência frustrada tentando usar Lazy Evaluation no Python, com o framework Django.</description>
+      <pubDate>Tue, 17 Jan 2017 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Usando *strings* e `doctest` em *Python2* e *Python3* simultaneamente.</title>
+      <link>https://paulohrpinheiro.xyz/texts/python/2016-12-16-doctest-py2-e-py3.html</link>
+      <description>Usando strings de uma forma que funciona tanto no Python2 como no Python3, especialmente quando fazendo testes com `doctest`.</description>
+      <pubDate>Fri, 16 Dec 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Uma aplicação Flask esquelética</title>
+      <link>https://paulohrpinheiro.xyz/texts/python/2016-11-30-flask-esqueletico.html</link>
+      <description>Configurando um servidor nginx para rodar uma aplicação Flask, precisei verificar se a conexão WSGI estava funcionando, e mais que isso, que uma aplicação *Flask* funcionaria. Para isso adaptei uma aplicação mínima, mas bem compartimentada, apenas com esse objetivo.</description>
+      <pubDate>Wed, 30 Nov 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Quantos números aleatórios posso gerar em 1 segundo?</title>
+      <link>https://paulohrpinheiro.xyz/texts/python/2016-02-06-numeros-aleatorios.html</link>
+      <description>Como trabalhar por um tempo determinado em Python é a resposta desse texto.</description>
+      <pubDate>Sat, 6 Feb 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Usando Flask para desenvolver sistemas WEB com Python</title>
+      <link>https://paulohrpinheiro.xyz/texts/python/2015-10-15-usando-flask.html</link>
+      <description>Um relato sobre minha volta para o Python e a difícil decisão na escolha de um framework. O Escolhido foi o Flask.</description>
+      <pubDate>Thu, 15 Oct 2015 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Tuplas mutantes em Python</title>
+      <link>https://paulohrpinheiro.xyz/texts/python/2015-02-23-tuplas-mutantes.html</link>
+      <description>Escrito por Luciano Ramalho, autor de Fluent Python. Eu, Paulo, apenas traduzi esse texto.</description>
+      <pubDate>Mon, 23 Feb 2015 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>sortedcontainers e o velho erro da falta de índice</title>
+      <link>https://paulohrpinheiro.xyz/texts/python/2014-09-28-sorted-containers.html</link>
+      <description>Otimizando código Python com os módulos sortedcontainers e profile.</description>
+      <pubDate>Sun, 28 Sep 2014 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Migrando dados entre instalações django</title>
+      <link>https://paulohrpinheiro.xyz/texts/python/2010-11-09-migrando-dados-django.html</link>
+      <description>ire os dados do sqlite e mande para um mysql</description>
+      <pubDate>Tue, 9 Nov 2010 00:00:00 +0000</pubDate>
+    </item>
+
+  </channel>
+</rss>

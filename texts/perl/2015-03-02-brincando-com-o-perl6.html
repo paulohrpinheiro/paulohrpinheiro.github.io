@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Brincando com Perl6</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Neste artigo será comentado um pequeno texto publicado em http://blogs.perl.org.">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores e sysadmins</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Brincando com Perl6</h2>
+
+<h3>Neste artigo será comentado um pequeno texto publicado em http://blogs.perl.org.</h3>
+
+<h4>O texto original</h4>
+
+<p>O texto que me fez abrir um terminal e testar formas alternativas do que estava nele, foi esse: <a href="http://blogs.perl.org/users/ovid/2015/03/tiny-games-with-perl-6.html">Tiny Games with Perl</a>, de <a href="http://search.cpan.org/%7Eovid">Curtis Poe</a>.</p>
+
+<p>O código que ele apresenta é simples, e muito animador para a adoção do Perl6:</p>
+<pre><code class="language-perl">
+$ perl6 -e &#x27;for ^6 { say (&quot;⚀&quot;..&quot;⚅&quot;).roll(3) }&#x27;
+⚄ ⚀ ⚂
+⚁ ⚁ ⚄
+⚃ ⚄ ⚂
+⚁ ⚅ ⚀
+⚀ ⚁ ⚀
+⚀ ⚀ ⚂
+
+</code></pre>
+<p>Sinceramente, não entendi nada e então mudei os números pra ver o que dava:</p>
+<pre><code class="language-perl">
+$ perl6 -e &#x27;for ^8 { say (&quot;⚀&quot;..&quot;⚅&quot;).roll(5) }&#x27;
+⚄ ⚀ ⚀ ⚂ ⚀
+⚄ ⚃ ⚃ ⚀ ⚃
+⚅ ⚃ ⚅ ⚂ ⚀
+⚅ ⚅ ⚄ ⚂ ⚀
+⚁ ⚅ ⚁ ⚁ ⚃
+⚁ ⚄ ⚀ ⚃ ⚅
+⚃ ⚂ ⚂ ⚄ ⚀
+⚀ ⚅ ⚁ ⚁ ⚁
+
+</code></pre>
+<p>Opa, será que é isso mesmo? aí decidi entrar no shell pra brincar:</p>
+<pre><code class="language-perl">
+$ perl6
+&gt; for ^3 { say (&quot;A&quot;..&quot;Z&quot;).roll(5) }
+B Q W R X
+Z I K F Y
+Q U I O X
+&gt; for ^3 { say (&quot;A&quot;..&quot;Z&quot;).roll(5) }
+X Q I E E
+D J I Q W
+S C V U V
+&gt; for ^3 { say (&quot;A&quot;..&quot;Z&quot;).roll(5) }
+A H L T I
+P U L F Q
+C R H D J
+
+</code></pre>
+<p>Vamos aumentar os possíveis caracteres:</p>
+<pre><code class="language-perl">
+&gt; for ^3 { say (&quot;A&quot;..&quot;z&quot;).roll(5) }
+p ` x d v
+J E a W j
+e z e ` U
+&gt; for ^3 { say (&quot;A&quot;..&quot;z&quot;).roll(5) }
+F p a ` H
+] u Z v z
+u u ` i a
+&gt; for ^3 { say (&quot;A&quot;..&quot;z&quot;).roll(5) }
+c b i g H
+w E E d o
+w s Z K s
+
+</code></pre>
+<p>Então temos um gerador de senhas aleatório. Como gerar uma senha? Minhas tentativas:</p>
+<pre><code class="language-perl">
+&gt; say (&quot;A&quot;..&quot;z&quot;).roll(8)
+W V h U b s I V
+
+</code></pre>
+<p>Não gostei desses espaços entre os caracteres, pois não dá pra copiar e colar. Mais uma tentativa:</p>
+<pre><code class="language-perl">
+&gt; print (&quot;A&quot;..&quot;z&quot;).roll(8)
+pSobmquY&gt;
+
+</code></pre>
+<p>Continua ainda muito chato, tem que marcar com cuidado pra copiar &quot;no mouse&quot;. Vamos adicionar uma quebra de linha:</p>
+<pre><code class="language-perl">
+&gt; print (&quot;A&quot;..&quot;z&quot;).roll(8) . &quot;\n&quot;
+===SORRY!=== Error while compiling &lt;unknown file&gt;
+Unsupported use of . to concatenate strings; in Perl 6 please use ~
+at &lt;unknown file&gt;:1
+------&gt; print (&quot;A&quot;..&quot;z&quot;).roll(8) . ⏏&quot;\n&quot;
+
+</code></pre>
+<p>Ainda por cima, nos ajuda a fazer a coisa certa. Vejamos:</p>
+<pre><code class="language-perl">
+&gt; print (&quot;A&quot;..&quot;z&quot;).roll(8) ~ &quot;\n&quot;
+y N a ^ z a s R
+&gt; say( (&quot;A&quot;..&quot;z&quot;).roll(8)) ~ &quot;\n&quot;
+_ n l E c L I u
+
+</code></pre>
+<p>Mas voltaram os velhos espaços entre os caracteres. Aí lembrei do velho truque, e vi que nesse artigo ele usa join:</p>
+<pre><code class="language-perl">
+&gt; say join &#x27;&#x27;,(&quot;A&quot;..&quot;z&quot;).roll(8)
+yWxhTCLt
+
+</code></pre>
+<p>Ou então, em uma linha executável:</p>
+<pre><code class="language-perl">
+$ perl6 -e &#x27;say join &quot;&quot;,(&quot;A&quot;..&quot;z&quot;).roll(8)&#x27;
+AgHY[Yuu
+
+</code></pre>
+<h4>Leia mais:</h4>
+
+<p><a href="http://perl6.org/documentation/">Documentação do Perl6</a>
+<a href="http://doc.perl6.org/routine/roll">Sobre o roll</a>
+<a href="http://doc.perl6.org/routine/%5E">Operador ^</a></p>
+
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Brincando com Perl6"
+    data-url="https://paulohrpinheiro.xyz/texts/perl/2015-03-02-brincando-com-o-perl6.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Brincando com Perl6"
+    data-url="https://paulohrpinheiro.xyz/texts/perl/2015-03-02-brincando-com-o-perl6.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Brincando com Perl6"
+    data-url="https://paulohrpinheiro.xyz/texts/perl/2015-03-02-brincando-com-o-perl6.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Brincando com Perl6"
+    data-url="https://paulohrpinheiro.xyz/texts/perl/2015-03-02-brincando-com-o-perl6.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Brincando com Perl6"
+    data-url="https://paulohrpinheiro.xyz/texts/perl/2015-03-02-brincando-com-o-perl6.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2017, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+</body>
+</html>

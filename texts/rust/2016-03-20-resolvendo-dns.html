@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Rust Pills - resolvendo nomes por DNS</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Resolvendo nomes FQDN para endereço IP, na linguagem Rust.">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores e sysadmins</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Rust Pills - resolvendo nomes por DNS</h2>
+
+<h3>Resolvendo nomes FQDN para endereço IP, na linguagem Rust.</h3>
+
+<p><img src="images/suplemento-ferro.jpg" alt="Rust pills"></p>
+
+<p>Em <a href="https://github.com/paulohrpinheiro/artigos/blob/master/rust/filtro-unix.md">artigo anterior</a>, falei sobre minhas aventuras em ler da entrada padrão, como um filtro <em>Unix</em>. A estrutura básica desse tipo de programa é:</p>
+<pre><code class="language-rust">
+use std::io;
+use std::io::prelude::*;
+
+fn main() {
+  let stdin = io::stdin();
+
+  for l in stdin.lock().lines() {
+    let line = l.unwrap();
+
+    println!(&quot;{}&quot;, line);
+  }
+
+</code></pre>
+<p>}</p>
+
+<p>Se, por exemplo, eu compilar e executar, passando alguma coisa para a entrada padrão:</p>
+<pre><code class="language-rust">
+$ rustc resolver.rs
+$ ls &#x2F;|.&#x2F;resolver
+bin
+boot
+dev
+etc
+home
+lib
+lib64
+lost+found
+media
+mnt
+opt
+proc
+root
+run
+sbin
+srv
+sys
+tmp
+usr
+var
+$
+
+</code></pre>
+<p>Se executar o programa sem passar alguma entrada, ele ficará à espera de algo digitado, até encontrar um &quot;CONTROL-D&quot;.</p>
+
+<p>Essa é uma estrutura bem básica para desenvolver inúmeros utilitários. O desse <em>POST</em> é um programa que lê uma lista de <em>hosts</em> (pode ser <em>host</em> ou <em>ip</em>), e caso seja <em>host</em>, descobre o(s) <em>ip(s)</em> e imprime.</p>
+
+<p>Esse também será um programa a partir do qual faremos outras coisas em outros <em>POSTS</em>.</p>
+
+<p>Preciso resolver nomes de hosts em endereços IPs. Poderia usar a <a href="https://doc.rust-lang.org/std/net/fn.lookup_host.html">função <code class="prettyprint">lookup_host</code> </a> do <a href="https://doc.rust-lang.org/std/net/index.html">módulo  <code class="prettyprint">std::net</code></a>, mas ela está classificada como instável, e o <em>rust</em> que tenho instalado é do <a href="https://doc.rust-lang.org/book/release-channels.html">canal estável</a>.</p>
+
+<p>O lance é procurar algum módulo que funcione para um compilador estável. Encontrei muitos <a href="http://www.crate.io"><em>crates</em></a> que trabalham com <em>DNS</em>, mas são todos para versões instáveis.</p>
+
+<p>Lembrei que a <em>libc</em> tem funções para trabalhar com isso. E lembrei que o <em>rust</em> pode trabalhar com bibliotecas escritas em outras linguagens, inclusive <em>C</em>. Portanto, ficou fácil, basta escrever um programa em <em>rust</em> que use a função apropriada da <em>libc</em>.</p>
+
+<p>Para isso, usa-se o <a href="https://doc.rust-lang.org/book/ffi.html">Foreign Function Interface</a> (também já escrevi sobre isso para <em>Perl6</em>, <a href="http://www.sysincloud.it/suporte-a-chamadas-nativas-em-perl6/">veja nesse artigo</a>). Com ele, reescrevemos estruturas e enumerações, além dos protótipos de função, que estão em <em>C</em>, para uma forma que o <em>rust</em> entenda. Para não reescrever as estruturas que usarei, usei um <em>crate</em> que já tem isso, o, pasmem, <a href="https://crates.io/crates/libc">crate libc</a>.</p>
+
+<p>Criei meu novo projeto com <code class="prettyprint">cargo new resolver --bin</code>, que cria o novo (<code class="prettyprint">new</code>) projeto <code class="prettyprint">resolver</code> para ser um programa executável (<code class="prettyprint">--bin</code>). Editei o arquivo <code class="prettyprint">Cargo.toml</code> que ficou assim para usar o <em>crate</em> <code class="prettyprint">libc</code>:</p>
+<pre><code class="language-rust">
+[package]
+name = &quot;resolver&quot;
+version = &quot;0.1.0&quot;
+authors = [&quot;Paulo Henrique Rodrigues Pinheiro &lt;paulohrpinheiro@gmail.com&gt;&quot;]
+
+[dependencies]
+libc = &quot;0.2.8&quot;
+
+</code></pre>
+<p>Agora vamos ao programa, que parte já com a parte voltada a ler a entrada padrão.</p>
+
+<p>Como será usado o <em>crate</em> <code class="prettyprint">libc</code>, adicionei o seguinte:</p>
+<pre><code class="language-rust">
+extern crate libc;
+use libc::{c_char, hostent};
+
+</code></pre>
+<p>Será usada a definição de <code class="prettyprint">c_char</code> e a estrutura <code class="prettyprint">hostent</code>.</p>
+
+<p>Também será usada a <code class="prettyprint">CString</code>, que é uma conveniência que nos facilita lidar com as <em>strings</em>  em C que precisam acabar com o caractere <code class="prettyprint">\0</code>:</p>
+<pre><code class="language-rust">
+use std::ffi::CString;
+
+</code></pre>
+<p>E, da <em>libc</em> nativa (não o <em>crate</em>), usaremos a função <code class="prettyprint">gethostbyname</code>:</p>
+<pre><code class="language-rust">
+#[link(name=&quot;c&quot;)]
+extern {
+  fn gethostbyname(name: *mut c_char) -&gt; *mut hostent;
+}
+
+</code></pre>
+<p>Veja o <code class="prettyprint">name=&quot;c&quot;</code>. Se fôssemos usar uma biblioteca chamada <code class="prettyprint">libfoobar</code>, ali deveria ser informado <code class="prettyprint">name=&quot;foobar&quot;</code>.</p>
+
+<p>O protótipo em <em>C</em> da função é esse:</p>
+<pre><code class="language-rust">
+struct hostent *gethostbyname(const char *name);
+
+</code></pre>
+<p>Usamos <code class="prettyprint">*mut</code> em nossa tradução, pois é assim que o <em>rust</em> define os <em><a href="https://doc.rust-lang.org/book/raw-pointers.html">raw pointers</a></em>, necessários para trabalhar em <em>baixo nível</em> com a memória.</p>
+
+<p>Os detalhes da minha implementação não interessam muito aqui, pois temos mais coisas importantes a observar.</p>
+
+<p>Primeiro, para usar a função em <em>C</em>:</p>
+<pre><code class="language-rust">
+let gethost_result :*mut hostent = unsafe { gethostbyname(to_resolv) };
+
+if gethost_result.is_null() {
+    return None;
+}
+
+</code></pre>
+<p>É preciso encapsular a chamada com o <code class="prettyprint">unsafe</code>, que diz ao <em>rust</em> algo como <strong>eu sei o que estou fazendo</strong>. O <em>rust</em> tem muitas preocupações e verificações que só podem ser validadas no escopo da linguagem. Portanto, qualquer operação que esteja fora do controle do compilador <em>rust</em>, tem que ser marcado como <strong>inseguro</strong>.</p>
+
+<p>Os tipos com assinatura <code class="prettyprint">*mut</code> disponibilizam um método <code class="prettyprint">is_null</code> para que se possa verificar se um ponteiro é <code class="prettyprint">NULL</code> tal como entendido em <em>C</em>. Nesse caso, se o retorno for nulo, a reposta será vazia. Esse tratamento de erro do <em>rust</em> é algo que merece um estudo à parte, vou considerar que esse assunto é entendido pelo leitor. Caso não seja, leia com paciência a longa explicação no <a href="https://doc.rust-lang.org/book/error-handling.html">livro oficial</a>.</p>
+
+<p>Observe que em toda a parte que lidamos com ponteiros, usamos <code class="prettyprint">unsafe</code>. <a href="https://doc.rust-lang.org/book/unsafe.html">Mais sobre ele aqui</a>.</p>
+
+<p>A estrutura <code class="prettyprint">hostent</code> é um tanto <em>embaçada</em>. Isso é facilmente percebido pelo código que fiz.</p>
+
+<p>Leia o manual sobre a chamada <a href="http://man7.org/linux/man-pages/man3/gethostbyname.3.html"><code class="prettyprint">gethostbyname</code></a>. Lá ele fala que, embora o retorno seja um ponteiro para a estrutura, é o ponteiro para dados estáticos, ou seja, não precisamos nos preocupar em liberar memória. Mas se você estiver trabalhando com algo que não seja estático, lembre-se sempre de dar um <code class="prettyprint">free</code>, por exemplo, implementando o <a href="https://doc.rust-lang.org/book/drop.html"><code class="prettyprint">trait</code> <code class="prettyprint">Drop</code></a>. Aqui há <a href="https://www.reddit.com/r/rust/comments/3wy3la/rust_ffi_am_i_leaking_memory/">um exemplo</a>.</p>
+
+<p>Aqui está o <a href="https://gist.github.com/paulohrpinheiro/2619ce23136a71fd4cda5180320f393f">código para este artigo</a>.</p>
+
+<p>Se você copiar os arquivos em seu computador, pode testar dessa forma:</p>
+<pre><code class="language-rust">
+$ cargo build &amp;&amp; echo -e &quot;noxexist.noxexist\nwww.tor.com\ngoogle.com\nwww.terra.com\nwww.sysincloud.it&quot;|target&#x2F;debug&#x2F;resolver
+   Compiling libc v0.2.8
+   Compiling resolver v0.1.0 (file:&#x2F;&#x2F;&#x2F;home&#x2F;paulohrpinheiro&#x2F;Dropbox&#x2F;projetos&#x2F;artigos&#x2F;rust_pills&#x2F;dns-resolver&#x2F;resolver)
+&quot;noxexist.noxexist&quot; =&gt; None
+&quot;www.tor.com&quot; =&gt; Some([&quot;104.20.16.112&quot;, &quot;104.20.15.112&quot;])
+&quot;google.com&quot; =&gt; Some([&quot;216.58.202.14&quot;])
+&quot;www.terra.com&quot; =&gt; Some([&quot;208.70.188.57&quot;])
+&quot;www.sysincloud.it&quot; =&gt; Some([&quot;54.175.90.218&quot;])
+
+</code></pre>
+<p>Espero logo poder usar a chamada nativa que já está disponível como instável: <a href="https://doc.rust-lang.org/std/net/fn.lookup_host.html"><code class="prettyprint">lookup_host</code></a>.</p>
+
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Rust Pills - resolvendo nomes por DNS"
+    data-url="https://paulohrpinheiro.xyz/texts/rust/2016-03-20-resolvendo-dns.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Rust Pills - resolvendo nomes por DNS"
+    data-url="https://paulohrpinheiro.xyz/texts/rust/2016-03-20-resolvendo-dns.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Rust Pills - resolvendo nomes por DNS"
+    data-url="https://paulohrpinheiro.xyz/texts/rust/2016-03-20-resolvendo-dns.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Rust Pills - resolvendo nomes por DNS"
+    data-url="https://paulohrpinheiro.xyz/texts/rust/2016-03-20-resolvendo-dns.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Rust Pills - resolvendo nomes por DNS"
+    data-url="https://paulohrpinheiro.xyz/texts/rust/2016-03-20-resolvendo-dns.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2017, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+</body>
+</html>

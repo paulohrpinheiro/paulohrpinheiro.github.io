@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Suporte a Chamadas Nativas em Perl6</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Neste artigo será mostrado como integrar uma biblioteca C diretamente em Perl6.">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores e sysadmins</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Suporte a Chamadas Nativas em Perl6</h2>
+
+<h3>Neste artigo será mostrado como integrar uma biblioteca C diretamente em Perl6.</h3>
+
+<h4>O Problema</h4>
+
+<p>Muitas bibliotecas escritas em C ou C++ estão consolidadas, até mesmo atingindo um altíssimo grau de segurança, maturidade e sofisticação, nos problemas em que se aplicam. Não é interessante resolver novamente os problemas que já estão contemplados por esses projetos, para termos as mesmas funcionalidades em Perl. Como exemplos, podemos citar bibliotecas de compactação como bzip ou gzip, ou bibliotecas gráficas como a QT, ou ainda drivers de bancos de dados (aqui é mais por conveniência do que por qualidade).</p>
+
+<h4>A Solução</h4>
+
+<p>A solução é utilizar essas bibliotecas tal qual são distribuídas. Assim, procede-se como em um programa C que precisa carregar dinamicamente uma biblioteca. Abrimos a biblioteca (o arquivo DLL ou so), e carregamos em memória o código necessário, e o tornamos disponível para nosso programa. Em Perl6, para o L&lt;Rakudo Star|http://www.rakudo.org&gt;, há um ótimo módulo que facilita todo esse processo: L&lt;NativeCall module|https://github.com/jnthn/zavolaj&gt;. Ele vem por padrão no Rakudo.</p>
+
+<h4>Um exemplo</h4>
+
+<p>Irei focar no Linux, e acredito ser difícil alguma máquina Linux estar sem sqlite3 instalado. Por isso vamos usá-lo em nossos exemplos. Vamos trabalhar com as funções que informam a versão da biblioteca: L&lt;Run-Time Library Version Numbers|https://www.sqlite.org/c3ref/libversion.html&gt;.</p>
+<pre><code class="language-perl">
+ 1. $ perl6
+ 2. &gt; use NativeCall
+ 3. &gt; sub sqlite3_libversion_number() returns Int is native(&#x27;libsqlite3&#x27;) { * }
+ 4. sub sqlite3_libversion_number( --&gt; Int) { #`(Sub+{Native[Sub,Str]}|139826072374712) ... }
+ 5. &gt; say sqlite3_libversion_number()
+ 6. 3008008
+ 7. &gt;
+
+</code></pre>
+<p>Linha a linha, temos o seguinte:</p>
+
+<ol>
+<li>Entre no shell interativo do perl6. Para testes rápidos, é melhor que escrever um programa, e economiza ponto e vírgula.</li>
+<li>Este é o módulo que faz todo o trabalho sujo pra você.</li>
+<li>Muita calma nessa hora! Esta linha diz algo assim: &quot;eu quero usar a função I&lt;sqlite3_libversion_number()&gt;. Ela retorna um número inteiro, e está presente na biblioteca I&lt;libsqlite3&gt;&quot;. Importante ter em mente que o módulo I&lt;NativeCall&gt; localiza a biblioteca em seu sistema, você não precisa dizer onde ela está.</li>
+<li>Essa linha nos dá algumas informações internas.</li>
+<li>Chamamos direto do Perl a função em C da I&lt;libsqlite3&gt;.</li>
+<li>Temos o número da versão, que é um inteiro conforme declarado anteriormente. Veja na documentação os tipos existentes. O autor afirma que a quantidade de tipos pode aumentar ainda.</li>
+</ol>
+
+<p>Se você achar feio o nome nativo da função, poderá alterá-lo:</p>
+<pre><code class="language-perl">
+ &gt; our sub Sqlite3VersionNumber is symbol(&#x27;sqlite3_libversion_number&#x27;) returns Int is native(&#x27;libsqlite3&#x27;) { * }
+ sub Sqlite3VersionNumber( --&gt; Int) { #`(Sub+{NativeCallSymbol[Str]}+{Native[Sub+{NativeCallSymbol[Str]},Str]}|140598248149192) ... }
+ &gt; Sqlite3VersionNumber();
+ 3008008
+
+</code></pre>
+<p>Isso aí em cima quer dizer: &quot;Nossa função que chamaremos <code class="prettyprint">Sqlite3VersionNumber</code> é na verdade <code class="prettyprint">sqlite3_libversion_number</code>. Ela retorna um número inteiro e está na <code class="prettyprint">libsqlite3</code>&quot;.</p>
+
+<p>Também podemos receber um <code class="prettyprint">char *</code>, com o tipo de dado <code class="prettyprint">Str</code>:</p>
+<pre><code class="language-perl">
+ &gt; our sub Sqlite3LibVersion is symbol(&#x27;sqlite3_libversion&#x27;) returns Str is native(&#x27;libsqlite3&#x27;) { }
+ sub Sqlite3LibVersion( --&gt; Str) { #`(Sub+{NativeCallSymbol[Str]}+{Native[Sub+{NativeCallSymbol[Str]},Str]}|140598245394280) ... }
+ &gt; Sqlite3LibVersion()
+ 3.8.8
+
+</code></pre>
+<h4>Um exemplo mais prático</h4>
+
+<p>Pode também ser preciso passar argumentos para algumas funções, alguns deles ponteiros, ou até mesmo ponteiros para ponteiros. Para exemplificar, vamos a um pequeno programa que cria uma tabela (executar uma consulta e pegar os resultados exige uma implementação maior que vai além dos objetivos desse texto):</p>
+<pre><code class="language-perl">
+ A. use NativeCall;
+ B.
+ C. constant $LIBNAME = &#x27;libsqlite3&#x27;;
+ D.
+ E. sub sqlite3_open   (Str, CArray[OpaquePointer])                                     returns Int is native($LIBNAME) { * }
+ F. sub sqlite3_exec   (OpaquePointer, Str, OpaquePointer, OpaquePointer,OpaquePointer) returns Int is native($LIBNAME) { * }
+ G. sub sqlite3_errmsg (OpaquePointer)                                                  returns Str is native($LIBNAME) { * }
+ H. sub sqlite3_close  (OpaquePointer)                                                  returns Int is native($LIBNAME) { * }
+ I.
+ J. my @handler := CArray[OpaquePointer].new;
+ K. @handler[0]  = OpaquePointer;
+ L.
+ M. say sqlite3_open(@*ARGS[0], @handler);
+ N. say sqlite3_exec(@handler[0], &quot;CREATE TABLE foo (bar NUMBER);&quot;, OpaquePointer, OpaquePointer, OpaquePointer);
+ O. say sqlite3_errmsg(@handler[0]);
+ P. say sqlite3_close(@handler[0]);
+
+</code></pre>
+<p>Este código está disponível em:</p>
+
+<p><a href="https://github.com/paulohrpinheiro/artigos/blob/master/perl6-native-calling-support.pl"></a>.</p>
+
+<p>O importante aqui é a manipulação de ponteiros. Na linha <em>E</em>, precisamos passar um ponteiro para ponteiro, o que traduzido no módulo <code class="prettyprint">NativeCall</code> fica como &#39;um array C contendo um ponteiro genérico&#39;. Nas demais declarações, de <em>F</em> a <em>H</em>, temos indicações de ponteiro simples. Na linhas <em>J</em> e <em>K</em>, um truque achado no código do <a href="https://github.com/mberends/MiniDBI">MiniDBI</a>, que é indicado pelo autor do módulo como sendo a melhor forma de aprender a usar a <code class="prettyprint">NativeCall</code>.</p>
+
+<p>Das linhas <em>M</em> até <em>P</em> usamos a biblioteca diretamente de nosso programa <em>Perl6</em>. Na linha <em>M</em> passamos o ponteiro para ponteiro. Na linha <em>N</em>, além de passarmos um ponteiro para o handler SqLite3, há uma série de ponteiros NULL. Quando passa como parâmetro um tipo do módulo, você está passando um NULL para esse tipo. E nas linhas linhas <em>O</em> e <em>P</em> passamos um ponteiro simples para o handler.</p>
+
+<p>Executando o script Duas vezes, temos a seguinte saída:</p>
+<pre><code class="language-perl">
+ [paulohrpinheiro@localhost artigos]$ perl6 perl6-native-calling-support.pl &#x2F;tmp&#x2F;monastery.db
+ 0
+ 0
+ not an error
+ 0
+ [paulohrpinheiro@localhost artigos]$ perl6 perl6-native-calling-support.pl &#x2F;tmp&#x2F;monastery.db
+ 0
+ 1
+ table foo already exists
+ 0
+ [paulohrpinheiro@localhost artigos]$
+
+</code></pre>
+<p>Na primeira vez, sem erro, na segunda com erro, pois a tabela já existe, como podemos ver com os seguintes comandos:</p>
+<pre><code class="language-perl">
+ [paulohrpinheiro@localhost artigos]$ sqlite3 &#x2F;tmp&#x2F;monastery.db
+ SQLite version 3.8.8 2015-01-16 12:08:06
+ Enter &quot;.help&quot; for usage hints.
+ sqlite&gt; .schema
+ CREATE TABLE foo (bar NUMBER);
+ sqlite&gt;
+
+</code></pre>
+<h4>Aplicação Prática</h4>
+
+<p>Perl6 está em grande desenvolvimento, mas ainda precisa de um bom conjunto de módulos para ser realmente útil. Muitas bibliotecas ainda não estão integradas no Perl6. Se você estiver interessado em ajudar e ainda não encontrou o que fazer, eis uma lista de bibliotecas prioritárias a trabalhar (sqlite3 é uma):</p>
+
+<p><a href="https://github.com/perl6/perl6-most-wanted/blob/master/most-wanted/bindings.md">Most Wanted Native Bindings</a></p>
+
+<p>Para um uso maior, ainda há um tópico importante, manipulação de estruturas <code class="prettyprint">C</code> nativas (<code class="prettyprint">struct</code>), que não foi coberto nesse texto. Se alguém quiser explorar esse tópico, todos nós agradecemos.</p>
+
+<h4>Leia mais</h4>
+
+<ul>
+<li><a href="http://en.wikipedia.org/wiki/Dynamic_linker">Dynamic Linker</a></li>
+<li><a href="https://perl6advent.wordpress.com/2010/12/15/day-15-calling-native-libraries-from-perl-6/">Calling native libraries from Perl6</a></li>
+<li><a href="http://doc.perl6.org/language/modules">How to create and distribute Perl 6 modules</a></li>
+<li><a href="https://perl6advent.wordpress.com/2014/12/15/day-15-bioinformatics-and-the-joy-of-perl6/">Day 15 – Bioinformatics and the joy of Perl 6</a></li>
+</ul>
+
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Suporte a Chamadas Nativas em Perl6"
+    data-url="https://paulohrpinheiro.xyz/texts/perl/2015-03-01-perl6-native-calling-support.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Suporte a Chamadas Nativas em Perl6"
+    data-url="https://paulohrpinheiro.xyz/texts/perl/2015-03-01-perl6-native-calling-support.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Suporte a Chamadas Nativas em Perl6"
+    data-url="https://paulohrpinheiro.xyz/texts/perl/2015-03-01-perl6-native-calling-support.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Suporte a Chamadas Nativas em Perl6"
+    data-url="https://paulohrpinheiro.xyz/texts/perl/2015-03-01-perl6-native-calling-support.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Suporte a Chamadas Nativas em Perl6"
+    data-url="https://paulohrpinheiro.xyz/texts/perl/2015-03-01-perl6-native-calling-support.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2017, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+</body>
+</html>

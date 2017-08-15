@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Linguagem Rust: tirando a ferrugem</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Conhecendo a nova linguagem de programação: Rust, by Mozilla.">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores e sysadmins</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Linguagem Rust: tirando a ferrugem</h2>
+
+<h3>Conhecendo a nova linguagem de programação: Rust, by Mozilla.</h3>
+
+<blockquote>
+<p>&quot;Do you pine for the nice days of minix-1.1, when men were men and wrote their own device drivers? Are you without a nice project and just dying to cut your teeth on a OS you can try to modify for your needs? Are you finding it frustrating when everything works on minix? No more all- nighters to get a nifty program working? Then this post might be just for you :-).</p>
+
+<p>As I mentioned a month(?) ago, I&#39;m working on a free version of a minix-lookalike for AT-386 computers. It has finally reached the stage where it&#39;s even usable (though may not be depending on what you want), and I am willing to put out the sources for wider distribution...&quot; -  - <em>Linus Torvalds, 05/Out/1991, em uma mensagem no grupo <a href="https://www.cs.cmu.edu/%7Eawb/linux.history.html">comp.os.minix</a></em></p>
+</blockquote>
+
+<p><img src="images/mozilla-rust-lang.jpg" alt="Rust Mozilla"></p>
+
+<p>Esse entusiasmo do Linus, insatisfeito com as soluções de sua época, permeia alguns bons desenvolvedores que questionam as técnicas e ferramentas atuais, e buscam, de forma prática, estabelecer novos padrões para o desenvolvimento de sistemas. É uma busca à qual a comunidade <em>Rust</em> oferece contribuições bem interessantes.</p>
+
+<h4>Motivação</h4>
+
+<p>A minha primeira empreitada com <em>Rust</em> foi com um projeto meu, <em><a href="https://github.com/paulohrpinheiro/test-driven-learning">Test Driven Learning</a></em>, que consiste em uma lista de exercícios, com os testes já escritos. Até o arquivo para resolver o exercício já está preparado. Uma forma de exercitar a programação em código de outra pessoa.</p>
+
+<p>Fiz os testes, junto com minhas repostas, em <em>Python</em>, que foi moleza, em <em>Perl5</em> já nem tanto, e em <em>C</em>, aí sim a coisa pegou, mas resolvi. E tinha em minha lista mental de linguagens, <em>Haskell</em>, <em>Perl6</em> e <em>Rust</em> como as opções para finalizar.</p>
+
+<p>Comecei com <em>Rust</em> e após resolver os problemas quase no mesmo tempo que em <em>Python</em>, percebi o quanto ela é importante. E para continuar o aprendizado inventei outro problema: escrever um módulo para <a href="https://en.wikipedia.org/wiki/Arbitrary-precision_arithmetic">aritmética de precisão arbitrária</a>, que pomposamente chamei de <a href="https://github.com/paulohrpinheiro/bignum">bignum</a>.</p>
+
+<h4>Material para estudo</h4>
+
+<p>Comecei pelos testes, bem devagar, buscando as soluções na <a href="https://doc.rust-lang.org/">documentação</a>, no <a href="https://doc.rust-lang.org/book/">livro oficial</a> e nos <a href="http://rustbyexample.com/">exemplos</a>.</p>
+
+<p>Também é interessante acompanhar o <a href="https://this-week-in-rust.org/">This week in Rust</a>, uma coletânea semanal de eventos e artigos.</p>
+
+<h4>Comunidade</h4>
+
+<p>A partir do site brasileiro <a href="http://rustontherocks.org/">Rust on the Rocks</a>, comecei a encontrar as comunidades nacionais:</p>
+
+<ul>
+<li><a href="https://groups.google.com/forum/#!forum/rustbrasil">rustbrasil no Google Gorups</a> * <a href="http://www.meetup.com/pt-BR/Rust-Sao-Paulo-Meetup/">Rust São Paulo no Meetup</a> * <a href="irc://irc.mozilla.org">Canal rust-br no IRC da Mozilla</a></li>
+</ul>
+
+<h4>Impressões</h4>
+
+<p>Meu sentimento é estar programando em algo que junta <em>C</em> e <em>Python</em>, e que pode ser usado para resolver problemas que são mais apropriados a uma ou outra, exclusivamente.</p>
+
+<p>Escrever código e compilar. Compilar e executar. Essa é a grande vantagem. Em <em>Python</em> se escreve código, testa, e algum tempo depois pode-se ter uma desagradável surpresa que só foi descoberta num momento muito inoportuno. O mesmo com <em>C</em>, e seus (nossos) erros de memória...</p>
+
+<p>Em <em>Rust</em>, a busca é por segurança, rapidez e fácil concorrência. Mesmo aprendendo em projetos próprios, sem grandes compromissos, tenho conseguido ser produtivo no desenvolvimento, apesar de ainda estar começando.</p>
+
+<p>A documentação é boa e os erros e avisos do compilador são um espetáculo à parte, pois efetivamente ajudam, ao invés de criar pânico.</p>
+
+<h4>Perspectivas</h4>
+
+<p>Aprender uma nova linguagem de programação é sempre bom, especialmente se essa nova linguagem trouxer novas ideias e formas de resolver problemas.</p>
+
+<p>As restrições como imutabilidade padrão e forte tipagem, por exemplo, exigem uma melhor forma de programar. E um compilador bem <em>crica</em> que não deixa passar quase nada que possa comprometer o funcionamento do sistema, aumentam em muito a qualidade do que é desenvolvido.</p>
+
+<p>Linguagem nova, problemas já vividos por quem acompanhou o nascimento de uma linguagem... É preciso desenvolver muita coisa ainda, até mesmo o <em>binding</em> para uso de bibliotecas escritas em outras linguagens.</p>
+
+<p>Pela movimentação toda em torno do <em>Rust</em>, isso não leva muito tempo para ser resolvido. E o mais interessante, há muitos problemas a resolver e contribuir.</p>
+
+<p>Pode parecer trabalho duplicado, mas reforço o clamor feito recentemente: <a href="http://robert.ocallahan.org/2016/02/rewrite-everything-in-rust.html">Rewrite Everything In Rust </a>!</p>
+
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Linguagem Rust: tirando a ferrugem"
+    data-url="https://paulohrpinheiro.xyz/texts/rust/2016-03-02-tirando-a-ferrugem.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Linguagem Rust: tirando a ferrugem"
+    data-url="https://paulohrpinheiro.xyz/texts/rust/2016-03-02-tirando-a-ferrugem.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Linguagem Rust: tirando a ferrugem"
+    data-url="https://paulohrpinheiro.xyz/texts/rust/2016-03-02-tirando-a-ferrugem.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Linguagem Rust: tirando a ferrugem"
+    data-url="https://paulohrpinheiro.xyz/texts/rust/2016-03-02-tirando-a-ferrugem.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Linguagem Rust: tirando a ferrugem"
+    data-url="https://paulohrpinheiro.xyz/texts/rust/2016-03-02-tirando-a-ferrugem.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2017, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+</body>
+</html>

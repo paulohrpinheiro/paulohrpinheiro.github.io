@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<rss version="2.0">
+  <channel>
+    <title>Paulo Henrique Rodrigues Pinheiro</title>
+    <link>https://paulohrpinheiro.xyz</link>
+    <description>Blog sobre programação para programadores e sysadmins</description>
+    <language>pt-br</language>
+
+    <item>
+      <title>Meu &quot;hello world&quot; em Haskell</title>
+      <link>https://paulohrpinheiro.xyz/texts/haskell/2017-01-28-meu-hello-world-em-haskell.html</link>
+      <description>Para começar bem no Haskell, nada melhor que um &quot;Hello World&quot; firulento</description>
+      <pubDate>Sat, 28 Jan 2017 00:00:00 +0000</pubDate>
+    </item>
+
+  </channel>
+</rss>

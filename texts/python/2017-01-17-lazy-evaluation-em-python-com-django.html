@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Lazy evaluation em python com django</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Uma experiência frustrada tentando usar Lazy Evaluation no Python, com o framework Django.">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores e sysadmins</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Lazy evaluation em python com django</h2>
+
+<h3>Uma experiência frustrada tentando usar Lazy Evaluation no Python, com o framework Django.</h3>
+
+<p><img src="images/lazy-evaluation.jpg" alt="Lazy Evaluation Meme"></p>
+
+<p>Em Python há uma sutil diferença entre essa construção:</p>
+<pre><code class="language-python">
+colchetes = [x for x in range(10)]
+
+</code></pre>
+<p>E essa:</p>
+<pre><code class="language-python">
+parenteses = (x for x in range(10))
+
+</code></pre>
+<p>Sutil na sintaxe, mas profunda no que representam.</p>
+
+<p>Inspecionemos a construção com colchetes:</p>
+<pre><code class="language-python">
+&gt;&gt;&gt; colchetes.__class__
+&lt;class &#x27;list&#x27;&gt;
+&gt;&gt;&gt; colchetes
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+</code></pre>
+<p>E inspecionemos a com parenteses:</p>
+<pre><code class="language-python">
+&gt;&gt;&gt; parenteses.__class__
+&lt;class &#x27;generator&#x27;&gt;
+&gt;&gt;&gt; parenteses
+&lt;generator object &lt;genexpr&gt; at 0x7f7395b36938&gt;
+
+</code></pre>
+<p>Em programas simples, elas podem simplesmente ser substituídas por um <em>loop for</em>:</p>
+<pre><code class="language-python">
+&gt;&gt;&gt; loopfor = []
+&gt;&gt;&gt; for x in range(10): loopfor.append(x)
+&gt;&gt;&gt; loopfor
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+</code></pre>
+<p>Por curiiosidade, o que é um <code class="prettyprint">range</code> afinal?</p>
+<pre><code class="language-python">
+&gt;&gt;&gt; usandorange = range(10)
+&gt;&gt;&gt; l
+&gt;&gt;&gt; usandorange
+range(0, 10)
+usandorange(0, 10)
+&gt;&gt;&gt; l[1]
+1
+&gt;&gt;&gt; usandorange.__class__
+&lt;class &#x27;range&#x27;&gt;
+&gt;&gt;&gt; dir(usandorange)
+[&#x27;__class__&#x27;, &#x27;__contains__&#x27;, &#x27;__delattr__&#x27;, &#x27;__dir__&#x27;,
+ &#x27;__doc__&#x27;, &#x27;__eq__&#x27;, &#x27;__format__&#x27;, &#x27;__ge__&#x27;,
+ &#x27;__getattribute__&#x27;, &#x27;__getitem__&#x27;, &#x27;__gt__&#x27;, &#x27;__hash__&#x27;,
+ &#x27;__init__&#x27;, &#x27;__iter__&#x27;, &#x27;__le__&#x27;, &#x27;__len__&#x27;, &#x27;__lt__&#x27;,
+ &#x27;__ne__&#x27;, &#x27;__new__&#x27;, &#x27;__reduce__&#x27;, &#x27;__reduce_ex__&#x27;,
+ &#x27;__repr__&#x27;, &#x27;__reversed__&#x27;, &#x27;__setattr__&#x27;, &#x27;__sizeof__&#x27;,
+ &#x27;__str__&#x27;, &#x27;__subclasshook__&#x27;, &#x27;count&#x27;, &#x27;index&#x27;, &#x27;start&#x27;,
+ &#x27;step&#x27;, &#x27;stop&#x27;]
+
+</code></pre>
+<p>Ainda estou voando. Investigando mais um pouco:</p>
+<pre><code class="language-python">
+&gt;&gt; print(usandorange.__doc__)
+range(stop) -&gt; range object
+range(start, stop[, step]) -&gt; range object
+
+Return an object that produces a sequence of integers from start (inclusive)
+to stop (exclusive) by step.  range(i, j) produces i, i+1, i+2, ..., j-1.
+start defaults to 0, and stop is omitted!  range(4) produces 0, 1, 2, 3.
+These are exactly the valid indices for a list of 4 elements.
+When step is given, it specifies the increment (or decrement).
+
+</code></pre>
+<p>Cheguei a esse código:</p>
+<pre><code class="language-python">
+def list_posts(request):
+    &quot;&quot;&quot;List posts.&quot;&quot;&quot;
+    try:
+        posts = blog.models.Post.objects\
+                                .defer(&#x27;content&#x27;)\
+                                .all()\
+                                .order_by(&#x27;-pub_date&#x27;)
+        data = {
+            &#x27;status&#x27;: &#x27;success&#x27;,
+            &#x27;message&#x27;: &#x27;&#x27;,
+            &#x27;posts&#x27;: [post_info(request, post) for post in posts],
+        }
+    except:
+        return fail(&#x27;Internal error. Please, try later.&#x27;, 503)
+
+    data[&#x27;posts_count&#x27;] = len(data[&#x27;posts&#x27;])
+
+    return JsonResponse(data)
+
+</code></pre>
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Lazy evaluation em python com django"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2017-01-17-lazy-evaluation-em-python-com-django.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Lazy evaluation em python com django"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2017-01-17-lazy-evaluation-em-python-com-django.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Lazy evaluation em python com django"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2017-01-17-lazy-evaluation-em-python-com-django.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Lazy evaluation em python com django"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2017-01-17-lazy-evaluation-em-python-com-django.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Lazy evaluation em python com django"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2017-01-17-lazy-evaluation-em-python-com-django.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2017, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Quantos números aleatórios posso gerar em 1 segundo?</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Como trabalhar por um tempo determinado em Python é a resposta desse texto.">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores e sysadmins</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Quantos números aleatórios posso gerar em 1 segundo?</h2>
+
+<h3>Como trabalhar por um tempo determinado em Python é a resposta desse texto.</h3>
+
+<p><img src="images/dilbert-aleatorios.jpg" alt="Dilbert - números aleatórios"></p>
+
+<p>Vi uma pergunta no grupo <a href="https://www.facebook.com/groups/python.brasil/">Python Brasil</a> do Facebook, e o pessoal não tava muito amigável, então resolvi tentar responder.</p>
+
+<p>Eis a pergunta:</p>
+
+<blockquote>
+<p><a href="https://www.facebook.com/groups/python.brasil/permalink/776232039148335/">Quantos números aleatórios um computador comum é capaz de gerar por segundo ?</a></p>
+</blockquote>
+
+<p>A primeira coisa, vamos tentar tentando:</p>
+<pre><code class="language-python">
+$ time (echo -e &quot;import random\nfor i in range(100):\n  a=random.randrange(100)\n&quot; | python -)
+
+real    0m0.023s
+user    0m0.018s
+sys 0m0.006s
+
+</code></pre>
+<p>Agora é só ~~chutar~~ encontrar o número certo e tenho a resposta:</p>
+<pre><code class="language-python">
+$ time (echo -e &quot;import random\nfor i in range(1000):\n  a=random.randrange(100)\n&quot; | python -)
+
+real    0m0.025s
+user    0m0.019s
+sys 0m0.006s
+$ time (echo -e &quot;import random\nfor i in range(10000):\n  a=random.randrange(100)\n&quot; | python -)
+
+real    0m0.038s
+user    0m0.032s
+sys 0m0.006s
+$ time (echo -e &quot;import random\nfor i in range(100000):\n  a=random.randrange(100)\n&quot; | python -)
+
+real    0m0.155s
+user    0m0.148s
+sys 0m0.008s
+$ time (echo -e &quot;import random\nfor i in range(1000000):\n  a=random.randrange(100)\n&quot; | python -)
+
+real    0m1.264s
+user    0m1.242s
+sys 0m0.023s
+$ time (echo -e &quot;import random\nfor i in range(500000):\n  a=random.randrange(100)\n&quot; | python -)
+
+real    0m0.660s
+user    0m0.643s
+sys 0m0.018s
+$ time (echo -e &quot;import random\nfor i in range(600000):\n  a=random.randrange(100)\n&quot; | python -)
+
+real    0m0.792s
+user    0m0.775s
+sys 0m0.018s
+$ time (echo -e &quot;import random\nfor i in range(700000):\n  a=random.randrange(100)\n&quot; | python -)
+
+real    0m0.911s
+user    0m0.889s
+sys 0m0.023s
+$ time (echo -e &quot;import random\nfor i in range(800000):\n  a=random.randrange(100)\n&quot; | python -)
+
+real    0m1.045s
+user    0m1.027s
+sys 0m0.018s
+$ time (echo -e &quot;import random\nfor i in range(750000):\n  a=random.randrange(100)\n&quot; | python -)
+
+real    0m0.996s
+user    0m0.975s
+sys 0m0.022s
+$ time (echo -e &quot;import random\nfor i in range(770000):\n  a=random.randrange(100)\n&quot; | python -)
+
+real    0m1.005s
+user    0m0.977s
+sys 0m0.030s
+$ time (echo -e &quot;import random\nfor i in range(760000):\n  a=random.randrange(100)\n&quot; | python -)
+
+real    0m0.989s
+user    0m0.970s
+sys 0m0.019s
+$ time (echo -e &quot;import random\nfor i in range(765000):\n  a=random.randrange(100)\n&quot; | python -)
+
+real    0m0.995s
+user    0m0.979s
+sys 0m0.016s
+$ time (echo -e &quot;import random\nfor i in range(768000):\n  a=random.randrange(100)\n&quot; | python -)
+
+real    0m1.006s
+user    0m0.983s
+sys 0m0.023s
+$ time (echo -e &quot;import random\nfor i in range(767000):\n  a=random.randrange(100)\n&quot; | python -)
+
+real    0m0.997s
+user    0m0.973s
+sys 0m0.024s
+$ time (echo -e &quot;import random\nfor i in range(767500):\n  a=random.randrange(100)\n&quot; | python -)
+
+real    0m0.993s
+user    0m0.976s
+sys 0m0.018s
+$ time (echo -e &quot;import random\nfor i in range(767900):\n  a=random.randrange(100)\n&quot; | python -)
+
+real    0m1.007s
+user    0m0.987s
+sys 0m0.021s
+$ time (echo -e &quot;import random\nfor i in range(767800):\n  a=random.randrange(100)\n&quot; | python -)
+
+real    0m0.993s
+user    0m0.979s
+sys 0m0.014s
+$ time (echo -e &quot;import random\nfor i in range(767850):\n  a=random.randrange(100)\n&quot; | python -)
+
+real    0m1.000s
+user    0m0.980s
+sys 0m0.019s
+
+</code></pre>
+<p>Encontrei um número! Mas como responder com tamanha gambiarra, a uma pergunta num fórum de programação tão supimpa?</p>
+
+<p>Então pensei em <em>timeit</em>. Esquece, não vem ao caso. Aí lembrei que o <em>Unix</em> tem interrupções de tempo. Nunca tinha usado, mas uma rápida pesquisa por &#39;python signal alarm&#39; me deu isso:</p>
+
+<p><a href="https://docs.python.org/2/library/signal.html">17.4. signal — Set handlers for asynchronous events</a></p>
+
+<p>Adaptei o exemplo no final da página e saiu esse código:</p>
+
+<p>&lt;script src=&quot;https://gist.github.com/paulohrpinheiro/a28af1fcf4bcdb6828da.js&quot;&gt;&lt;/script&gt;</p>
+
+<p>O que esse código faz é definir uma função que será chamada quando o tempo determinado acabar (1 segundo). Ao ser chamada, essa função gera uma exceção e o <em>while</em> acaba, nos permitindo imprimir o contador.</p>
+
+<p>Testei com vários <em>Pythons</em>, e obtive esses resultados:</p>
+<pre><code class="language-python">
+$ python r.py
+(&#x27;Acabando....&#x27;, 14)
+785166
+$ python3 r.py
+Acabando.... 14
+426140
+$ pypy r.py
+(&#x27;Acabando....&#x27;, 14)
+23514193
+$ pypy3 r.py
+Acabando.... 14
+3510197
+
+</code></pre>
+<p>Detalhe para como as versões 2 são mais rápidas que as 3. Eu não gosto de Python2, eisso me deixou um pouco decepcionado.</p>
+
+<p>E atentem para o detalhe de como o <em>print</em> se comporta, nas diferentes versões...</p>
+
+<p>Até que tá bom, já que na busca manual (usando python2) achei 767850 e no programa achei 785166. O importante é a ordem de grandeza ;).</p>
+
+<p>É possível melhorar muito esse programa, por exemplo, tornando-o paralelo. Mas isso fica como desafio, e talvez, para um outro <em>post</em>.</p>
+
+<p>Ah, o Unix e suas belezas: <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man3/signal.3">signal — simplified software signal facilities</a></p>
+
+<p>Ah, o Python e suas belezas: <a href="https://docs.python.org/2/library/random.html">9.6. random — Generate pseudo-random numbers</a></p>
+
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Quantos números aleatórios posso gerar em 1 segundo?"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2016-02-06-numeros-aleatorios.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Quantos números aleatórios posso gerar em 1 segundo?"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2016-02-06-numeros-aleatorios.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Quantos números aleatórios posso gerar em 1 segundo?"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2016-02-06-numeros-aleatorios.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Quantos números aleatórios posso gerar em 1 segundo?"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2016-02-06-numeros-aleatorios.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Quantos números aleatórios posso gerar em 1 segundo?"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2016-02-06-numeros-aleatorios.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2017, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+</body>
+</html>

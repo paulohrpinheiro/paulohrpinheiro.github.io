@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Saiu a nova versão do ruby-txt2tags</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="O que há de novo na versão 0.1.0 do ruby-txt2tags?">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores e sysadmins</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Saiu a nova versão do ruby-txt2tags</h2>
+
+<h3>O que há de novo na versão 0.1.0 do ruby-txt2tags?</h3>
+
+<p><img src="images/ruby-txt2tags.png" alt="ruby-txt2tags-avatar"></p>
+
+<p>Prontamente falando, copiando e colando do <a href="https://github.com/paulohrpinheiro/ruby-txt2tags/blob/gem_0.1.0/CHANGELOG.md">changelog</a>:</p>
+
+<ul>
+<li>Add image mark</li>
+<li>Add URL mark</li>
+<li>Add Changelog :)</li>
+<li>Add Ruby version requirement: &#39;&gt;= 2.0&#39;</li>
+</ul>
+
+<p>Ou seja, foi melhorada a documentação e configuração, e o mais importante, foram adicionadas duas novas marcações.</p>
+
+<p>A primeira, para incorporar imagens ao documento. Em <em>HTML</em>, uma <em>tag</em> <code class="prettyprint">&lt;img&gt;</code>. A sintaxe é <code class="prettyprint">[URL]</code>, por exemplo, <code class="prettyprint">[https://paulohrpinheiro.xyz/favicon.ico]</code>.</p>
+
+<p>A segunda, um pouco mais complexa, é para <em>linkar</em> documentos. Em <em>HTML</em>, uma <em>tag</em> <code class="prettyprint">&lt;a&gt;</code>. A sintaxe é: <code class="prettyprint">[Descrição da URL URL]</code>, por exemplo, <code class="prettyprint">[Meu site legal https://paulohrpinheiro.xyz]</code>.</p>
+
+<p>Essas inclusões causaram-me alguns problemas para implementar, especialmente porque o <em>motor</em> de tradução é todo baseado em expressões regulares.</p>
+
+<p>Então tive uma surpresa ao colocar, numa mesma linha, essas duas tags:</p>
+<pre><code class="language-ruby">
+[https:&#x2F;&#x2F;paulohrpinheiro.xyz&#x2F;favicon.ico][Meu site legal https:&#x2F;&#x2F;paulohrpinheiro.xyz]
+
+</code></pre>
+<p>Pois era gerada uma saída como:</p>
+<pre><code class="language-ruby">
+&lt;img src=&quot;https:&lt;em&gt;paulohrpinheiro.xyz&#x2F;favicon.ico&quot;&gt;&lt;a href=&quot;https:&lt;&#x2F;em&gt;paulohrpinheiro.xyz&quot;&gt;Meu site legal&lt;&#x2F;a&gt;
+
+</code></pre>
+<p>Afinal, há um texto entre <code class="prettyprint">//</code> e <code class="prettyprint">//</code> que precisa ser marcado como em itálico, de acordo com as regras! E o programa funcionou de acordo com minhas tolas especificações...</p>
+
+<p>Passei alguns dias pensando em como resolver isso. A ideia principal era parsear de forma mais descente, e abandonar as expressões regulares.</p>
+
+<p>Foi então que resolvi escrever um teste pra deixar documentada a falha, e poder ir testando mais facilmente. E não é que rapidinho me veio a solução? Uma baita gambiarra, mas me fez passar o teste e não ter que rescrever, por enquanto, todo o &quot;motor&quot;.</p>
+
+<p>Decidi criar a regra de que o itálico não será aplicado, se entre as suas marcas existir ou o caractere <code class="prettyprint">[</code> ou o caractere <code class="prettyprint">]</code>. Totalmente impositivo, mas para as minhas necessidade é o que basta.</p>
+
+<p>De quebra passei um bom tempo no <code class="prettyprint">irb</code> brincando com expressões regulares.</p>
+
+<p>A lista do que falta implementar para estar de acordo com as especificações do programa original é bem grande. Como prioridade de novas funcionalidades tenho a implementação de tabelas e listas.</p>
+
+<p>E como prioridade &quot;interna&quot;, quero melhorar o programa e deixá-lo menos macarrônico. A atual saída do <a href="http://rubocop.readthedocs.io/en/latest/">RuboCop</a> é essa:</p>
+<pre><code class="language-ruby">
+➤ rubocop
+Inspecting 13 files
+..........C..
+
+Offenses:
+
+lib&#x2F;txt2tags.rb:65:3: C: Assignment Branch Condition size for output is too high. [35.62&#x2F;15]
+  def output(format)
+  ^^^
+lib&#x2F;txt2tags.rb:65:3: C: Cyclomatic complexity for output is too high. [9&#x2F;6]
+  def output(format)
+  ^^^
+lib&#x2F;txt2tags.rb:65:3: C: Method has too many lines. [25&#x2F;10]
+  def output(format) ...
+  ^^^^^^^^^^^^^^^^^^
+lib&#x2F;txt2tags.rb:65:3: C: Perceived complexity for output is too high. [10&#x2F;7]
+  def output(format)
+  ^^^
+
+13 files inspected, 4 offenses detected
+
+</code></pre>
+<p>Os números não mentem, está bem embaralhado o programa. Meu desconhecimento e inexperiência com <em>Ruby</em> contribuem para isso. Mas já melhorou muito.</p>
+
+<p>Além de ir aprendendo a programar em <em>Ruby</em>, algo bem interessante é o aprendizado na manutenção de um sistema, especialmente de uma <em>gem</em> e de um projeto no <em>github</em>.</p>
+
+<p>Importante, o programa original (implementado em <em>Python</em>), agora minha especificação, está em <a href="http://txt2tags.org/docs.html">Txt2tags</a>.</p>
+
+<p>E o <code class="prettyprint">ruby-txt2tags</code> pode ser encontrado em:</p>
+
+<p>https://github.com/paulohrpinheiro/ruby-txt2tags</p>
+
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Saiu a nova versão do ruby-txt2tags"
+    data-url="https://paulohrpinheiro.xyz/texts/ruby/2016-12-24-nova-versao-do-ruby-txt2tags.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Saiu a nova versão do ruby-txt2tags"
+    data-url="https://paulohrpinheiro.xyz/texts/ruby/2016-12-24-nova-versao-do-ruby-txt2tags.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Saiu a nova versão do ruby-txt2tags"
+    data-url="https://paulohrpinheiro.xyz/texts/ruby/2016-12-24-nova-versao-do-ruby-txt2tags.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Saiu a nova versão do ruby-txt2tags"
+    data-url="https://paulohrpinheiro.xyz/texts/ruby/2016-12-24-nova-versao-do-ruby-txt2tags.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Saiu a nova versão do ruby-txt2tags"
+    data-url="https://paulohrpinheiro.xyz/texts/ruby/2016-12-24-nova-versao-do-ruby-txt2tags.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2017, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+</body>
+</html>

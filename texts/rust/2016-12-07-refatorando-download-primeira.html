@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Refatorando um programa escrito em Rust — Primeira empreitada</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Algumas coisas me chamaram a atenção em um recente texto, sobre como baixar arquivos remotos com Rust. Essas coisas despertaram uma imensa vontade de refatorar esse código.">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores e sysadmins</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Refatorando um programa escrito em Rust — Primeira empreitada</h2>
+
+<h3>Algumas coisas me chamaram a atenção em um recente texto, sobre como baixar arquivos remotos com Rust. Essas coisas despertaram uma imensa vontade de refatorar esse código.</h3>
+
+<p><img src="images/refactoring.jpg" alt="Refatorando"></p>
+
+<p>A checagem de erros em Rust é muito interessante. Não são necessárias variáveis globais para explicar o erro, nem levantar exceções para indicar um erro, nem passar à função chamada variáveis que receberão o status. Basta retornar ou o erro ou o resultado, em uma estrutura Result. No texto abaixo tratei um pouco desse assunto:</p>
+
+<p><a href="/texts/rust/lidadndo-com-erros-em-rust.html">Lidando com erros em Rust</a></p>
+
+<p>Uma vantagem do Result é que podemos escrever nosso código sem verificar um erro. Se ocorrer um erro, então o Rust se encarrega de retornar o erro por você. DESDE QUE, a função que você usa e a sua função tenham o mesmo tipo de retorno, afinal a estrutura Result é bem maleável.</p>
+
+<p>Caso as estruturas sejam idênticas, você pode usar a macro <code class="prettyprint">try!()</code>. Algo como:</p>
+<pre><code class="language-rust">
+let resultado = try!(algo());
+
+</code></pre>
+<p>Ou agora o novo padrão:</p>
+<pre><code class="language-rust">
+let resultado = algo()?;
+
+</code></pre>
+<p>Ambas as formas realizam propagação de erros. Se algo der errado, o retorno de sua função será o retorno recebido. São equivalentes a escrever:</p>
+<pre><code class="language-rust">
+let resultado = match algo() {
+   Err(e) =&gt; return Err(e),
+   Ok(r) =&gt; resultado = r,
+};
+
+</code></pre>
+<p>Muito mais prático e legível usar as macros, especialmente a mais nova versão.</p>
+
+<p>Mas como falei, desde que sua função tenha o mesmo retorno. Uma outra opção é o <code class="prettyprint">unwrap()</code>. Mas só use se não tem problema que seu programa aborte caso algo dê errado. Usa-se o <code class="prettyprint">unwrap()</code> nos casos em que as funções retornem o tipo <code class="prettyprint">Option</code>.</p>
+
+<p>Então você deve decidir se usa <code class="prettyprint">Result</code> ou <code class="prettyprint">Option</code>. Aconselho usar <code class="prettyprint">Result</code>. Mas aqui tem uma boa explicação sobre onde o <code class="prettyprint">Option</code> é usado:</p>
+
+<blockquote>
+<p>std::option - Rust
+API documentation for the Rust <code class="prettyprint">option</code> mod in crate <code class="prettyprint">std</code>.
+https://doc.rust-lang.org/std/option/index.html</p>
+</blockquote>
+
+<p>O principal é que devemos conviver com essas duas estruturas.</p>
+
+<p>E a dificuldade do código do texto sobre download de arquivos está nisso. O texto está aqui:</p>
+
+<p><a href="/texts/rust/download-arquivos.html">Rust Pills — Download de arquivos</a></p>
+
+<p>O código final é esse:</p>
+<pre><code class="language-rust">
+&#x2F;&#x2F;! Crawler — My own crawler in Rust!
+
+extern crate hyper;         &#x2F;&#x2F; biblioteca (crate) não padrão
+use std::env;               &#x2F;&#x2F; argumentos env::args
+use std::io::{Read, Write}; &#x2F;&#x2F; para IO de arquivos
+use std::fs::File;          &#x2F;&#x2F; para criar arquivos
+use std::path::Path;        &#x2F;&#x2F; configurar nome de arquivo
+use std::thread;            &#x2F;&#x2F; concorrência
+
+
+const ROBOT_NAME:  &amp;&#x27;static str  = &quot;paulohrpinheiro-crawler&quot;;
+const BUFFER_SIZE: usize = 512;
+
+
+fn download_content(url: &amp;str) -&gt; Result&lt;String, String&gt; {
+    &#x2F;&#x2F; Somos um respeitável e conhecido bot
+    let mut headers = hyper::header::Headers::new();
+    headers.set(hyper::header::UserAgent(ROBOT_NAME.to_string()));
+
+    &#x2F;&#x2F; Pega cabeçalhos (e possivelmente algum dado já)
+    let client = hyper::Client::new();
+    let mut response;
+
+    match client.get(url).headers(headers).send() {
+        Err(error) =&gt; return Err(format!(&quot;{:?}&quot;, error)),
+        Ok(res)    =&gt; response = res,
+    }
+
+    &#x2F;&#x2F; Cria arquivo para salvar conteúdo
+    let filename = Path::new(&amp;url).file_name().unwrap();
+    let mut localfile;
+
+    match File::create(filename) {
+        Err(error)     =&gt; return Err(format!(&quot;{:?}&quot;, error)),
+        Ok(filehandle) =&gt; localfile = filehandle,
+    }
+
+    &#x2F;&#x2F; pega conteúdo e salva em arquivo
+    loop {
+        let mut buffer = [0; BUFFER_SIZE];
+
+        match response.read(&amp;mut buffer) {
+            Err(read_error) =&gt; return Err(format!(&quot;{:?}&quot;, read_error)),
+            Ok(bytes_read)  =&gt; {
+                if bytes_read == 0 {
+                    &#x2F;&#x2F; não tem mais o que ler
+                    break;
+                }
+                &#x2F;&#x2F; vamos tentar escrever o que pegamos
+                match localfile.write(&amp;buffer[0..bytes_read]) {
+                    Err(write_error) =&gt; return Err(format!(&quot;{:?}&quot;, write_error)),
+                    Ok(bytes_write)  =&gt; {
+                        if bytes_write != bytes_read {
+                            return Err(&quot;Error in write.&quot;.to_string());
+                        }
+                    },
+                }
+            },
+        }
+    }
+
+    return Ok(String::from(filename.to_str().unwrap()));
+}
+
+
+fn main() {
+    &#x2F;&#x2F; Pega os argumentos, mas ignorando o primeiro
+    &#x2F;&#x2F; que é o nome do programa.
+    let mut args = env::args();
+    args.next();
+
+    &#x2F;&#x2F; vetor para as threads que serão criadas
+    let mut workers = vec![];
+
+    &#x2F;&#x2F; Pega o conteúdo de cada URL
+    for url in args {
+        workers.push(thread::spawn(move || {
+            print!(&quot;{} - &quot;, url);
+
+            match download_content(&amp;url) {
+                Err(error)   =&gt; println!(&quot;{:?}&quot;, error),
+                Ok(filename) =&gt; println!(&quot;{:?}&quot;, filename),
+            }
+
+            print!(&quot;\n\n&quot;);
+        }));
+    }
+
+    &#x2F;&#x2F; espera cada thread acabar
+    for worker in workers {
+        let _ = worker.join();
+    }
+}
+
+</code></pre>
+<p>O código refatorado é esse:</p>
+<pre><code class="language-rust">
+&#x2F;&#x2F;! Crawler — My own crawler in Rust!
+
+extern crate hyper;         &#x2F;&#x2F; biblioteca (crate) não padrão
+use std::env;               &#x2F;&#x2F; argumentos env::args
+use std::io::{Read, Write}; &#x2F;&#x2F; para IO de arquivos
+use std::fs::File;          &#x2F;&#x2F; para criar arquivos
+use std::path::Path;        &#x2F;&#x2F; configurar nome de arquivo
+use std::thread;            &#x2F;&#x2F; concorrência
+
+
+const ROBOT_NAME:  &amp;&#x27;static str  = &quot;paulohrpinheiro-crawler&quot;;
+const BUFFER_SIZE: usize = 512;
+
+
+#[derive(Debug)]
+enum DownloadError {
+    CantGet,
+    CantRead,
+    CantWrite,
+    CantCreate,
+    InvalidName,
+}
+
+
+fn download_content(url: &amp;str) -&gt; Result&lt;String, DownloadError&gt; {
+    &#x2F;&#x2F; Somos um respeitável e conhecido bot
+    let mut headers = hyper::header::Headers::new();
+    headers.set(hyper::header::UserAgent(ROBOT_NAME.to_string()));
+
+    &#x2F;&#x2F; Pega cabeçalhos (e possivelmente algum dado já)
+    let client = hyper::Client::new();
+    let mut response = match     client.get(url).headers(headers).send() {
+        Err(_) =&gt; return Err(DownloadError::CantGet),
+        Ok(r)  =&gt; r,
+    };
+
+    let local_filename = filename(url)?;
+    let mut localfile = create_localfile(&amp;local_filename)?;
+
+    &#x2F;&#x2F; pega conteúdo e salva em arquivo
+    loop {
+        let mut buffer = [0; BUFFER_SIZE];
+
+        &#x2F;&#x2F; conseguimos ler?
+        let bytes_read = match response.read(&amp;mut buffer) {
+            Err(_) =&gt; return Err(DownloadError::CantRead),
+            Ok(b)  =&gt; b,
+        };
+
+        &#x2F;&#x2F; não tem mais nada?
+        if bytes_read == 0 {
+            break;
+        }
+
+        &#x2F;&#x2F; vamos tentar escrever o que pegamos
+        let bytes_write = match localfile.write(&amp;buffer[0..bytes_read]) {
+            Err(_) =&gt; return Err(DownloadError::CantWrite),
+            Ok(b)  =&gt; b,
+        };
+
+        &#x2F;&#x2F; conseguiu escrever o que leu?
+        if bytes_write != bytes_read {
+            return Err(DownloadError::CantWrite);
+        }
+    }
+
+    return Ok(local_filename);
+}
+
+
+fn filename(url: &amp;str) -&gt; Result&lt;String, DownloadError&gt; {
+    match Path::new(&amp;url).file_name() {
+        None       =&gt; Err(DownloadError::InvalidName),
+        Some(name) =&gt; {
+            match name.to_str() {
+                None    =&gt; Err(DownloadError::InvalidName),
+                Some(r) =&gt; Ok(String::from(r)),
+            }
+        }
+    }
+}
+
+
+fn create_localfile(name: &amp;str) -&gt; Result&lt;File, DownloadError&gt; {
+    match File::create(&amp;name) {
+        Err(_) =&gt; Err(DownloadError::CantCreate),
+        Ok(f)  =&gt; Ok(f),
+    }
+}
+
+
+fn main() {
+    &#x2F;&#x2F; Pega os argumentos, mas ignorando o primeiro
+    &#x2F;&#x2F; que é o nome do programa.
+    let mut args = env::args();
+    args.next();
+
+    &#x2F;&#x2F; Vetor para as threads que serão criadas
+    let mut workers = vec![];
+
+    &#x2F;&#x2F; Pega o conteúdo de cada URL
+    for url in args {
+        &#x2F;&#x2F; Cria thread para cada URL
+        workers.push(thread::spawn(move || {
+            print!(&quot;{} - &quot;, url);
+
+            match download_content(&amp;url) {
+                Err(e) =&gt; println!(&quot;ERR: {:?}&quot;, e),
+                Ok(f)  =&gt; println!(&quot;OK:  saved as {:?}&quot;, f),
+            }
+
+            print!(&quot;\n\n&quot;);
+        }));
+    }
+
+    &#x2F;&#x2F; Espera as threads terminarem suas tarefas
+    for worker in workers {
+        let _ = worker.join();
+    }
+}
+
+</code></pre>
+<h4>Criando os códigos de erro</h4>
+<pre><code class="language-rust">
+#[derive(Debug)]
+enum DownloadError {
+    CantGet,
+    CantRead,
+    CantWrite,
+    CantCreate,
+    InvalidName,
+}
+
+</code></pre>
+<p>A primeira linha é um facilitador. Quando precisarmos imprimir o erro, ele imprime o símbolo definido, por exemplo, quando não é possível baixar algum conteúdo ou arquivo:</p>
+<pre><code class="language-rust">
+ERR: CantGet
+
+</code></pre>
+<p>No programa, esse é o trecho responsável por essa saída:</p>
+<pre><code class="language-rust">
+match download_content(&amp;url) {
+    Err(e) =&gt; println!(&quot;ERR: {:?}&quot;, e),
+    Ok(f)  =&gt; println!(&quot;OK:  saved as {:?}&quot;, f),
+}
+
+</code></pre>
+<p>Modificando o retorno da função download_content</p>
+<pre><code class="language-rust">
+fn download_content(url: &amp;str) -&gt; Result&lt;String, DownloadError&gt; {
+...
+}
+
+</code></pre>
+<p>Agora ela retorna um código de erro ao invés de uma String.
+Declarando e inicializando uma variável com match</p>
+
+<p>Nesse caso, para iniciar o processo de transferência do arquivo:</p>
+<pre><code class="language-rust">
+let mut response = match client.get(url).headers(headers).send() {
+    Err(_) =&gt; return Err(DownloadError::CantGet),
+    Ok(r)  =&gt; r,
+};
+
+</code></pre>
+<p>Aqui para verificar se conseguiu ler:</p>
+<pre><code class="language-rust">
+let bytes_read = match response.read(&amp;mut buffer) {
+    Err(_) =&gt; return Err(DownloadError::CantRead),
+    Ok(b) =&gt; b,
+};
+
+</code></pre>
+<p>E assim para verificar se conseguiu escrever:</p>
+<pre><code class="language-rust">
+let bytes_write = match localfile.write(&amp;buffer[0..bytes_read]) {
+    Err(_) =&gt; return Err(DownloadError::CantWrite),
+    Ok(b) =&gt; b,
+};
+
+</code></pre>
+<p>Observe o ‘;’ ao final.</p>
+
+<p>Gosto de declarar as variáveis bem perto de onde as uso. Assim está bem perto :).</p>
+
+<h4>Usando macro para repasse de erros</h4>
+<pre><code class="language-rust">
+let local_filename = filename(url)?;
+let mut localfile = create_localfile(&amp;local_filename)?;
+
+</code></pre>
+<h4>Outras mudanças</h4>
+
+<p>Além das funções criadas, filename e create_localfile, responsáveis por, respectivamente, definir o nome local do conteúdo baixado, e por criar o arquivo localmente.</p>
+
+<p>Bem mais legível o código, e isso só foi possível por terem sido criados códigos de erro e padronizado o fluxo pelo nosso programa.
+Próximas refatorações</p>
+
+<p>Ao executar o programa com algumas URLs que levem aproximadamente o mesmo tempo para realizar a tarefa, a saída no console fica toda embaralhada. Afinal, estamos trabalhando com threads... Isso deve ser arrumado.</p>
+
+<p>Devemos adicionar alguns testes e documentação .</p>
+
+<p>E por fim, mas não menos importante, que tal usar cores para diferenciar erros de finalizações bem sucedidas?</p>
+
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Refatorando um programa escrito em Rust — Primeira empreitada"
+    data-url="https://paulohrpinheiro.xyz/texts/rust/2016-12-07-refatorando-download-primeira.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Refatorando um programa escrito em Rust — Primeira empreitada"
+    data-url="https://paulohrpinheiro.xyz/texts/rust/2016-12-07-refatorando-download-primeira.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Refatorando um programa escrito em Rust — Primeira empreitada"
+    data-url="https://paulohrpinheiro.xyz/texts/rust/2016-12-07-refatorando-download-primeira.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Refatorando um programa escrito em Rust — Primeira empreitada"
+    data-url="https://paulohrpinheiro.xyz/texts/rust/2016-12-07-refatorando-download-primeira.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Refatorando um programa escrito em Rust — Primeira empreitada"
+    data-url="https://paulohrpinheiro.xyz/texts/rust/2016-12-07-refatorando-download-primeira.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2017, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Uma aplicação Flask esquelética</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Configurando um servidor nginx para rodar uma aplicação Flask, precisei verificar se a conexão WSGI estava funcionando, e mais que isso, que uma aplicação *Flask* funcionaria. Para isso adaptei uma aplicação mínima, mas bem compartimentada, apenas com esse objetivo.">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores e sysadmins</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Uma aplicação Flask esquelética</h2>
+
+<h3>Configurando um servidor nginx para rodar uma aplicação Flask, precisei verificar se a conexão WSGI estava funcionando, e mais que isso, que uma aplicação <em>Flask</em> funcionaria. Para isso adaptei uma aplicação mínima, mas bem compartimentada, apenas com esse objetivo.</h3>
+
+<p><img src="images/flask.png" alt="Flask"></p>
+
+<blockquote>
+<p>Este artigo é para ajudar administradores de sistema que estejam configurando e testando um servidor de aplicação, e não para ajudar desenvolvedores que queiram saber como usar o <em>Flask</em>.</p>
+</blockquote>
+
+<h4>Estrutura geral</h4>
+
+<p>A base desse esqueleto e das configurações, veio de um tutorial que encontrei via google:</p>
+<pre><code class="language-python">
+https:&#x2F;&#x2F;www.digitalocean.com&#x2F;community&#x2F;tutorials&#x2F;how-to-structure-large-flask-applications
+
+</code></pre>
+<p><em>Nota:</em></p>
+
+<blockquote>
+<p>A aplicação está disponível em https://github.com/paulohrpinheiro/flask-esqueletico. Aqui reproduzo o conteúdo de cada arquivo apenas para ilustrá-los.</p>
+</blockquote>
+
+<p>Minha estrutura ficou assim:</p>
+<pre><code class="language-python">
+flask-esqueletico
+    ├── app
+    │   ├── __init__.py
+    │   ├── mod_root
+    │   │   ├── controllers.py
+    │   │   └── __init__.py
+    │   └── templates
+    │       └── mod_root
+    │           └── index.html
+    ├── config.py
+    ├── requirements.txt
+    └── run.py
+
+</code></pre>
+<h4>Preparando o terreno</h4>
+
+<p>Primeiro baixamos a aplicação em algum diretório e entramos no diretório criado pelo <code class="prettyprint">git clone</code>:</p>
+<pre><code class="language-python">
+$ cd &#x2F;tmp
+$ git clone https:&#x2F;&#x2F;github.com&#x2F;paulohrpinheiro&#x2F;flask-esqueletico
+$ cd flask-esqueletico
+
+</code></pre>
+<p>Agora criamos uma <code class="prettyprint">virtualenv</code> para conter um ambiente Python exclusivo para nosso projeto:</p>
+<pre><code class="language-python">
+$ virtualenv &#x2F;tmp&#x2F;env-flask-esqueletico
+New python executable in &#x2F;tmp&#x2F;env-flask-esqueletico&#x2F;bin&#x2F;python2
+Also creating executable in &#x2F;tmp&#x2F;env-flask-esqueletico&#x2F;bin&#x2F;python
+Installing setuptools, pip, wheel...done.
+$
+
+</code></pre>
+<p>Ativamos a <em>virtualenv</em>:</p>
+<pre><code class="language-python">
+$ source &#x2F;tmp&#x2F;env-flask-esqueletico&#x2F;bin&#x2F;activate
+(env-flask-esqueletico) $
+
+</code></pre>
+<p>E instalamos oo módulos necessários:</p>
+<pre><code class="language-python">
+$ pip install -r requirements.txt
+Collecting flask (from -r requirements.txt (line 1))
+  Using cached Flask-0.11.1-py2.py3-none-any.whl
+Collecting uwsgi (from -r requirements.txt (line 2))
+Collecting itsdangerous&gt;=0.21 (from flask-&gt;-r requirements.txt (line 1))
+Collecting click&gt;=2.0 (from flask-&gt;-r requirements.txt (line 1))
+Collecting Jinja2&gt;=2.4 (from flask-&gt;-r requirements.txt (line 1))
+  Using cached Jinja2-2.8-py2.py3-none-any.whl
+Collecting Werkzeug&gt;=0.7 (from flask-&gt;-r requirements.txt (line 1))
+  Using cached Werkzeug-0.11.11-py2.py3-none-any.whl
+Collecting MarkupSafe (from Jinja2&gt;=2.4-&gt;flask-&gt;-r requirements.txt (line 1))
+Installing collected packages: itsdangerous, click, MarkupSafe, Jinja2, Werkzeug, flask, uwsgi
+Successfully installed Jinja2-2.8 MarkupSafe-0.23 Werkzeug-0.11.11 click-6.6 flask-0.11.1 itsdangerous-0.24 uwsgi-2.0.14
+(env-flask-esqueletico) $
+
+</code></pre>
+<h4>Testando</h4>
+
+<p>Estando no diretório <code class="prettyprint">flask-esqueletico</code>, com a <code class="prettyprint">virtualenv</code> criada, podemos testar o sistema:</p>
+<pre><code class="language-python">
+$ python run.py
+ * Running on http:&#x2F;&#x2F;127.0.0.1:8080&#x2F; (Press CTRL+C to quit)
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger pin code: 324-612-083
+
+</code></pre>
+<p>E no seu browser, (ou com <code class="prettyprint">cURL</code> ou <code class="prettyprint">wget</code> ou <code class="prettyprint">fetch</code>) acessar a seguinte <em>URL</em>:</p>
+<pre><code class="language-python">
+http:&#x2F;&#x2F;127.0.0.1:8080&#x2F;app&#x2F;
+
+</code></pre>
+<h4>Configurando o nginx</h4>
+
+<p>Eu prefiro compilar, mas isso é assunto para outro texto, então vou assumir aqui que você tem, de alguma forma, um <em>nginx</em> instalado.</p>
+
+<p>O importante, é dentro do bloco <code class="prettyprint">server</code> referente ao domínio que você quer que responda pelo aplicativo (normalmente um arquivo dentro de <code class="prettyprint">/etc/nginx/conf.d</code>), ter essas seguintes linhas:</p>
+<pre><code class="language-python">
+location = &#x2F;app { rewrite ^ &#x2F;app&#x2F;; }
+location &#x2F;app { try_files $uri @app; }
+location @app {
+        include uwsgi_params;
+        uwsgi_pass application;
+}
+
+</code></pre>
+<p>Fora do bloco <code class="prettyprint">server</code> desse domínio, deve ter esse bloco:</p>
+<pre><code class="language-python">
+upstream application {
+    server 127.0.0.1:8000;
+}
+
+</code></pre>
+<p>Por exemplo, uma configuração minha ficou assim:</p>
+<pre><code class="language-python">
+upstream application {
+    server 127.0.0.1:8000;
+}
+
+server {
+    charset utf-8;
+
+    access_log  &#x2F;opt&#x2F;log&#x2F;nginx&#x2F;access.log;
+
+    location &#x2F; {
+            root   &#x2F;opt&#x2F;www&#x2F;html;
+            index  index.html index.htm;
+    }
+
+    location = &#x2F;app { rewrite ^ &#x2F;app&#x2F;; }
+    location &#x2F;app { try_files $uri @app; }
+    location @app {
+            include uwsgi_params;
+            uwsgi_pass application;
+    }
+
+    client_max_body_size 100m;
+
+    proxy_redirect     off;
+    proxy_set_header   Host $host;
+    proxy_set_header   X-Real-IP $remote_addr;
+    proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header   X-Forwarded-Host $server_name;
+}
+
+</code></pre>
+<p>Para testar a configuração:</p>
+<pre><code class="language-python">
+nginx -t
+
+</code></pre>
+<p>E para fazer valer essas novas configurações:</p>
+<pre><code class="language-python">
+pkill -HUP nginx
+
+</code></pre>
+<h4>uWSGI</h4>
+
+<p>Para rodar a aplicação, estando com a <em>virtualenv</em> ativada, podemos executar o
+seguinte comando:</p>
+<pre><code class="language-python">
+$ uwsgi --socket 127.0.0.1:8000 --wsgi-file app --callable app
+*** Starting uWSGI 2.0.14 (64bit) on [Sat Oct 29 17:42:11 2016] ***
+compiled with version: 6.2.1 20160916 (Red Hat 6.2.1-2) on 29 October 2016 16:54:03
+os: Linux-4.7.9-200.fc24.x86_64 #1 SMP Thu Oct 20 14:26:16 UTC 2016
+nodename: localhost.localdomain
+machine: x86_64
+clock source: unix
+pcre jit disabled
+detected number of CPU cores: 4
+current working directory: &#x2F;tmp&#x2F;flask-esqueletico
+detected binary path: &#x2F;tmp&#x2F;env-flask-esqueletico&#x2F;bin&#x2F;uwsgi
+*** WARNING: you are running uWSGI without its master process manager ***
+your processes number limit is 14592
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to TCP address 127.0.0.1:8000 fd 3
+Python version: 2.7.12 (default, Sep 29 2016, 13:30:34)  [GCC 6.2.1 20160916 (Red Hat 6.2.1-2)]
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x1b53590
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 72768 bytes (71 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint=&#x27;&#x27;) ready in 0 seconds on interpreter 0x1b53590 pid: 7630 (default app)
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI worker 1 (and the only) (pid: 7630, cores: 1)
+
+</code></pre>
+<h4>Vendo essa coisa toda funcionar</h4>
+
+<p>Com essas configurações, basta subir o <em>nginx</em> e o <em>uwsgi</em>, que manualmente pode ser feito assim:, com a <em>virtualenv</em> ativada, dentro do diretório <code class="prettyprint">flask-esqueletico</code>:</p>
+<pre><code class="language-python">
+uwsgi --socket 127.0.0.1:8000 --wsgi-file app --callable app
+
+</code></pre>
+<p>Acesse pelo browser o endereço <code class="prettyprint">http://example.com/app</code>, se o seu domínio for <code class="prettyprint">example.com</code>:</p>
+
+<p><img src="images/flask-esqueletico.png" alt="Captura de tela"></p>
+
+<h4>Entendendo a aplicação</h4>
+
+<p>A pasta <code class="prettyprint">app</code> conterá o sistema em si. A pasta <code class="prettyprint">app/templates</code> conterá, para cada módulo, uma pasta correspondente com seus respectivos templates. Nesse sistema temos apenas um módulo, o <code class="prettyprint">mod_root</code>.</p>
+
+<h5>Raiz</h5>
+
+<p>Temos três arquivos aqui:</p>
+<pre><code class="language-python">
+├── config.py
+├── requirements.txt
+└── run.py
+
+</code></pre>
+<p>O arquivo config conterá as configurações mais gerais do sistema:</p>
+<pre><code class="language-python">
+DEBUG = True
+
+# app directory
+import os
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+
+# Threads per processor
+THREADS_PER_PAGE = 2
+
+# Protect against CSRF
+CSRF_ENABLE = True
+CSRF_SESSION_KEY = &#x27;MDk3N2I0NTc2ZDdiNDIzZmIxNDMyMDY2OWUyMGM3MGI=&#x27;
+
+# cookies
+SECRET_KEY = &#x27;N2I5OTc5ZWZmNjY2NGIwZWE2NzA1YjNhY2IxYjc4OWM=&#x27;
+
+</code></pre>
+<p>As chaves, <code class="prettyprint">CSRF_SESSION_KEY</code> e <code class="prettyprint">SECRET_KEY</code>, gerei com os seguintes comandos:</p>
+<pre><code class="language-python">
+$ python -c &#x27;import base64,uuid; print(base64.b64encode(uuid.uuid4().hex))&#x27;
+MDk3N2I0NTc2ZDdiNDIzZmIxNDMyMDY2OWUyMGM3MGI=
+$ python -c &#x27;import base64,uuid; print(base64.b64encode(uuid.uuid4().hex))&#x27;
+N2I5OTc5ZWZmNjY2NGIwZWE2NzA1YjNhY2IxYjc4OWM=
+
+</code></pre>
+<p>O arquivo <code class="prettyprint">requirements.txt</code> lista as dependências de nosso sistema:</p>
+<pre><code class="language-python">
+flask
+uwsgi
+
+</code></pre>
+<p>E, finalmente, o arquivo <code class="prettyprint">run.py</code> serve para &quot;subir&quot; a nossa aplicação, para verificações rápidas:</p>
+<pre><code class="language-python">
+from app import app
+app.run(host=&#x27;127.0.0.1&#x27;, port=8080, debug=True)
+
+</code></pre>
+<p>Executando esse script podemos, pelo browser, acessar o endereço http://127.0.0.1:8080.</p>
+
+<h5>Pasta <code class="prettyprint">app/templates</code></h5>
+
+<p>Temos um só modulo, portanto teremos uma só subpasta. Nela, <code class="prettyprint">app/templates/mod_root</code>, teremos o template <code class="prettyprint">index.html</code>:</p>
+<pre><code class="language-python">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;Flask Template Example&lt;&#x2F;title&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;&#x2F;head&gt;
+
+&lt;body&gt;
+    &lt;h1&gt;test app&lt;h1&gt;
+    &lt;p&gt;{{ now_str }}&lt;&#x2F;p&gt;
+&lt;body&gt;
+&lt;html&gt;
+
+</code></pre>
+<p>Esse template recebe uma variável, <code class="prettyprint">now_str</code>, que contém a data corrente, obtida pela aplicação.</p>
+
+<h5>Pasta <code class="prettyprint">app_/mod_root</code>:</h5>
+
+<p>Aqui está o código de nosso módulo. Teremos dois arquivos, o <code class="prettyprint">__init__.py</code> para indicarmos que esse diretório contém um módulo, e o arquivo <code class="prettyprint">controllers.py</code>:</p>
+<pre><code class="language-python">
+import datetime
+
+from flask import Blueprint, render_template;
+
+mod_root = Blueprint(&#x27;root&#x27;, __name__, url_prefix=&#x27;&#x2F;app&#x27;)
+
+@mod_root.route(&#x27;&#x2F;&#x27;, methods=[&#x27;GET&#x27;])
+def root():
+    my_datetime = datetime.datetime.now().isoformat()
+    print(&quot;DATE:&quot;, my_datetime)
+    return render_template(&#x27;mod_root&#x2F;index.html&#x27;, now_str=my_datetime)
+
+</code></pre>
+<p>Aqui definimos nosso módulo, e o que responderá quando requisitarmos o endereço <code class="prettyprint">/app/</code>. Utilizamos o template <code class="prettyprint">mod_root/index.html</code>.</p>
+
+<p>Finalmente, em <code class="prettyprint">app/__init__.py</code> temos a inicialização de nossa aplicação:</p>
+<pre><code class="language-python">
+from flask import Flask, render_template
+
+app = Flask(__name__)
+app.config.from_object(&#x27;config&#x27;)
+
+from app.mod_root.controllers import mod_root as root_module
+app.register_blueprint(root_module)
+
+</code></pre>
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Uma aplicação Flask esquelética"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2016-11-30-flask-esqueletico.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Uma aplicação Flask esquelética"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2016-11-30-flask-esqueletico.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Uma aplicação Flask esquelética"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2016-11-30-flask-esqueletico.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Uma aplicação Flask esquelética"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2016-11-30-flask-esqueletico.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Uma aplicação Flask esquelética"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2016-11-30-flask-esqueletico.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2017, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+
+<rss version="2.0">
+  <channel>
+    <title>Paulo Henrique Rodrigues Pinheiro</title>
+    <link>https://paulohrpinheiro.xyz</link>
+    <description>Blog sobre programação para programadores e sysadmins</description>
+    <language>pt-br</language>
+
+    <item>
+      <title>Configurando um smarthost (relayhost) no exim4 em Debian</title>
+      <link>https://paulohrpinheiro.xyz/texts/server/2011-06-08-configurando-smarthost-debian-exim4.html</link>
+      <description>omo mandar emails do servidor para um email real</description>
+      <pubDate>Wed, 8 Jun 2011 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Garantindo mais espaço em seu disco</title>
+      <link>https://paulohrpinheiro.xyz/texts/server/2011-03-29-garantindo-mais-espaco.html</link>
+      <description>Removendo a reserva de espaço do usuário root</description>
+      <pubDate>Tue, 29 Mar 2011 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Desabilitando a verificação de discos no boot (fsck disable)</title>
+      <link>https://paulohrpinheiro.xyz/texts/server/2010-11-25-desabilitando-verificacao-de-discos.html</link>
+      <description>assando reto na verificação de discos</description>
+      <pubDate>Thu, 25 Nov 2010 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Desabilitando IPv6 no Linux</title>
+      <link>https://paulohrpinheiro.xyz/texts/server/2010-10-25-desabilitando-ipv6-linux.html</link>
+      <description>Deixando apenas o IPv4 no Linux</description>
+      <pubDate>Mon, 25 Oct 2010 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>vim como editor padrão no debian</title>
+      <link>https://paulohrpinheiro.xyz/texts/server/2010-10-15-vim-editor-padrão-debian.html</link>
+      <description>configuração para o debian usar vim em comandos como crontab</description>
+      <pubDate>Fri, 15 Oct 2010 00:00:00 +0000</pubDate>
+    </item>
+
+  </channel>
+</rss>

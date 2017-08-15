@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+
+<rss version="2.0">
+  <channel>
+    <title>Paulo Henrique Rodrigues Pinheiro</title>
+    <link>https://paulohrpinheiro.xyz</link>
+    <description>Blog sobre programação para programadores e sysadmins</description>
+    <language>pt-br</language>
+
+    <item>
+      <title>Um tail -f desfalcado</title>
+      <link>https://paulohrpinheiro.xyz/texts/c/2017-01-19-um-tail-f-descalcado.html</link>
+      <description>Treinando com C para uma implementação pessoal do tail -f</description>
+      <pubDate>Thu, 19 Jan 2017 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Linguagem C: goto é para inocentes... O lance é setjmp!</title>
+      <link>https://paulohrpinheiro.xyz/texts/c/2016-03-08-goto-setjmp.html</link>
+      <description>Usando goto e setjmp para manter o código legível.</description>
+      <pubDate>Tue, 8 Mar 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Testes unitários na linguagem C</title>
+      <link>https://paulohrpinheiro.xyz/texts/c/2016-02-17-testes-unitarios.html</link>
+      <description>Como realizar testes unitários em C?</description>
+      <pubDate>Wed, 17 Feb 2016 00:00:00 +0000</pubDate>
+    </item>
+
+  </channel>
+</rss>

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Fixtures em JSON com Senha Criptografada Pelo BCRYPT</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Relato de uma pequena e feliz experiência com Perl em uma startup">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores e sysadmins</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Fixtures em JSON com Senha Criptografada Pelo BCRYPT</h2>
+
+<h3>Relato de uma pequena e feliz experiência com Perl em uma startup</h3>
+
+<h4>Prolegômenos</h4>
+
+<p>Há algum tempo, pesquisando sobre alternativas para desenvolvimento de sistemas, decidi voltar a programar em Perl <a href="http://mail.pm.org/pipermail/saopaulo-pm/2015/021550.html">Aqui tem uma explicação</a>. E a cada pequeno problema superado fico mais certo de ter acertado. Desenvolvendo um sistema para a gerência de um marketplace voltado ao mercado de pesquisas qualitativas, precisei ter à mão uma forma de gerar dados iniciais mínimos para alimentar uma base em MongoDB.</p>
+
+<p>Os primeiros usuários. A senha precisava estar criptografada, e eu precisava ter em mãos algo para gerar rapidamente, as entradas que eu precisasse. Primeiro pensamento, escrever um programa que alimente o banco de dados. Como o desenvolvimento é com requisitos que ainda estão sendo construídos (intuídos e validados), optei por escrever algo que me imprimisse em JSON o que queria inserir no mongo. Copiar e colar a saída no console do banco e pronto.</p>
+
+<h4>Primeira implementação</h4>
+
+<p>Precisava de um JSON, criei um:</p>
+<pre><code class="language-perl">
+A. #!&#x2F;usr&#x2F;bin&#x2F;env perl
+B.
+C. use strict;
+D. use warnings;
+E.
+F. use JSON;
+G.
+H. my $root_user = {
+I.   email =&gt; &#x27;app@chail.com.br&#x27;,
+J.   name =&gt; &#x27;Chail Root Admin&#x27;,
+K.   password =&gt; &#x27;{#MinhaSenhaSuuuuperSegura#}&#x27;,
+L.   role =&gt; &#x27;admin&#x27;,
+M.   active =&gt; JSON::true,
+N. };
+O.
+P. print to_json($root_user);
+
+</code></pre>
+<p>O importante é que na linha <em>F</em> usamos o <a href="https://metacpan.org/pod/JSON">JSON</a>, e na linha <em>H</em> iniciamos a criação de um <em>hash</em> com os dados necessários. E na linha <em>P</em> o objetivo é atingido.</p>
+
+<p>A função <code class="prettyprint">to_json</code> nos cospe os dados em <em>JSON</em>. Muito simples!</p>
+
+<p>Esse programa nos mostra essa saída:</p>
+<pre><code class="language-perl">
+{&quot;role&quot;:&quot;admin&quot;,&quot;email&quot;:&quot;app@chail.com.br&quot;,&quot;password&quot;:&quot;{#MinhaSenhaSuuuuperSegura#}&quot;,&quot;active&quot;:true,&quot;name&quot;:&quot;Chail Root Admin&quot;}
+
+</code></pre>
+<p>Para uma saída mais amigável, basta alterar a linha <em>P</em> de:</p>
+<pre><code class="language-perl">
+print to_json($root_user);
+
+</code></pre>
+<p>Para:</p>
+<pre><code class="language-perl">
+print to_json($root_user, {pretty =&gt; 1} );
+
+</code></pre>
+<p>E então obtemos a seguinte saída:</p>
+<pre><code class="language-perl">
+{
+  &quot;name&quot; : &quot;Chail Root Admin&quot;,
+  &quot;password&quot; : &quot;{#MinhaSenhaSuuuuperSegura#}&quot;,
+  &quot;role&quot; : &quot;admin&quot;,
+  &quot;active&quot; : true,
+  &quot;email&quot; : &quot;app@chail.com.br&quot;
+}
+
+</code></pre>
+<p>Muito mais amigável. Confesso que tentei primeiro imprimir bonitinho usando <code class="prettyprint">Data::Dumper</code>, mas percebi a besteira, voltei ao juízo normal e li o manual.</p>
+
+<p>Testes feitos, agora era tomar cuidado pra não armazenar senhas sem criptografar.</p>
+
+<h4>Procurando algo feito para criptografar</h4>
+
+<p>Pesquisando na <a href="http://sao-paulo.pm.org/pub">lista de publicações</a> da <a href="http://sao-paulo.pm.org/">São Paulo Perl Mongers</a>, encontrei um ótimo texto do Blabo de Blebe, <a href="http://sao-paulo.pm.org/pub/encriptacao-se-senhas-uma-abordagem-com-bcry%20pt">Encriptação se senhas - Uma abordagem com bcrypt</a>. Com as indicações dele, cheguei a outros bons textos, e no <a href="http://www.gist.github.com"></a>, encontrei o que estava procurando: <a href="https://gist.github.com/gcrawshaw/1071698">Using bcrypt to secure passwords in a Perl application</a>.</p>
+
+<p>Outro ótimo texto, foi uma implementação em Python, do <a href="http://github.com/viniciusmarangoni">Vinícius Henrique Marangoni</a>: <a href="http://pythoneiro.blogspot.com.br/2015/02/como-utilizar-bcrypt-em-python.html">Como utilizar bcrypt em python</a>.</p>
+
+<p>E a própria página do módulo em <em>Perl</em>:</p>
+
+<p><a href="https://metacpan.org/pod/Crypt::Eksblowfish::Bcrypt">Crypt::Eksblowfish::Bcrypt</a>.</p>
+
+<p>A partir dessas informações, adaptei os códigos em um módulo:</p>
+<pre><code class="language-perl">
+package Util::Password;
+
+use strict;
+use warnings;
+
+use Crypt::Eksblowfish::Bcrypt;
+use Crypt::Random;
+
+sub Encrypt {
+    my $password = shift;
+
+    # Generate a random salt if not passed
+    my $salt = shift || Crypt::Eksblowfish::Bcrypt::en_base64(Crypt::Random::makerandom_octet(Length=&gt;16));;
+
+    # Set the cost to 13 and append a NUL
+    my $settings = &#x27;$2a$13$&#x27;.$salt;
+
+    # Encrypt it
+    return Crypt::Eksblowfish::Bcrypt::bcrypt($password, $settings);
+ }
+
+ sub Check {
+    my $plain_password = shift;
+    my $hashed_password = shift;
+
+    # Regex to extract the salt
+    if ($hashed_password =~ m!^\$2a\$\d{2}\$([A-Za-z0-9+\\.&#x2F;]{22})!) {
+        # Use a letter by letter match rather than a complete string match to avoid timing attacks
+        my $match = Encrypt($plain_password, $1);
+        my $bad = 0;
+        for (my $n=0; $n &lt; length $match; $n++) {
+            $bad++ if substr($match, $n, 1) ne substr($hashed_password, $n, 1);
+        }
+
+        return $bad == 0;
+    } else {
+        return 0;
+    }
+}
+
+1;
+
+</code></pre>
+<p>Há um parâmetro hardcoded, <code class="prettyprint">cost</code>, 13, representado por <code class="prettyprint">$13$</code>. Quanto mais alto, mais esforço computacional para calcular, quanto menos, menos esforço. Veja nos artigos citados explicações sobre este parâmetro.</p>
+
+<h4>Adaptando e Usando</h4>
+
+<p>Então o script primeiro foi alterado para usar o package:</p>
+<pre><code class="language-perl">
+#!&#x2F;usr&#x2F;bin&#x2F;env perl
+
+use strict;
+use warnings;
+
+use JSON;
+
+use Util::Password;
+
+my $password = Util::Password::Encrypt(&#x27;{#MinhaSenhaSuuuuperSegura#}&#x27;);
+my $root_user = {
+    email =&gt; &#x27;app@chail.com.br&#x27;,
+    name =&gt; &#x27;Chail Root Admin&#x27;,
+    password =&gt; $password,
+    role =&gt; &#x27;admin&#x27;,
+    active =&gt; JSON::true,
+};
+
+print to_json($root_user, {pretty =&gt; 1} );
+
+</code></pre>
+<p>E a saída:</p>
+<pre><code class="language-perl">
+{
+    &quot;email&quot; : &quot;app@chail.com.br&quot;,
+    &quot;active&quot; : true,
+    &quot;role&quot; : &quot;admin&quot;,
+    &quot;password&quot; : &quot;$2a$13$KcM2L2HEJ6POekmb8Kp5j.1LnxGB.dk3Bcnaqgnt9x6ZD7PFlzhkO&quot;,
+    &quot;name&quot; : &quot;Chail Root Admin&quot;
+}
+
+</code></pre>
+<p>E transportando isso através do mouse - com todo o cuidado - para o console do mongodb:</p>
+<pre><code class="language-perl">
+phrp@paulaum:~&#x2F;Dropbox&#x2F;Projetos&#x2F;SaoPauloPM$ mongo
+MongoDB shell version: 2.6.3
+connecting to: test
+&gt; use chail
+switched to db chail
+&gt; db.users.insert( {
+ ...     &quot;email&quot; : &quot;app@chail.com.br&quot;,
+ ...     &quot;active&quot; : true,
+ ...     &quot;role&quot; : &quot;admin&quot;,
+ ...     &quot;password&quot; : &quot;$2a$13$KcM2L2HEJ6POekmb8Kp5j.1LnxGB.dk3Bcnaqgnt9x6ZD7PFlzhkO&quot;,
+...     &quot;name&quot; : &quot;Chail Root Admin&quot;
+...  })
+WriteResult({ &quot;nInserted&quot; : 1 })
+
+</code></pre>
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Fixtures em JSON com Senha Criptografada Pelo BCRYPT"
+    data-url="https://paulohrpinheiro.xyz/texts/perl/2015-08-22-fixtures-em-json-com-senha-criptografada-pelo-bcrypt.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Fixtures em JSON com Senha Criptografada Pelo BCRYPT"
+    data-url="https://paulohrpinheiro.xyz/texts/perl/2015-08-22-fixtures-em-json-com-senha-criptografada-pelo-bcrypt.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Fixtures em JSON com Senha Criptografada Pelo BCRYPT"
+    data-url="https://paulohrpinheiro.xyz/texts/perl/2015-08-22-fixtures-em-json-com-senha-criptografada-pelo-bcrypt.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Fixtures em JSON com Senha Criptografada Pelo BCRYPT"
+    data-url="https://paulohrpinheiro.xyz/texts/perl/2015-08-22-fixtures-em-json-com-senha-criptografada-pelo-bcrypt.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Fixtures em JSON com Senha Criptografada Pelo BCRYPT"
+    data-url="https://paulohrpinheiro.xyz/texts/perl/2015-08-22-fixtures-em-json-com-senha-criptografada-pelo-bcrypt.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2017, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+</body>
+</html>

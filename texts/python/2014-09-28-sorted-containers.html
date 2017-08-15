@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>sortedcontainers e o velho erro da falta de índice</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Otimizando código Python com os módulos sortedcontainers e profile.">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores e sysadmins</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>sortedcontainers e o velho erro da falta de índice</h2>
+
+<h3>Otimizando código Python com os módulos sortedcontainers e profile.</h3>
+
+<p><img src="images/containers.jpg" alt="Containers"></p>
+
+<p>Preciso distrinchar um arquivo texto, palavra por palavra, e ter um dicionário com todas as palavras desse texto, além do texto original mapeado por esse dicionário de palavras.</p>
+
+<p>Digamos que eu tenha o texto:</p>
+<pre><code class="language-python">
+O Paulo pensa que programa
+O Paulo pensa que ninguém ve as gambiarras
+
+</code></pre>
+<p>Quero uma lista com as palavras:</p>
+<pre><code class="language-python">
+[&#x27;O&#x27;, &#x27;Paulo&#x27;, &#x27;pensa&#x27;, &#x27;que&#x27;, &#x27;programa&#x27;, &#x27;ninguém&#x27;, &#x27;ve&#x27;, &#x27;as&#x27;, &#x27;gambiarras&#x27;]
+
+</code></pre>
+<p>E outra lista com o texto “codificado”:</p>
+<pre><code class="language-python">
+[[0,1,2,3,4], [0,1,2,3,5,6,7,8]]
+
+</code></pre>
+<p>Ou seja:</p>
+
+<ul>
+<li>para cada linha a analisar:
+
+<ul>
+<li>distrinchar a linha em palavras</li>
+<li>criar uma nova linha (vazia) na lista de linhas codificadas</li>
+<li>para cada palavra:
+
+<ul>
+<li>se a palavra não existir no dicionario de palavras:
+
+<ul>
+<li>incluir nova palavra no dicionário de palavras</li>
+<li>reter o código da nova palavra</li>
+</ul></li>
+<li>se a palavra existir no dicionário de palavras:
+
+<ul>
+<li>reter o código da palavra existente</li>
+<li>incluir o código na nova linha (criada vazia) da lista de linhas codificadas</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+
+<p>Mas isso não parece python, então fiz assim:</p>
+<pre><code class="language-python">
+import sys
+words = set()
+plain_text = list()
+codded_text= list()
+
+# read content
+plain_text = [l.strip().split() for l in sys.stdin]
+
+# build a word list from content
+for line in plain_text:
+    [words.add(w) for w in line]
+
+# set() don&#x27;t have an index method, then use a list
+words = list(words)
+
+# build codded content
+for line in plain_text:
+    codded_text.append([words.index(w) for w in line])
+
+# how many words?
+print(&#x27;Total of words:&#x27;, len(words))
+
+</code></pre>
+<p>Para testar, fiz um script que gera um arquivo de palavras aleatórias com tamanho aleatório, com frases de tamanho aleatório:</p>
+<pre><code class="language-python">
+import sys
+import random
+import string
+
+LINES, WORDS, CHARS = [int(sys.argv[x]) for x in (range(1,1+3))]
+
+randomize = random.Random()
+random_number = randomize.randint
+choice_one = randomize.choice
+possible_letters = string.ascii_letters
+
+for l in range(0, LINES):
+    for w in range(1, random_number(1, WORDS)):
+        for c in range(1, random_number(2, CHARS)):
+            print(&#x27;&#x27;.join([_char for _char in choice_one(possible_letters)]), end=&#x27;&#x27;)
+        print(end=&#x27; &#x27;)
+    print()
+
+</code></pre>
+<p>Para gerar o arquivo de teste:</p>
+<pre><code class="language-python">
+$ time python3 create_file.py 5000 20 15 &lt; test.txt
+real 0m10.392s
+user 0m10.321s
+sys 0m0.040s
+
+$ wc test.txt
+5000 47679 410014 test.txt
+
+$ ls -lh test.txt
+-rw-rw-r-- 1 phrp phrp 401K Set 27 03:17 test.txt
+
+</code></pre>
+<p>Nesse caso, criado para ter 5000 linhas com até 20 palavras, de até 15 caracteres cada uma, com a saída direcionada para o arquivo “test.txt”. O arquivo gerado tem 5000 linhas, 47679 palavras e 410014 letras. Seu tamanho é 401KB.</p>
+
+<p>Vamos executar nosso script estado da arte, feito quase de primeira (mentira!):</p>
+<pre><code class="language-python">
+$ time python3 distrincha.py &lt; test.txt
+Total of words: 42740
+
+real 3m47.047s
+user 3m44.842s
+sys 0m0.120s
+
+</code></pre>
+<p>Hummm, acho que é possível fazer isso mais rápido… Otimizemos. Dizem que referências locais são mais rápidas, então transformemos o script em um programa com função, e eliminemos repetidas resoluções de classes:</p>
+<pre><code class="language-python">
+import sys
+
+def distrincha():
+    words = set()
+    plain_text = list()
+    codded_text= list()
+
+    # need for speed
+    _words_add = words.add
+    _codded_text_append = codded_text.append
+
+    # read content
+    plain_text = [l.strip().split() for l in sys.stdin]
+
+    # build a word list from content
+    for line in plain_text:
+        [_words_add(w) for w in line]
+
+    # set() don&#x27;t have an index method, then use a list
+    words = list(words)
+
+    # need for speed
+    _words_index = words.index
+
+    # build codded content
+    for line in plain_text:
+        _codded_text_append([_words_index(w) for w in line])
+
+    # how many words?
+    return len(words)
+
+print(&#x27;Total of words:&#x27;, distrincha())
+
+</code></pre>
+<p>Like a horse! (http://www.gohorseprocess.com). Perdemos mais tempo:</p>
+<pre><code class="language-python">
+$ time python3 distrincha_speedup.py &lt; test.txt
+Total of words: 42740
+
+real 3m47.764s
+user 3m44.630s
+sys 0m0.132s
+
+</code></pre>
+<p>Tem mais uma dica, também pega no livro “Python CookBook, terceira edição, de Beazley &amp; Jones, pela O’Reilly”, para tentar achar o que tá errado. É, ao invocar o script, usar o módulo cProfile:</p>
+<pre><code class="language-python">
+$ python3 -m cProfile distrincha.py &lt; test.txt
+Total of words: 42740
+ 120568 function calls in 229.015 seconds
+
+Ordered by: standard name
+
+ncalls tottime percall cumtime percall filename:lineno(function)
+ 102 0.002 0.000 0.004 0.000 codecs.py:297(decode)
+ 1 0.181 0.181 229.015 229.015 distrincha.py:1()
+ 5000 0.184 0.000 0.325 0.000 distrincha.py:12()
+ 5000 0.875 0.000 228.370 0.046 distrincha.py:19()
+ 1 0.054 0.054 0.122 0.122 distrincha.py:8()
+ 1 0.000 0.000 229.015 229.015 {built-in method exec}
+ 1 0.000 0.000 0.000 0.000 {built-in method len}
+ 1 0.000 0.000 0.000 0.000 {built-in method print}
+ 102 0.003 0.000 0.003 0.000 {built-in method utf_8_decode}
+ 47679 0.141 0.000 0.141 0.000 {method &#x27;add&#x27; of &#x27;set&#x27; objects}
+ 5000 0.017 0.000 0.017 0.000 {method &#x27;append&#x27; of &#x27;list&#x27; objects}
+ 1 0.000 0.000 0.000 0.000 {method &#x27;disable&#x27; of &#x27;_lsprof.Profiler&#x27; objects}
+ 47679 227.495 0.005 227.495 0.005 {method &#x27;index&#x27; of &#x27;list&#x27; objects}
+ 5000 0.047 0.000 0.047 0.000 {method &#x27;split&#x27; of &#x27;str&#x27; objects}
+ 5000 0.017 0.000 0.017 0.000 {method &#x27;strip&#x27; of &#x27;str&#x27; objects}
+
+</code></pre>
+<p>Mas é claro, faltou índice! Com 47679 chamadas, o método ‘index’ dominou a execução de nosso script. Afinal, fazendo procura em lista grande, desordenada…</p>
+
+<p>Pesquisando um pouco, encontrei o módulo sortedcontainers (http://www.grantjenks.com/docs/sortedcontainers/), que é uma forma pronta de ter coleções python sempre ordenadas. Ele usa o módulo bisect, que foi minha primeira tentativa, mas achei complicado demais.</p>
+
+<p>Eis o novo script:</p>
+<pre><code class="language-python">
+import sys
+import sortedcontainers
+
+words = sortedcontainers.SortedSet()
+plain_text = list()
+codded_text= list()
+
+# read content
+plain_text = [l.strip().split() for l in sys.stdin]
+
+# build a word list from content
+for line in plain_text:
+    [words.add(w) for w in line]
+
+# in sortedcontainers, SortedSet have an index method :)
+# build codded content
+for line in plain_text:
+    codded_text.append([words.index(w) for w in line])
+
+# how many words?
+print(len(words))
+
+</code></pre>
+<p>Clamando a Deus para seja realmente rápido:</p>
+<pre><code class="language-python">
+$ time python3 distrincha_sc.py &lt; test.txt
+42740
+
+real 0m3.136s
+user 0m3.016s
+sys 0m0.076s
+
+</code></pre>
+<p>Uau! Isso sim é otimização. Dois links úteis:</p>
+
+<ul>
+<li><a href="http://stupidpythonideas.blogspot.com.br/2014/04/sortedcontainers.html">Uma análise sobre o pacote</a></li>
+<li><a href="http://www.grantjenks.com/docs/sortedcontainers/">Página do projeto</a></li>
+</ul>
+
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="sortedcontainers e o velho erro da falta de índice"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2014-09-28-sorted-containers.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="sortedcontainers e o velho erro da falta de índice"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2014-09-28-sorted-containers.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="sortedcontainers e o velho erro da falta de índice"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2014-09-28-sorted-containers.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="sortedcontainers e o velho erro da falta de índice"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2014-09-28-sorted-containers.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="sortedcontainers e o velho erro da falta de índice"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2014-09-28-sorted-containers.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2017, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+</body>
+</html>

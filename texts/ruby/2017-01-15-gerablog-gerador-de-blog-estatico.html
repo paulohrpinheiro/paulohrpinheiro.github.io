@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Gerablog, um modesto gerador de blog estático</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Liberado no RubyGems o gerador de blog estático que uso para este blog: Gerablog.">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores e sysadmins</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Gerablog, um modesto gerador de blog estático</h2>
+
+<h3>Liberado no RubyGems o gerador de blog estático que uso para este blog: Gerablog.</h3>
+
+<p><img src="images/gerablog.png" alt="I&#39;m GeraBlog">
+<em>Image created by https://robohash.org/</em></p>
+
+<p>No <a href="https://paulohrpinheiro.xyz/texts/ruby/2017-01-09-biblioteca-tenjin-para-templates-em-ruby.html">post em que falo sobre a <em>gem</em> Tenjin</a>, expliquei como funciona o script que comecei a usar para gerenciar esse blog.</p>
+
+<p>Há algum tempo, comecei a salvar os textos que publico como arquivos <em>Markdown</em>. E isso me facilitou muito quando eu queria usar algum novo sistema para meu blog.</p>
+
+<p>O simples script que iniciou essa brincadeira, transformou-se (comparando a ele) em um amontoado de código, como algumas classes e <em>gems</em> a mais. Comecei com isso: <a href="https://gist.github.com/paulohrpinheiro/20130e06355fc5bffe5865ce903dce63">Gist para o peimiro gerablog.rb</a>.</p>
+
+<p>A primeira versão do blog eu gerei com <em>shell-script</em>, mas conforme eu ia tendo ideias, como a de gerar automaticamente o <em>RSS</em>, a coisa foi complicando de tal forma que precisei partir para uma linguagem mais adequada.</p>
+
+<p>E parti para a criação de algo que eu pudesse liberar como <em>free-software</em>.</p>
+
+<p>Foi aí que a tormenta começou. Estimei que em dois dias transformaria o <em>script</em> inicial em um projeto minimamente organizado no <em>GitHub</em>. Santa Inocência! Foram mais de duas semanas em que isso tomou grande parte de meu tempo, inclusive tempo de trabalho.</p>
+
+<p>Mas como preciso aprender <em>Ruby</em> para o trampo, fui adiante. E aprendi muito. Eu prefiro aprender tendo em conta algo prático para resolver. Não é a melhor forma, mas é o que funciona melhor para mim. Crianças, não sigam meu exemplo. Sempre se esforcem para aprender os fundamentos das coisas!</p>
+
+<h4>Princípios</h4>
+
+<p>Conhecendo um pouco do <em>rails</em>, resolvei também ser metido a besta e escrever um sistema com opiniões. Só que sem muita brecha para personalizações... O sistema espera uma estrutura rígida de diretórios e tem convenções para o texto e até mesmo para o nome dos arquivos.</p>
+
+<p>Na raiz de seu blog, existem apenas os diretórios que indicam as categorias dos textos. Por exemplo, nesse blog tenho:</p>
+<pre><code class="language-ruby">
+C Currículo Diversos Javascript Perl ProgramadorBipolar Python Ruby Rust
+
+</code></pre>
+<p>Em cada um deles existe um subdiretório images, onde as imagens para cada texto são salvas.</p>
+
+<p>Os arquivos devem ser salvos no formato <code class="prettyprint">YYY-MM-DD-nome-do-arquivo.md</code>. Em geral, <code class="prettyprint">nome-do-arquivo</code> é o título do texto, mas sem acentuação ou pontuação.</p>
+
+<p>No arquivo com o texto, a primeira linha deve ser o título do texto, por exemplo, <code class="prettyprint"># Título do texto</code>, a segunda linha deve estar em branco, e a terceira deve conter um resumo do texto, como por exemplo, <code class="prettyprint">## Resumo do texto</code>. as Marcas <code class="prettyprint">#</code> e <code class="prettyprint">##</code> são obrigatórias.</p>
+
+<p>Para o resto do texto, use <em>Markdown</em> à vontade.</p>
+
+<p>É gerado um <code class="prettyprint">feed.xml</code> geral, e para categoria, em seu diretório, é criado um <code class="prettyprint">index.html</code> e um <code class="prettyprint">feed.xml</code> contendo apenas as entradas da categoria.</p>
+
+<h4>Criando um blog</h4>
+
+<p>O sistema não é uma <em>gem</em> para ser usada em seus programas (até se pode fazer isso), o seu uso é pela linha de comando com o executável <code class="prettyprint">gerablog</code>.</p>
+
+<p>Para criar um novo blog, execute <code class="prettyprint">gerablog --new ~/meublog</code>, por exemplo. Ele irá criar a seguinte estrutura de arquivos:</p>
+<pre><code class="language-ruby">
+➤ tree ~&#x2F;meublog
+&#x2F;home&#x2F;paulohrpinheiro&#x2F;meublog
+├── assets
+│   └── css
+│       └── gerablog.css
+├── gerablog.conf
+├── output
+├── templates
+│   ├── categories.rbhtml
+│   ├── category.rbhtml
+│   ├── feed.rbxml
+│   ├── footer.rbhtml
+│   ├── header.rbhtml
+│   ├── index.rbhtml
+│   └── post.rbhtml
+└── texts
+
+</code></pre>
+<p>Em <code class="prettyprint">assets</code>, se quiser incluir imagens e <em>CSS</em> e <em>Javascript</em>, sinta-se desimpedido. O arquivo <code class="prettyprint">assets/css/gerablog.css</code> é o super <em>CSS</em> que consegui criar (sim, estou me esforçando para aprender).</p>
+
+<p>Como indica o nome, <code class="prettyprint">gerablog.conf</code> é a configuração. Nem rele nesse arquivo!</p>
+
+<p>O diretório <code class="prettyprint">output</code> é o local em que ficará o blog gerado, como tudo que precisa, inclusive cópia da pasta <code class="prettyprint">assets</code>.</p>
+
+<p>Em <code class="prettyprint">templates</code> temos os templates usando <a href="http://www.kuwata-lab.com/tenjin/">Tenjin</a>. Altere como preferir, eles serão a base de seu blog.</p>
+
+<p>Já em <code class="prettyprint">texts</code> devem estar os seus textos, organizados por categoria (diretórios) e, se necessário, imagens, como explicado antes.</p>
+
+<h4>Gerando o conteúdo estático</h4>
+
+<p>Para criar seus arquivos <em>html</em> e <em>RSS</em>, execute o comando</p>
+<pre><code class="language-ruby">
+gerablog --generate ~&#x2F;meublog
+
+</code></pre>
+<p>Isso criará o diretório <code class="prettyprint">output</code> com tudo que é necessário para o blog.</p>
+
+<h4>Confissão</h4>
+
+<p>Ao escrever esse texto, ainda estava usando o velho script. A consciência pesou, e agora esse blog finalmente é gerado pelo <em>Gerablog</em>.</p>
+
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Gerablog, um modesto gerador de blog estático"
+    data-url="https://paulohrpinheiro.xyz/texts/ruby/2017-01-15-gerablog-gerador-de-blog-estatico.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Gerablog, um modesto gerador de blog estático"
+    data-url="https://paulohrpinheiro.xyz/texts/ruby/2017-01-15-gerablog-gerador-de-blog-estatico.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Gerablog, um modesto gerador de blog estático"
+    data-url="https://paulohrpinheiro.xyz/texts/ruby/2017-01-15-gerablog-gerador-de-blog-estatico.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Gerablog, um modesto gerador de blog estático"
+    data-url="https://paulohrpinheiro.xyz/texts/ruby/2017-01-15-gerablog-gerador-de-blog-estatico.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Gerablog, um modesto gerador de blog estático"
+    data-url="https://paulohrpinheiro.xyz/texts/ruby/2017-01-15-gerablog-gerador-de-blog-estatico.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2017, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Meu &quot;hello world&quot; em Haskell</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Para começar bem no Haskell, nada melhor que um &quot;Hello World&quot; firulento">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores e sysadmins</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Meu &quot;hello world&quot; em Haskell</h2>
+
+<h3>Para começar bem no Haskell, nada melhor que um &quot;Hello World&quot; firulento</h3>
+
+<p><img src="images/hello-world.jpg" alt="Hello World em Haskell"></p>
+
+<p>Meu primeiro <em>Hello World</em> foi no clássico &quot;C - A Linguagem de Programação&quot;, traduzido, capa rosa. Nele temos os primeiros - se não me enganei - 9 elementos da linguagem, num simples programa.</p>
+
+<p>Depois de muitos anos, descobri <a href="https://www.gnu.org/software/hello/">a versão GNU do &quot;Hello World&quot; em C</a>, que é praticamente um curso completo de programação C para sistemas GNU, e mais próximo à piada da imagem. Mas vai demorar um pouco para eu chegar nesse nível, ainda mais em Haskell.</p>
+
+<p>Se você está lendo isso, provavelmente tem todos os requisitos necessários para se virar e instalar um compilador Haskell em sua máquina. Eu uso <em>Fedora</em>, então só precisei de um:</p>
+<pre><code class="language-haskell">
+sudo dnf install haskell-platform
+
+</code></pre>
+<p>Com isso, tenho muito mais do que preciso, mas especialmente o compilador <code class="prettyprint">ghc</code> e um interpretador <a href="https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop">REPL</a> <code class="prettyprint">ghci</code>.</p>
+
+<p>Antes de sair funcionalmente programando, eu, que preciso meter a mão na massa, larguei mão de entender toda a teoria que sustenta o Haskell, e parti para a ignorância.</p>
+
+<p>Chega de enrolação, eis o programa:</p>
+<pre><code class="language-haskell">
+{- |
+Module      :  $Header$
+Description :  A hello world in Haskell, with steroids.
+Copyright   :  (c) Paulo Henrique Rodrigues Pinheiro
+License     :  MIT
+
+Maintainer  :  paulohrpinheiro@gmail.com
+Stability   :  experimental
+Portability :  portable
+
+A hello world program in Haskell, with various language elements.
+-}
+
+import Data.Char
+
+-- | Puts a greeting, get a string, then puts another greeting.
+main = do putStrLn &quot;Hello World, from Haskelland.&quot;
+          putStrLn &quot;Please, type your name:&quot;
+          name &lt;- getLine
+          putStr &quot;HI, &quot;
+          nameInUpperCase = map toUpper name
+          putStr nameInUpperCase
+          putStrLn &quot;!&quot;
+
+</code></pre>
+<p>Parece muita coisa, mas é por conta das firulas embutidas.</p>
+
+<p>Primeiro, um longo cabeçalho, com várias informações. De acordo com as <a href="https://wiki.haskell.org/Programming_guidelines">diretrizes de programação Haskell</a>, todo arquivo fonte deve começar dessa forma. Trata-se de <em>guideline</em>, portanto fique tranquilo que compila sem isso.</p>
+
+<p>Já foi o primeiro elemento.</p>
+
+<p>Nos deparamos com um <code class="prettyprint">import Data.Char</code>. Como implica o nome, <code class="prettyprint">import</code> foi usado para &quot;importar&quot; um <em>package</em>. O nome dele já dá uma dica de que estamos querendo trabalhar com caracteres.</p>
+
+<p>E foi o segundo elemento.</p>
+
+<p>Opa! Um texto iniciado por <code class="prettyprint">-- |</code>. Comentários em Haskell são feitos com <code class="prettyprint">--</code>. Mas veja, esse é mais um comentário especial, para documentação do programa. É um <a href="https://www.haskell.org/haddock/doc/html/ch03s08.html">haddock</a>. Tem <em>markup</em> para várias coisas, podemos gerar documentação bem formatada a partir desses comentários. Use esse tipo de comentário para documentar cada função ou tipo de dado.</p>
+
+<p>Vencemos o terceiro elemento.</p>
+
+<p>Aqui embaralhou tudo. o <code class="prettyprint">main = do</code> é uma declaração de função. Não apenas isso, mas um bloco. </p>
+
+<p>Foi-se o quarto elemento.</p>
+
+<p>Um bloco pode estar entre <code class="prettyprint">{}</code> ou definido por um <code class="prettyprint">do</code>, como foi feito aqui (é o recomendado).  Usando o <code class="prettyprint">do</code>, a indentação é requerida, como é no Python. Não use &lt;TABS&gt;, apenas espaços. E alinhe a próxima linha com o que vem depois do <code class="prettyprint">=</code> na primeira linha.</p>
+
+<p>E mandamos o quinto elemento para os quintos!</p>
+
+<p>Há várias opções para imprimir, dentre as quais <code class="prettyprint">putStr</code>, sem quebra de linha, e <code class="prettyprint">putStrLn</code>. Chame com um argumento do tipo <code class="prettyprint">String</code>.</p>
+
+<p>Foi-se o sexto.</p>
+
+<p>Em seguida, temos <code class="prettyprint">name &lt;- getLine</code>. A <a href="https://wiki.haskell.org/Introduction_to_IO">mônada <code class="prettyprint">IO</code></a> (não queira saber tão cedo o que é uma mônada) define a função <code class="prettyprint">getLine</code> que lê e retorna uma <code class="prettyprint">String</code>. Direcionando a saída da função para a variável <code class="prettyprint">name</code>.</p>
+
+<p>Passamos enfim do sétimo.</p>
+
+<p>A maravilhosa linha <code class="prettyprint">nameInUpperCase = map toUpper name</code> já dá um gosto do que vem pela frente. A variável <code class="prettyprint">nameInUpperCase</code> recebe o resultado da aplicação (o <code class="prettyprint">map</code> faz isso) da função <code class="prettyprint">toUpper</code> (definida em <code class="prettyprint">Data.Char</code>) a todos os caracteres de <code class="prettyprint">name</code>.</p>
+
+<p>Perceba que não temos parêntesis, nem vírgulas para separar as coisas. Só espaços (os parêntesis são necessários nos casos em que possa haver confusão no entendimento do que se queira fazer, mas são usados diferentemente do convencional, por hora, deixemos isso pra lá.</p>
+
+<p>O oitavo e o nono já eram!</p>
+
+<p>Para compilar, salvando como <code class="prettyprint">hello.hs</code>:</p>
+<pre><code class="language-haskell">
+➤ ghc hello.hs 
+[1 of 1] Compiling Main             ( hello.hs, hello.o )
+Linking hello ...
+
+</code></pre>
+<p>E, para executar:</p>
+<pre><code class="language-haskell">
+➤ .&#x2F;hello
+Hello World, from Haskelland.
+Please, type your name:
+paulo
+HI, PAULO!
+
+</code></pre>
+<p>E faltou o décimo elemento, <code class="prettyprint">main</code>. O Haskell precisa dessa função declarada para usar como um ponto de entrada, assim como é em <code class="prettyprint">C</code>.</p>
+
+<p>Nosso programa poderia ser simples dessa forma:</p>
+<pre><code class="language-haskell">
+main = putStrLn &quot;hello, world&quot;
+
+</code></pre>
+<p>Mas se eu informasse isso no começo, não teríamos assunto.</p>
+
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Meu &quot;hello world&quot; em Haskell"
+    data-url="https://paulohrpinheiro.xyz/texts/haskell/2017-01-28-meu-hello-world-em-haskell.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Meu &quot;hello world&quot; em Haskell"
+    data-url="https://paulohrpinheiro.xyz/texts/haskell/2017-01-28-meu-hello-world-em-haskell.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Meu &quot;hello world&quot; em Haskell"
+    data-url="https://paulohrpinheiro.xyz/texts/haskell/2017-01-28-meu-hello-world-em-haskell.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Meu &quot;hello world&quot; em Haskell"
+    data-url="https://paulohrpinheiro.xyz/texts/haskell/2017-01-28-meu-hello-world-em-haskell.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Meu &quot;hello world&quot; em Haskell"
+    data-url="https://paulohrpinheiro.xyz/texts/haskell/2017-01-28-meu-hello-world-em-haskell.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2017, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+</body>
+</html>

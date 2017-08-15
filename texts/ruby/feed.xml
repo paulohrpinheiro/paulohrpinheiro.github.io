@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+
+<rss version="2.0">
+  <channel>
+    <title>Paulo Henrique Rodrigues Pinheiro</title>
+    <link>https://paulohrpinheiro.xyz</link>
+    <description>Blog sobre programação para programadores e sysadmins</description>
+    <language>pt-br</language>
+
+    <item>
+      <title>Gerablog, um modesto gerador de blog estático</title>
+      <link>https://paulohrpinheiro.xyz/texts/ruby/2017-01-15-gerablog-gerador-de-blog-estatico.html</link>
+      <description>Liberado no RubyGems o gerador de blog estático que uso para este blog: Gerablog.</description>
+      <pubDate>Sun, 15 Jan 2017 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Biblioteca Tenjin para templates em Ruby</title>
+      <link>https://paulohrpinheiro.xyz/texts/ruby/2017-01-09-biblioteca-tenjin-para-templates-em-ruby.html</link>
+      <description>Aprendendo e usando uma alternativa à biblioteca padrão ERB, no Ruby, para templates de texto</description>
+      <pubDate>Mon, 9 Jan 2017 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Saiu a nova versão do ruby-txt2tags</title>
+      <link>https://paulohrpinheiro.xyz/texts/ruby/2016-12-24-nova-versao-do-ruby-txt2tags.html</link>
+      <description>O que há de novo na versão 0.1.0 do ruby-txt2tags?</description>
+      <pubDate>Sat, 24 Dec 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Ruby e o deep copy</title>
+      <link>https://paulohrpinheiro.xyz/texts/ruby/2016-12-16-ruby-e-o-deep-copy.html</link>
+      <description>Uma quase alucinada busca de uma forma de fazer *deep copy* em *Ruby*, apenas por preguiça de copiar, e pra não ferir o orgulho e repetir código.</description>
+      <pubDate>Fri, 16 Dec 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Iniciando no Ruby</title>
+      <link>https://paulohrpinheiro.xyz/texts/ruby/2016-11-08-iniciando-no-ruby.html</link>
+      <description>Antes de sair por aí programando e instalando *gems* como um doido, convém habituar-se a preparar o ambiente para cada novo projeto.</description>
+      <pubDate>Tue, 8 Nov 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Nota sobre o livro Test-Driven Development: Teste e Design no Mundo Real com Ruby</title>
+      <link>https://paulohrpinheiro.xyz/texts/ruby/2016-10-05-test-driven-development.html</link>
+      <description>Divulgando um livro que acabei de ler e que achei legal pra caramba!</description>
+      <pubDate>Wed, 5 Oct 2016 00:00:00 +0000</pubDate>
+    </item>
+
+  </channel>
+</rss>

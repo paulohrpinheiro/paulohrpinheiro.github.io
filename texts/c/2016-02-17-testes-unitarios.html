@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Testes unitários na linguagem C</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Como realizar testes unitários em C?">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores e sysadmins</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Testes unitários na linguagem C</h2>
+
+<h3>Como realizar testes unitários em C?</h3>
+
+<p><img src="images/dilbert-tdd-1.gif" alt="Dilbert and TDD"></p>
+
+<blockquote>
+<p>People think that writing a unit testing framework has to be complex. In fact, you can write one in just a few lines of code, as this tech note shows. Of course, if you have access to a full-featured testing framework like JUnit, by all means use it. But if you don&#39;t, you can still use a simple framework like MinUnit, or whip up your own in a few hours. <strong>There&#39;s no excuse for not unit testing</strong>.</p>
+</blockquote>
+
+<p><a href="http://www.jera.com/techinfo/jtns/jtn002.html">MinUnit by JeraDesign</a></p>
+
+<h4>Inspiração</h4>
+
+<p>Para melhorar minhas habilidades em programação, me impus um desafio. Defini alguns exercícios, mas com testes unitários. Não posso falar que pratiquei TDD, pois ao mesmo tempo em que elaborei os exercícios, fui pensando nos testes e pensando no código, e fazendo tudo ao mesmo tempo.</p>
+
+<p>Mas quem quiser experimentar como é trabalhar com um código feito por outra pessoa, com muita coisa já decidida, definida, pode se valer dessa minha empreitada.</p>
+
+<p>Coloquei essa experiência no <a href="https://github.com/paulohrpinheiro/test-driven-learning">GitHub</a>. Pretendo definir mais problemas e usar outros <em>frameworks</em> para cada linguagem, e falar um pouco sobre os problemas que encontrei e como os sanei.</p>
+
+<p>Lá, para cada linguagem, há um arquivo <code class="prettyprint">problems</code> com o esqueleto das funções a serem desenvolvidas. Dependendo da linguagem, os testes estão no mesmo arquivo ou em arquivo separado. Basta seguir as instruções e <em>hackear</em> um pouco.</p>
+
+<p>Atualmente, os problemas estão codificados em <em>C</em>, <em>Perl</em> e <em>Python</em>.</p>
+
+<h4>Linguagem C</h4>
+
+<p>Procurei, em cada linguagem, a abordagem mais simplificada, e com esse espírito encontrei o <em>framework</em> <a href="http://www.jera.com/techinfo/jtns/jtn002.html">MinUnit</a>:</p>
+<pre><code class="language-c">
+#define mu_assert(message, test) do { if (!(test)) return
+message; } while (0)
+#define mu_run_test(test) do { char *message = test(); tests_run++; \
+                                if (message) return message; } while (0)
+extern int tests_run;
+
+</code></pre>
+<p>Muito simples para instalar e usar. É isso mesmo, essas macros e essa variável global.</p>
+
+<h4>Na prática</h4>
+
+<p>Imaginemos o seguinte problema: você deve escrever uma função que aceite dois <a href="https://pt.wikipedia.org/wiki/N%C3%BAmero_natural">números naturais</a> como parâmetro e execute a subtração deles, na sequência em que foram informados. Se a diferença for gerar um número negativo, deve-se retornar um erro.</p>
+
+<p>Comecemos pelos testes. Usa-se a macro <code class="prettyprint">mu_assert</code>, cujo primeiro parâmetro é uma mensagem para o caso de falha, e o segundo parâmetro é uma expressão que se verdadeira indica que o teste funcionou, e caso falsa indica falha.</p>
+
+<p>A nossa função a será chamada <code class="prettyprint">N_subtracao</code>. Receberá dois parâmetros e retornará a diferença entre eles. Caso não possa efetuar a conta, retornará <code class="prettyprint">-1</code>, que está forá da faixa de valores válidos para números naturais.</p>
+
+<p>Neste fragmento de código, três testes são executados, tentando passar números negativos como se fossem naturais.</p>
+<pre><code class="language-c">
+mu_assert(&quot;Primeiro parâmetro inválido.&quot;, -1==N_subtracao( -1,  10));
+mu_assert(&quot;Segundo parâmetro inválido.&quot;,  -1==N_subtracao( 10,  -1));
+mu_assert(&quot;Os dois parâmetros inválidos&quot;, -1==N_subtracao(-10, -20));
+
+</code></pre>
+<p>Aqui, verifica-se se há alguma garantia de que o resultado não seja negativo:</p>
+<pre><code class="language-c">
+mu_assert(&quot;Resultado negativo.&quot;, -1==N_subtracao(10, 20));
+
+</code></pre>
+<p>E finalmente verifica-se se a função retorna os resultados corretos para valores válidos:</p>
+<pre><code class="language-c">
+mu_assert(&quot;0-0&quot;,    0==N_subtracao( 0,  0));
+mu_assert(&quot;10-0&quot;,  10==N_subtracao(10,  0));
+mu_assert(&quot;10-10&quot;,  0==N_subtracao(10, 10));
+mu_assert(&quot;20-10&quot;, 10==N_subtracao(20, 10));
+
+</code></pre>
+<p>A bateria de testes foi agrupada em funções que são chamadas de outra função que as agrupa:</p>
+<pre><code class="language-c">
+static char *testes(void) {
+    mu_run_test(testa_parametros);
+    mu_run_test(testa_resultado_nao_N);
+    mu_run_test(testa_resultados_validos);
+
+    return 0;
+}
+
+</code></pre>
+<p>Note que todas as funções envolvidas retornam o tipo (static char *), e retornam o valor <code class="prettyprint">0</code> caso todos os <code class="prettyprint">mu_assert</code> e agregadores <code class="prettyprint">mu_run_test</code> passem.</p>
+
+<h4>A função</h4>
+
+<p>Baseado nessa especificação e nos testes já escritos, aqui está o código para testar:</p>
+<pre><code class="language-c">
+&#x2F;* usaremos -1 como indicador de erro *&#x2F;
+
+int N_subtracao(int a, int b) {
+    &#x2F;* Só queremos números naturais como parâmetro. *&#x2F;
+    if(a&lt;0 || b&lt;0) {
+        return -1;
+    }
+
+    &#x2F;* Só podemos retornar um número natural como resultado. *&#x2F;
+    if(a&lt;b) {
+        return -1;
+    }
+
+    &#x2F;* sem medo *&#x2F;
+    return a-b;
+}
+
+</code></pre>
+<p>Espero que o código fale por si :).</p>
+
+<h4>Facilitando</h4>
+
+<p>Para não ficar copiando e colando arquivos, você pode baixá-los da seguinte forma:</p>
+<pre><code class="language-c">
+cd &#x2F;tmp
+git clone https:&#x2F;&#x2F;gist.github.com&#x2F;1f45a929aba4eb91f376.git minunit
+
+</code></pre>
+<p>Compilar e executar os testes:</p>
+<pre><code class="language-c">
+cd minunit
+make teste
+
+</code></pre>
+<p>Se você tiver as ferramentas de desenvolvimento padrão, terá uma saída como essa:</p>
+<pre><code class="language-c">
+cc -c natural.c -Wall -ansi -pedantic -o natural.o
+cc teste.c natural.o -Wall -ansi -pedantic -o teste
+.&#x2F;teste
+=&gt; testa_parametros
+=&gt; testa_resultado_nao_N
+=&gt; testa_resultados_validos
+TESTES EXECUTADOS COM SUCESSO
+Testes executados: 3
+
+</code></pre>
+<p>O <em>link</em> para o gist é:  https://gist.github.com/paulohrpinheiro/1f45a929aba4eb91f376</p>
+
+<p>Leia o código completo, não fique apenas com o que foi colado aqui. Adicione testes e veja o que acontece. Ler código é muito mais divertido e instrutivo do que ler textos!</p>
+
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Testes unitários na linguagem C"
+    data-url="https://paulohrpinheiro.xyz/texts/c/2016-02-17-testes-unitarios.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Testes unitários na linguagem C"
+    data-url="https://paulohrpinheiro.xyz/texts/c/2016-02-17-testes-unitarios.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Testes unitários na linguagem C"
+    data-url="https://paulohrpinheiro.xyz/texts/c/2016-02-17-testes-unitarios.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Testes unitários na linguagem C"
+    data-url="https://paulohrpinheiro.xyz/texts/c/2016-02-17-testes-unitarios.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Testes unitários na linguagem C"
+    data-url="https://paulohrpinheiro.xyz/texts/c/2016-02-17-testes-unitarios.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2017, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+</body>
+</html>

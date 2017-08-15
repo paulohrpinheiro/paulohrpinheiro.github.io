@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Usando Flask para desenvolver sistemas WEB com Python</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Um relato sobre minha volta para o Python e a difícil decisão na escolha de um framework. O Escolhido foi o Flask.">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores e sysadmins</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Usando Flask para desenvolver sistemas WEB com Python</h2>
+
+<h3>Um relato sobre minha volta para o Python e a difícil decisão na escolha de um framework. O Escolhido foi o Flask.</h3>
+
+<p><img src="images/flask.png" alt="Flask"></p>
+
+<h4>Em busca do Framework perfeito</h4>
+
+<p>Estando eu em busca do <em>framework</em> perfeito para desenvolvimento <em>WEB</em> em <em>Python</em>, passei por várias alternativas, testando algumas e lendo sobre outras.</p>
+
+<p>Não quero avaliar as opções e justificar minha escolha, apenas registrar e compartilhar minhas impressões.</p>
+
+<h4>Feliz com Perl</h4>
+
+<p>Estava eu muito feliz programando em <em>Perl</em>, e me vi travando em cada nova tarefa no desenvolvimento de uma aplicação <em>WEB</em>, não por conta do <em>Perl</em>, mas do <em>framework</em> escolhido. Muita documentação para ler, pequenas mudanças pouco documentadas entre versões, mas que quebram tudo. Uma ótima oportunidade para contribuir em projetos <em>OpenSource</em>, mas antes de contribuir preciso ter alguns sistemas funcionando.</p>
+
+<p>Encontrei opções, segui os tutoriais rápidos de cada uma e encontrei ótimos sistemas. Há o <em>Catalyst</em>, consolidado, grande, estável, praticamente a ferramenta oficial <em>Perl</em>. Eu ouso compará-lo com o que é o <em>Django</em> para o ecossistema <em>Python</em>.</p>
+
+<p>E há duas opções muito ágeis, eficientes e rápidas para iniciar e colocar aplicações no ar: <em>Mojolicious</em> e <em>Dancer</em>.</p>
+
+<p>Eu realmente gostei do <em>Mojolicious</em>, e nele investi meu tempo.</p>
+
+<h4>Voltando para o Python</h4>
+
+<p>Em minhas pesquisas comecei a rever as opções para <em>Python</em>. Uma velha paixão, o <em>CherryPy</em> foi a primeira tentativa. Depois de perder muito tempo em busca do gerenciamento perfeito de sessões, deixei ele adormecido.</p>
+
+<p>Eu gosto do jeito <em>CherryPy</em> de ser, e tudo que aprendi com <em>Flask</em> deve me ajudar a usá-lo melhor e mais eficientemente, em outros projetos. Mas eu precisava escrever um sistema com banco de dados e muitos formulários, e são muitas as opções para fazer isso.</p>
+
+<p>Para alguém extremamente disperso como eu, isso é um grande problema.</p>
+
+<p>O <em>Django</em> é uma opção, mas como eu precisava de algo que me atendesse tanto com <em>MongoDB</em> quanto com <em>SQLite</em>, descartei. Há o <em>TurboGears</em>, que atende esse requisito, mas nos primeiros passos dos tutoriais deparei-me com erros.</p>
+
+<p>Simpatizei muito com o <em>Bootle</em>, mas não curti aquela história de &quot;não cuidamos de sessões&quot;:</p>
+
+<p><a href="">http://bottlepy.org/docs/dev/recipes.html#keeping-track-of-sessions.</a></p>
+
+<h4>O Vencedor</h4>
+
+<p>É o <em>Flask</em>. A documentação é muito extensa e coerente na forma entre as diversas extensões. Mas uma coisa que me irritou e dificultou muito, é a documentação focada em demonstrar que a coisa funciona. É uma receita do tipo &quot;uma aplicação mínima usando este módulo...&quot;.</p>
+
+<p>Dificilmente essa &quot;receita&quot; se aplica como tal ao mundo real, especialmente quando se está iniciando e tentando juntar as peças.</p>
+
+<p>Mas fica na cabeça que a extensão funciona e é fácil de usar.</p>
+
+<p>Felizmente há um excelente livro que cobre essa grave falha na documentação, e que apresenta uma proposta de organização do código para grandes aplicações (grandes no sentido de &quot;não é apenas uma demonstração&quot;).</p>
+
+<p>O autor tem uma <a href="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world" title="The Flask Mega-Tutorial">série de artigos</a> sobre como usar o <em>Flask</em>. E <a href="http://flaskbook.com/">neste link</a> as referências do livro.</p>
+
+<p>Sem estas duas referências, o trabalho é árduo. Mas, independente do caminho, ao se ganhar certa autonomia, fica tudo muito divertido.</p>
+
+<p>Além da documentação, dos artigos e do livro, há amplo registro de problemas e soluções. Por exemplo, aqui estão alguns dos links que me trouxeram soluções:</p>
+
+<ul>
+<li><a href="https://github.com/miguelgrinberg/flasky/blob/master/app/email.py">Enviando email</a></li>
+<li><a href="http://stackoverflow.com/questions/18002750/flask-admin-blueprint-creation-during-testing">Problemas com unittest</a></li>
+<li><a href="https://gist.github.com/shrayasr/5df96d5bc287f3a2faa4">Populando o banco de dados</a></li>
+</ul>
+
+<h4>Concluindo</h4>
+
+<p>A busca não acabou, e claro, o <em>framework</em> perfeito só encontrarei depois que desenvolvê-lo.</p>
+
+<p>Alguém se habilita?</p>
+
+<h4>Referências</h4>
+
+<h5>termos genéricos</h5>
+
+<ul>
+<li><a href="O%20que%20%C3%A9%20framework?">http://www.dsc.ufcg.edu.br/~jacques/cursos/map/html/frame/oque.htm</a></li>
+<li><a href="C%C3%B3digo%20aberto%20-%20Wikip%C3%A9dia">https://pt.wikipedia.org/wiki/C%C3%B3digo_aberto</a></li>
+<li><a href="Aplicativo%20WEB%20-%20wikip%C3%A9dia">https://pt.wikipedia.org/wiki/Aplica%C3%A7%C3%A3o_web</a></li>
+</ul>
+
+<h5>linguagens de programação</h5>
+
+<ul>
+<li><a href="Perl">http://www.perl.org</a></li>
+<li><a href="Python">http://www.python.org</a></li>
+</ul>
+
+<h5>frameworks perl</h5>
+
+<ul>
+<li><a href="Catalyst">http://www.catalystframework.org</a></li>
+<li><a href="Dancer">http://www.perldancer.org</a></li>
+<li><a href="Mojolicious">http://www.mojolicious.org</a></li>
+</ul>
+
+<h5>frameworks python</h5>
+
+<ul>
+<li><a href="CherryPy">http://www.cherrypy.org</a></li>
+<li><a href="Bootle">http://www.bottlepy.org</a></li>
+<li><a href="Django">http://www.djangoproject.com</a></li>
+<li><a href="Flask">http://flask.pocoo.org</a></li>
+<li><a href="TurboGears">http://www.turbogears.org</a></li>
+</ul>
+
+<h5>bancos de dados</h5>
+
+<ul>
+<li><a href="SQLite">http://www.sqlite.org</a></li>
+<li><a href="MongoDB">http://www.mongodb.org</a></li>
+</ul>
+
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Usando Flask para desenvolver sistemas WEB com Python"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2015-10-15-usando-flask.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Usando Flask para desenvolver sistemas WEB com Python"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2015-10-15-usando-flask.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Usando Flask para desenvolver sistemas WEB com Python"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2015-10-15-usando-flask.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Usando Flask para desenvolver sistemas WEB com Python"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2015-10-15-usando-flask.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Usando Flask para desenvolver sistemas WEB com Python"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2015-10-15-usando-flask.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2017, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+</body>
+</html>

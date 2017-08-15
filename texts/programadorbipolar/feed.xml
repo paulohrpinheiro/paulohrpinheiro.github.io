@@ -1,0 +1,138 @@
+<?xml version="1.0"?>
+
+<rss version="2.0">
+  <channel>
+    <title>Paulo Henrique Rodrigues Pinheiro</title>
+    <link>https://paulohrpinheiro.xyz</link>
+    <description>Blog sobre programação para programadores e sysadmins</description>
+    <language>pt-br</language>
+
+    <item>
+      <title>Anti-socializando nas redes</title>
+      <link>https://paulohrpinheiro.xyz/texts/programadorbipolar/2017-01-04-nadando-contra-a-corrente.html</link>
+      <description>Um pouco sobre como resolvi assumir minha anti-socialidade e não gastar tempo com certas redes sociais, além de vencer uma pesada depressão.</description>
+      <pubDate>Wed, 4 Jan 2017 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Quase</title>
+      <link>https://paulohrpinheiro.xyz/texts/programadorbipolar/2016-12-15-quase.html</link>
+      <description>Procurei, encontrei...</description>
+      <pubDate>Thu, 15 Dec 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Sete meses...</title>
+      <link>https://paulohrpinheiro.xyz/texts/programadorbipolar/2016-05-31-sete-meses.html</link>
+      <description>Sete meses de incapacidade...</description>
+      <pubDate>Tue, 31 May 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>A marcha do tempo</title>
+      <link>https://paulohrpinheiro.xyz/texts/programadorbipolar/2016-05-23-a-marcha-do-tempo.html</link>
+      <description>É sem volta...</description>
+      <pubDate>Mon, 23 May 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Hibernando</title>
+      <link>https://paulohrpinheiro.xyz/texts/programadorbipolar/2016-05-16-hibernando.html</link>
+      <description>É assim que funciona...</description>
+      <pubDate>Mon, 16 May 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Indecisão</title>
+      <link>https://paulohrpinheiro.xyz/texts/programadorbipolar/2016-05-10-indicisao.html</link>
+      <description>Em uma semana fui capaz de...</description>
+      <pubDate>Tue, 10 May 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Mais 12 horas</title>
+      <link>https://paulohrpinheiro.xyz/texts/programadorbipolar/2016-05-03-mais-12-horas.html</link>
+      <description>Esse blog ocupou</description>
+      <pubDate>Tue, 3 May 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Vazio</title>
+      <link>https://paulohrpinheiro.xyz/texts/programadorbipolar/2016-04-26-vazio.html</link>
+      <description>Uma Internet de coisas...</description>
+      <pubDate>Tue, 26 Apr 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Sabotador</title>
+      <link>https://paulohrpinheiro.xyz/texts/programadorbipolar/2016-04-19-sabotador.html</link>
+      <description>Mais um cliente...</description>
+      <pubDate>Tue, 19 Apr 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Desconectado</title>
+      <link>https://paulohrpinheiro.xyz/texts/programadorbipolar/2016-04-17-desconectado.html</link>
+      <description>Repassando um texto legal...</description>
+      <pubDate>Sun, 17 Apr 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Super poder</title>
+      <link>https://paulohrpinheiro.xyz/texts/programadorbipolar/2016-04-12-super-poder.html</link>
+      <description>O super poder de...</description>
+      <pubDate>Tue, 12 Apr 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Louco</title>
+      <link>https://paulohrpinheiro.xyz/texts/programadorbipolar/2016-04-05-louco.html</link>
+      <description>Esse é meu maior medo...</description>
+      <pubDate>Tue, 5 Apr 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Tim Maia</title>
+      <link>https://paulohrpinheiro.xyz/texts/programadorbipolar/2016-04-01-tim-maia.html</link>
+      <description>Tim Maia tem algo a dizer...</description>
+      <pubDate>Fri, 1 Apr 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Horários</title>
+      <link>https://paulohrpinheiro.xyz/texts/programadorbipolar/2016-03-31-horarios.html</link>
+      <description>Muitas responsabilidades...</description>
+      <pubDate>Thu, 31 Mar 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Depressão no ambiente de trabalho</title>
+      <link>https://paulohrpinheiro.xyz/texts/programadorbipolar/2016-03-31-depressao-ambiente-de-trabalho.html</link>
+      <description>Repassando um texto...</description>
+      <pubDate>Thu, 31 Mar 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>A cor da esperança</title>
+      <link>https://paulohrpinheiro.xyz/texts/programadorbipolar/2016-03-30-a-cor-da-esperanca.html</link>
+      <description>Finalmente consegui dormir...</description>
+      <pubDate>Wed, 30 Mar 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Fracassado</title>
+      <link>https://paulohrpinheiro.xyz/texts/programadorbipolar/2016-03-29-fracassado.html</link>
+      <description>A cada dia...</description>
+      <pubDate>Tue, 29 Mar 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Manoel Bandeira</title>
+      <link>https://paulohrpinheiro.xyz/texts/programadorbipolar/2016-03-28-manoel-bandeira.html</link>
+      <description>Substâncias químicas...</description>
+      <pubDate>Mon, 28 Mar 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Mais um projeto</title>
+      <link>https://paulohrpinheiro.xyz/texts/programadorbipolar/2016-03-28-mais-um-projeto.html</link>
+      <description>O sono chegando...</description>
+      <pubDate>Mon, 28 Mar 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Hora de dormir</title>
+      <link>https://paulohrpinheiro.xyz/texts/programadorbipolar/2016-03-28-hora-de-dormir.html</link>
+      <description>Dormir!</description>
+      <pubDate>Mon, 28 Mar 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Desespero</title>
+      <link>https://paulohrpinheiro.xyz/texts/programadorbipolar/2016-03-28-desespero.html</link>
+      <description>Eu preciso!</description>
+      <pubDate>Mon, 28 Mar 2016 00:00:00 +0000</pubDate>
+    </item>
+
+  </channel>
+</rss>

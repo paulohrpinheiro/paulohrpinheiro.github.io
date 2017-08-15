@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Linguagem C: goto é para inocentes... O lance é setjmp!</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Usando goto e setjmp para manter o código legível.">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores e sysadmins</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Linguagem C: goto é para inocentes... O lance é setjmp!</h2>
+
+<h3>Usando goto e setjmp para manter o código legível.</h3>
+
+<p><img src="images/xkcd-goto.png" alt="xkcd goto"></p>
+
+<blockquote>
+<p>For a number of years I have been familiar with the observation that the quality of programmers is a decreasing function of the density of <strong>go to</strong> statements in the programs they produce. More recently I discovered why the use of the go to statement has such disastrous effects, and I became convinced that the go to statement should be abolished from all &quot;higher level&quot; programming languages. - <strong><a href="https://pt.wikipedia.org/wiki/Edsger_Dijkstra">Edsger W.  Dijkstra</a></strong></p>
+</blockquote>
+
+<p>É uma discussão acalorada. Mas eu afirmo que é preciso, eventualmente, usar um <em>goto</em> em <em>C</em>. E com o avanço da <a href="http://www.sysincloud.it/resolucao-de-ano-novo-aprender-uma-nova-linguagem-de-programacao/">programação funcional</a>, tem-se percebido como o Dijkstra estava certo. Mas estamos programando em <em>C</em>, e não em uma linguagem de &quot;alto nível&quot;.</p>
+
+<p>Liberação de memória, retorno de funções, saída clara de <em>loops</em> aninhados... Em alguns casos pode ficar menos poluído usar um <em>goto</em>.</p>
+
+<p>Mas o <em>goto</em> tem um primo rico. É o <em>setjmp</em>. O código em <em>C</em> costuma ficar bem complexo quando as coisas vão ficando sérias. Em alguns momentos fica bem difícil escrever programas robustos.</p>
+
+<p>Por exemplo, imagine que uma função retorne um tipo inteiro, mas deve poder retornar um código de erro também... Pode-se usar uma variável global, como nesse exemplo:</p>
+<pre><code class="language-c">
+#include &lt;stdlib.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+
+int error;
+
+int my_f(int a, int b) {
+    if(b==0) {
+        error = 1;
+        return error;
+    }
+
+    error = 0;
+    return a&#x2F;b;
+}
+
+int main(void) {
+    int result;
+
+    result = my_f(1, 0);
+    if(1==error) {
+        puts(&quot;Error in my_f().&quot;);
+        return EXIT_FAILURE;
+    }
+
+    printf(&quot;Result: %d\n&quot;, result);
+
+    return EXIT_SUCCESS;
+}
+
+</code></pre>
+<p>É muito fácil esquecer de alguma coisa e demorar pra perceber.</p>
+
+<p>Ou então passa-se um ponteiro para um endereço em que será informado o <em>status</em> de retorno da função:</p>
+<pre><code class="language-c">
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+
+int my_f(int a, int b, int *response) {
+    if(b==0) {
+        return (*response = -1);
+    }
+
+    *response = 0;
+
+    return a&#x2F;b;
+}
+
+int main(void) {
+    int result, response;
+
+    result = my_f(1, 0, &amp;response);
+    if(-1==response) {
+        puts(&quot;Error in my_f().&quot;);
+        return EXIT_FAILURE;
+    }
+
+    printf(&quot;Result: %d\n&quot;, result);
+
+    return EXIT_SUCCESS;
+}
+
+</code></pre>
+<p>Eu não gosto disso, pois polui as chamadas a função.</p>
+
+<p>Por fim, pode-se usar uma estrutura como retorno, contendo o valor e um código de erro:</p>
+<pre><code class="language-c">
+typedef struct {
+    int result;
+    int response;
+} f_return;
+
+</code></pre>
+<p>Essa estrutura então pode ser passada como referência:</p>
+<pre><code class="language-c">
+void my_f(int a, int b, f_return *response) {
+    if(b==0) {
+        response-&gt;response = -1;
+    }
+    else {
+        response-&gt;response = 0;
+        response-&gt;result = a&#x2F;b;
+    }
+}
+
+</code></pre>
+<p>Eu sou mais simpático a essa solução, especialmente depois de começar a estudar <em><a href="http://www.sysincloud.it/linguagem-rust-tirando-a-ferrugem/">Rust</a></em>, que tem esse padrão para tratamento de erros.</p>
+
+<p>Em <em>C</em> ainda, temos outras possibilidades, como ter essa estrutura como uma variável global, ou ainda alocada dinamicamente na função chamada, tendo seu ponteiro retornado, o que exige que não esqueçamos de liberar essa memória alocada.</p>
+
+<p>Mas há uma prática entre programadores <em>C</em>, em usar instruções de salto longo, para lidar com essa situação.</p>
+
+<p>Voltemos ao nosso exemplo, em que corremos o risco de executar uma divisão por zero. Devemos verificar e evitar essa tragédia. Mas como relatá-la?</p>
+
+<p>Podemos emular uma exceção. Um <em>try</em> / <em>catch</em> se preferir.</p>
+
+<p>Por exemplo, ao invés de retornar um código de erro ou encerrar com um <em>abort</em>, pode-se, do ponto de vista do &quot;usuário&quot; de sua biblioteca, retornar com um <em>fatality</em> :) pra cima dele:</p>
+<pre><code class="language-c">
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;setjmp.h&gt;
+
+jmp_buf jmp_buffer;
+
+enum { OK, ERR_DIV_BY_ZERO };
+
+int my_f(int a, int b) {
+    if(b==0) {
+        longjmp(jmp_buffer, ERR_DIV_BY_ZERO);
+    }
+
+    return a&#x2F;b;
+}
+
+int main(void) {
+    int result, error;
+
+    error = setjmp(jmp_buffer);
+
+    if(OK==error) { &#x2F;* try *&#x2F;
+        result = my_f(1, 0);
+    }
+    else { &#x2F;* catch *&#x2F;
+        puts(&quot;Error in my_f().&quot;);
+        return EXIT_FAILURE;
+    }
+
+    printf(&quot;Result: %d\n&quot;, result);
+
+    return EXIT_SUCCESS;
+}
+
+</code></pre>
+<p>Executando esse código (salvei esse programa como <code class="prettyprint">test_jmp.c</code>) temos:</p>
+<pre><code class="language-c">
+$ gcc -Wall -ansi -pedantic test_jmp.c -o test_jmp
+$ .&#x2F;test_jmp
+Error in my_f().
+$
+
+</code></pre>
+<p>E alterando <code class="prettyprint">result = my_f(1, 0);</code> para <code class="prettyprint">result = my_f(10, 2);</code>:</p>
+<pre><code class="language-c">
+$ gcc -Wall -ansi -pedantic test_jmp.c -o test_jmp
+$ .&#x2F;test_jmp
+Result: 5
+$
+
+</code></pre>
+<p>É um código estranho, quando nos deparamos com ele pela primeira vez, mas vamos debulhar esse trem!</p>
+
+<p>Começando do <code class="prettyprint">main</code>, temos a linha <code class="prettyprint">error = setjmp(jmp_buffer);</code> que nos indica o exato local de retorno, caso algo de errado. Quando o programa é executado, nesse ponto ela retornará <code class="prettyprint">0</code> (zero), pois fomos nós quem a chamamos. Nosso OK tem esse valor, pois é a primeira entrada do <code class="prettyprint">enum</code>.</p>
+
+<p>Como <code class="prettyprint">0</code> é <code class="prettyprint">OK</code>, e <code class="prettyprint">error</code> tem esse valor, a função <code class="prettyprint">my_f</code> será chamada.</p>
+
+<p>Em nossa função, caso esteja tudo certo, ela retorna normalmente e o programa executa conforme o fluxo normal.</p>
+
+<p>Caso o argumento <code class="prettyprint">b</code> seja <code class="prettyprint">0</code>, não podemos realizar a divisão e chamamos <code class="prettyprint">longjmp</code>, indicando para qual ponto do programa ele deve retornar (primeiro parâmetro), e um código de retorno (segundo parâmetro).</p>
+
+<p>Como no início salvamos o <code class="prettyprint">stack</code> com a primeira chamada a <code class="prettyprint">setjmp</code>, nossa função &quot;sabe&quot; aonde retornar: para a linha <code class="prettyprint">error = setjmp(jmp_buffer);</code>. Novamente, o <code class="prettyprint">if</code> é executado, só que desta vez o valor de <code class="prettyprint">error</code> é <code class="prettyprint">ERR_DIV_BY_ZERO</code>, o que faz com que a mensagem de erro seja mostrada, e o programa termine com status de erro (<code class="prettyprint">return EXIT_FAILURE;</code>).</p>
+
+<p>É estranho, mas se seguir esse roteiro descrito acima, não haverá mais estranhamento se deparar-se com esse tipo de construção.</p>
+
+<p>Há quem utilize macros para isso, para tornar o código mais legível. Eu não simpatizo com essa abordagem, até porque, se alguém prefere esse tipo de sintaxe, pode passar a programar em C++ :P.</p>
+
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Linguagem C: goto é para inocentes... O lance é setjmp!"
+    data-url="https://paulohrpinheiro.xyz/texts/c/2016-03-08-goto-setjmp.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Linguagem C: goto é para inocentes... O lance é setjmp!"
+    data-url="https://paulohrpinheiro.xyz/texts/c/2016-03-08-goto-setjmp.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Linguagem C: goto é para inocentes... O lance é setjmp!"
+    data-url="https://paulohrpinheiro.xyz/texts/c/2016-03-08-goto-setjmp.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Linguagem C: goto é para inocentes... O lance é setjmp!"
+    data-url="https://paulohrpinheiro.xyz/texts/c/2016-03-08-goto-setjmp.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Linguagem C: goto é para inocentes... O lance é setjmp!"
+    data-url="https://paulohrpinheiro.xyz/texts/c/2016-03-08-goto-setjmp.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2017, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+</body>
+</html>

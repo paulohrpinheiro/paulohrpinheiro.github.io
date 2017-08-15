@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+
+<rss version="2.0">
+  <channel>
+    <title>Paulo Henrique Rodrigues Pinheiro</title>
+    <link>https://paulohrpinheiro.xyz</link>
+    <description>Blog sobre programação para programadores e sysadmins</description>
+    <language>pt-br</language>
+
+    <item>
+      <title>Trabalhando com uma versão atualizada de Perl no OpenShift</title>
+      <link>https://paulohrpinheiro.xyz/texts/perl/2015-09-22-perl-atualizado-openshift.html</link>
+      <description>Uma forma de trabalhar com uma instalação Perl atualizada rodando no OpenShift, válido também para a GetupCloud.</description>
+      <pubDate>Tue, 22 Sep 2015 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Fixtures em JSON com Senha Criptografada Pelo BCRYPT</title>
+      <link>https://paulohrpinheiro.xyz/texts/perl/2015-08-22-fixtures-em-json-com-senha-criptografada-pelo-bcrypt.html</link>
+      <description>Relato de uma pequena e feliz experiência com Perl em uma startup</description>
+      <pubDate>Sat, 22 Aug 2015 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Brincando com Perl6</title>
+      <link>https://paulohrpinheiro.xyz/texts/perl/2015-03-02-brincando-com-o-perl6.html</link>
+      <description>Neste artigo será comentado um pequeno texto publicado em http://blogs.perl.org.</description>
+      <pubDate>Mon, 2 Mar 2015 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Suporte a Chamadas Nativas em Perl6</title>
+      <link>https://paulohrpinheiro.xyz/texts/perl/2015-03-01-perl6-native-calling-support.html</link>
+      <description>Neste artigo será mostrado como integrar uma biblioteca C diretamente em Perl6.</description>
+      <pubDate>Sun, 1 Mar 2015 00:00:00 +0000</pubDate>
+    </item>
+
+  </channel>
+</rss>

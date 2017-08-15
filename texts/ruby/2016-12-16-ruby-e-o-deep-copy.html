@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Ruby e o deep copy</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Uma quase alucinada busca de uma forma de fazer *deep copy* em *Ruby*, apenas por preguiça de copiar, e pra não ferir o orgulho e repetir código.">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores e sysadmins</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Ruby e o deep copy</h2>
+
+<h3>Uma quase alucinada busca de uma forma de fazer <em>deep copy</em> em <em>Ruby</em>, apenas por preguiça de copiar, e pra não ferir o orgulho e repetir código.</h3>
+
+<p><img src="images/deep-shallow.png" alt="Descrição"></p>
+
+<p>Eu queria testar se uma chave de minha base de dados realmente estava como chave única.</p>
+
+<p>O código estava nesse ponto, e por orgulho e preguiça, eu não queria copiar e colar a atribuição de valores:</p>
+<pre><code class="language-ruby">
+test &quot;Não pode salvar produtos com descrição existente&quot; do
+    produto = Produto.new()
+    produto.unidade = &#x27;UN&#x27;
+    produto.preco = 1.25
+    produto.categoria = &#x27;beb&#x27;
+    produto.descricao = &quot;Descrição supimpa&quot;
+
+    mesmo_produto = produto # isso não vai dar certo...
+    produto.save
+    assert_not mesmo_produto.save, &quot;Salvou duas vezes produto com mesma descrição&quot;
+end
+
+</code></pre>
+<p>Aquele <code class="prettyprint">mesmo_produto = produto</code> não fez o que eu queria, mas eu já estava desconfiando. Afinal, eu apenas dei um apelido para um objeto existente. Logo pensei em <em>Deep Copy</em>, mas após algumas leituras, desisti. Teria que usar uma <em>gem</em> para isso, ou fazer a cópia na unha.</p>
+
+<p>Encontrei em algum lugar (realmente perdi a referência e nem me lembro como foi que encontrei) essa dica:</p>
+<pre><code class="language-ruby">
+test &quot;Não pode salvar produtos com descrição existente&quot; do
+    produto = Produto.new()
+    produto.unidade = &#x27;UN&#x27;
+    produto.preco = 1.25
+    produto.categoria = &#x27;beb&#x27;
+    produto.descricao = &quot;Descrição supimpa&quot;
+
+    mesmo_produto = Produto.new(produto.attributes)
+    produto.save
+    assert_not mesmo_produto.save, &quot;Salvou duas vezes produto com mesma descrição&quot;
+end
+
+</code></pre>
+<p>Ainda não gostei. Mas o que é que tem nesse <code class="prettyprint">produto.attributes</code>? Eu, um quase
+hacker, fui pro console da minha aplicação fuçar nas coisas:</p>
+<pre><code class="language-ruby">
+$ rails c
+Running via Spring preloader in process 6543
+Loading development environment (Rails 5.0.0.1)
+2.3.0 :001 &gt; p = Produto.new
+ =&gt; #&lt;Produto id: nil, descricao: nil, categoria: nil, preco: nil, unidade: nil, created_at: nil, updated_at: nil&gt;
+2.3.0 :002 &gt; p.attributes
+ =&gt; {&quot;id&quot;=&gt;nil, &quot;descricao&quot;=&gt;nil, &quot;categoria&quot;=&gt;nil, &quot;preco&quot;=&gt;nil, &quot;unidade&quot;=&gt;nil, &quot;created_at&quot;=&gt;nil, &quot;updated_at&quot;=&gt;nil}
+2.3.0 :003 &gt;
+
+</code></pre>
+<p>Próxima tentativa, mais ao meu gosto e experiência com Python:</p>
+<pre><code class="language-ruby">
+test &quot;Não pode salvar produtos com descrição existente&quot; do
+    salva_produto = Proc.new(|mensagem| {
+        p = Produto.new({
+            &quot;id&quot; =&gt; nil,
+            &quot;descricao&quot; =&gt; &quot;Descrição supimpa&quot;,
+            &quot;categoria&quot; =&gt; &quot;beb&quot;,
+            &quot;preco&quot; =&gt; 1.25,
+            &quot;unidade&quot; =&gt; &quot;UN&quot;,
+            &quot;created_at&quot; =&gt; nil,
+            &quot;updated_at&quot; =&gt; nil,
+        }
+
+        assert p.save, mensagem
+    })
+
+    # salva primeiro, tem que dar certo.
+    salva_produto &quot;Não salvou produto inexistente&quot;
+
+    # salva segundo, tem que dar erro.
+    salva_produto &quot;Salvou duas vezes produto com mesma descrição&quot;
+end
+
+</code></pre>
+<p>E se eu criar um <a href="http://augustl.com/blog/2008/procs_blocks_and_anonymous_functions/">proc</a>?</p>
+<pre><code class="language-ruby">
+test &quot;Não pode salvar produtos com descrição existente&quot; do
+    salva_produto = proc {
+        Produto.new({
+            &quot;id&quot; =&gt; nil,
+            &quot;descricao&quot; =&gt; &quot;Descrição supimpa&quot;,
+            &quot;categoria&quot; =&gt; &quot;beb&quot;,
+            &quot;preco&quot; =&gt; 1.25,
+            &quot;unidade&quot; =&gt; &quot;UN&quot;,
+            &quot;created_at&quot; =&gt; nil,
+            &quot;updated_at&quot; =&gt; nil,
+        }).save
+    }
+
+    # salva primeiro, tem que dar certo.
+    assert salva_produto.call, &quot;Não salvou produto inexistente&quot;
+
+    # salva segundo, tem que dar erro.
+    assert_not salva_produto.call, &quot;Salvou duas vezes produto com mesma descrição&quot;
+end
+
+</code></pre>
+<p>Agora sim, voltou a ter cara de teste e é só bater o olho pra entender o que está acontecendo.</p>
+
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Ruby e o deep copy"
+    data-url="https://paulohrpinheiro.xyz/texts/ruby/2016-12-16-ruby-e-o-deep-copy.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Ruby e o deep copy"
+    data-url="https://paulohrpinheiro.xyz/texts/ruby/2016-12-16-ruby-e-o-deep-copy.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Ruby e o deep copy"
+    data-url="https://paulohrpinheiro.xyz/texts/ruby/2016-12-16-ruby-e-o-deep-copy.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Ruby e o deep copy"
+    data-url="https://paulohrpinheiro.xyz/texts/ruby/2016-12-16-ruby-e-o-deep-copy.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Ruby e o deep copy"
+    data-url="https://paulohrpinheiro.xyz/texts/ruby/2016-12-16-ruby-e-o-deep-copy.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2017, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+</body>
+</html>

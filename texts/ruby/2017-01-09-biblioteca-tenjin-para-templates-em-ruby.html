@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Biblioteca Tenjin para templates em Ruby</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Aprendendo e usando uma alternativa à biblioteca padrão ERB, no Ruby, para templates de texto">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores e sysadmins</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Biblioteca Tenjin para templates em Ruby</h2>
+
+<h3>Aprendendo e usando uma alternativa à biblioteca padrão ERB, no Ruby, para templates de texto</h3>
+
+<p>Por meu blog não ser <em>ainda</em> um blog de &quot;um milhão de dólares&quot;, tenho sempre experimentado alternativas para geri-lo. Já usei:</p>
+
+<ul>
+<li>Wordpress</li>
+<li>Ghost</li>
+<li>GitHub</li>
+<li>Medium</li>
+</ul>
+
+<p>Tudo isso em meio à uma vontade de usar um sistema gerador de sites estático. Mas sempre que ia aprender algum, a preguiça batia, era muita coisa nova para aprender, e não estava no topo de minhas prioridades.</p>
+
+<p>Eis que um dia me vi pensando em ter mais liberdade, registrei um domínio e comecei a pensar no que usar para colocar meu blog nele.</p>
+
+<p>Como há muito tempo mantenho meu textos todos arquivados em <em>Markdown</em>, resolvi fazer um <em>script</em> para gerar os <em>HTMLs</em>, usando <em>SSI</em> para facilitar a vida, num servidor <em>Nginx</em>.</p>
+
+<p>Comecei escrevendo em <em>bash</em>, e logo me toquei que escrever em <em>Ruby</em> ou <em>Python</em> seria mais fácil, especialmente no momento de manipular <em>strings</em>. Como estou em processo de imersão no <em>Ruby</em>, ele foi o escolhido.</p>
+
+<p>Rapidinho terminei o programa e coloquei o blog no ar.</p>
+
+<h4>Próximo passo</h4>
+
+<p>Já tinha um programa para gerar meu blog, então pensei, porque melhorar, porque não melhorar, &quot;melhorei-lho-o&quot;.</p>
+
+<p>Passei a ampliá-lo e organizá-lo para ser um <em>gem</em>, coisa simples. Primeiro passo, usar um sistema de <em>template</em>. Escolha óbvia, parti para o <em>ERB</em></p>
+
+<p>Mas as coisas não são tão simples sem a ajuda do <em>Rails</em>, onde tudo é facilitado no uso do <em>ERB</em>.</p>
+
+<p>O programa ficou complicado demais com minhas gambiarras para ter sub-templates.</p>
+
+<h4>Alívio</h4>
+
+<p>Pesquisei um pouco e descobri o <a href="http://www.kuwata-lab.com/tenjin/">Tenjin</a>.</p>
+
+<p>De forma surpreendente para mim, consegui alterar todo o meu código para substituir o <em>ERB</em> por ele, sem problemas e bem rápido. O código ficou menos macarrônico e até mesmo a conversão dos templates foi fácil.</p>
+
+<h4>Tenjin</h4>
+
+<p>Ele se gaba de ser o cara mais rápido do velho-oeste. Além de <em>Ruby</em>, tem versões para <em>Python</em>, <em>Perl</em>, <em>PHP</em> e <em>Javascript</em>.</p>
+
+<h5>Instalação</h5>
+
+<p>O padrão:</p>
+<pre><code class="language-ruby">
+gem install tenjin
+
+</code></pre>
+<h5>Marcação</h5>
+
+<p>No seu arquivo de template, inclua <code class="prettyprint">&lt;?rb COMANDO ?&gt;</code> para incorporar qualquer comando <em>Ruby</em>. Use <code class="prettyprint">${EXP}</code> para incluir expressões, que devam ter conteúdo <em>HTML</em> convertido para texto, e com <code class="prettyprint">#{EXP}</code> para incluir expressões que não precisam de conversão.</p>
+
+<h5>Código no template</h5>
+
+<p>Por exemplo, se temos o arquivo <code class="prettyprint">example.rbhtml</code>:</p>
+<pre><code class="language-ruby">
+&lt;ul&gt;                                                                            
+&lt;?rb for i in 10.times ?&gt;                                                       
+  &lt;li&gt;${i}&lt;&#x2F;li&gt;                                                                                                
+&lt;?rb end ?&gt;                                                                     
+&lt;&#x2F;ul&gt;
+
+</code></pre>
+<p>E, no mesmo diretório, o arquivo <code class="prettyprint">example.rb</code></p>
+<pre><code class="language-ruby">
+require &#x27;tenjin&#x27;
+
+engine = Tenjin::Engine.new
+puts engine.render ARGV[0]
+
+</code></pre>
+<p>Ao executar <code class="prettyprint">ruby example.rb example.rbhtml</code>, temos como saída:</p>
+<pre><code class="language-ruby">
+➤ ruby example.rb
+&lt;ul&gt;
+&lt;li&gt;0&lt;&#x2F;li&gt;
+&lt;li&gt;1&lt;&#x2F;li&gt;
+&lt;li&gt;2&lt;&#x2F;li&gt;
+&lt;li&gt;3&lt;&#x2F;li&gt;
+&lt;li&gt;4&lt;&#x2F;li&gt;
+&lt;li&gt;5&lt;&#x2F;li&gt;
+&lt;li&gt;6&lt;&#x2F;li&gt;
+&lt;li&gt;7&lt;&#x2F;li&gt;
+&lt;li&gt;8&lt;&#x2F;li&gt;
+&lt;li&gt;9&lt;&#x2F;li&gt;
+&lt;ul&gt;
+
+</code></pre>
+<h5>Contextos</h5>
+
+<p>Um template começa a ser útil quando, a partir de nosso programa, podemos &quot;enviar&quot; parâmetros para que o template seja renderizado.</p>
+
+<p>No método <code class="prettyprint">engine</code> há o parâmetro <code class="prettyprint">context</code> que resolve essa parada. Trata-se de um <em>hash</em> que será reconhecido no template, Vamos passar o limite do loop por parâmetro, alterando nosso arquivo <code class="prettyprint">example.rbhtml</code> para:</p>
+<pre><code class="language-ruby">
+&lt;ul&gt;                                                                            
+&lt;?rb for i in @limit.times ?&gt;                                                                                
+&lt;li&gt;${i}&lt;&#x2F;li&gt;                                                                   
+&lt;?rb end ?&gt;                                                                     
+&lt;&#x2F;ul&gt;
+
+</code></pre>
+<p>E o programa <code class="prettyprint">example.rb</code> para:</p>
+<pre><code class="language-ruby">
+require &#x27;tenjin&#x27;
+
+engine = Tenjin::Engine.new
+context = { limit: Integer(ARGV[1]) }
+puts engine.render ARGV[0], context
+
+</code></pre>
+<p>Ao executar <code class="prettyprint">ruby example.rb example.rbhtml 8</code> (passando como segundo parâmetro o limite):</p>
+<pre><code class="language-ruby">
+&lt;ul&gt;
+&lt;li&gt;0&lt;&#x2F;li&gt;
+&lt;li&gt;1&lt;&#x2F;li&gt;
+&lt;li&gt;2&lt;&#x2F;li&gt;
+&lt;li&gt;3&lt;&#x2F;li&gt;
+&lt;li&gt;4&lt;&#x2F;li&gt;
+&lt;li&gt;5&lt;&#x2F;li&gt;
+&lt;li&gt;6&lt;&#x2F;li&gt;
+&lt;li&gt;7&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+
+</code></pre>
+<p>E que tal colocar um título? Alteremos o programa para:</p>
+<pre><code class="language-ruby">
+require &#x27;tenjin&#x27;
+
+engine = Tenjin::Engine.new
+context = { limit: Integer(ARGV[1]), title: ARGV[2] }
+puts engine.render ARGV[0], context
+
+</code></pre>
+<p>Modifiquemos o template para:</p>
+<pre><code class="language-ruby">
+&lt;h1&gt;${@title}&lt;&#x2F;h1&gt;
+&lt;ul&gt;
+&lt;?rb for i in @limit.times ?&gt;
+&lt;li&gt;${i}&lt;&#x2F;li&gt;
+&lt;?rb end ?&gt;
+&lt;&#x2F;ul&gt;
+
+</code></pre>
+<p>E a saída do comando <code class="prettyprint">ruby example.rb example.rbhtml 5 Exemplo</code> será:</p>
+<pre><code class="language-ruby">
+&lt;h1&gt;Exemplo&lt;&#x2F;h1&gt;
+&lt;ul&gt;
+&lt;li&gt;0&lt;&#x2F;li&gt;
+&lt;li&gt;1&lt;&#x2F;li&gt;
+&lt;li&gt;2&lt;&#x2F;li&gt;
+&lt;li&gt;3&lt;&#x2F;li&gt;
+&lt;li&gt;4&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+
+</code></pre>
+<p>Percebem a diferente entre uma variável &quot;local&quot; e uma variável vinda do contexto?</p>
+
+<h5>Padrão recomendado</h5>
+
+<p>A documentação ainda recomenda declarar, no template, quais variáveis vem pelo contexto. Seguindo esse <em>pattern</em>, nosso template fica dessa forma:</p>
+<pre><code class="language-ruby">
+&lt;?rb #@ARGS title, limit ?&gt;                                                                                  
+&lt;h1&gt;${@title}&lt;&#x2F;h1&gt;                                                              
+&lt;ul&gt;                                                                            
+&lt;?rb for i in @limit.times ?&gt;                                                   
+&lt;li&gt;${i}&lt;&#x2F;li&gt;                                                                   
+&lt;?rb end ?&gt;                                                                     
+&lt;&#x2F;ul&gt;
+
+</code></pre>
+<h5>Incluindo outro template</h5>
+
+<p>Nosso template pode ainda incluir outros. Por exemplo, podemos ter um arquivo <code class="prettyprint">include_template.rbhtml</code>:</p>
+<pre><code class="language-ruby">
+&lt;p&gt;Nosso limite é o número ${@limit}.&lt;&#x2F;p&gt;
+
+</code></pre>
+<p>E no nosso template:</p>
+<pre><code class="language-ruby">
+&lt;?rb #@ARGS title, limit ?&gt;
+&lt;h1&gt;${@title}&lt;&#x2F;h1&gt;
+&lt;?rb import &#x27;include_template.rbhtml&#x27; ?&gt;
+&lt;ul&gt;
+&lt;?rb for i in @limit.times ?&gt;
+&lt;li&gt;${i}&lt;&#x2F;li&gt;
+&lt;?rb end ?&gt;
+&lt;&#x2F;ul&gt;
+
+</code></pre>
+<p>Executando <code class="prettyprint">ruby example.rb example.rbhtml 5 &#39;Exemplo com Include&#39;</code> temos:</p>
+<pre><code class="language-ruby">
+&lt;h1&gt;Exemplo com Include&lt;&#x2F;h1&gt;
+&lt;p&gt;Nosso limite é o número 5.&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;0&lt;&#x2F;li&gt;
+&lt;li&gt;1&lt;&#x2F;li&gt;
+&lt;li&gt;2&lt;&#x2F;li&gt;
+&lt;li&gt;3&lt;&#x2F;li&gt;
+&lt;li&gt;4&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+
+</code></pre>
+<p>O contexto se aplica ao template incluído.</p>
+
+<h4>Concluindo</h4>
+
+<p>O guia do usuário tem mais exemplos e lista muitas outras funcionalidades, como suporte a <em>layout</em>:</p>
+
+<p><a href="http://www.kuwata-lab.com/tenjin/rbtenjin-users-guide.html">Tenjin Users Guide</a></p>
+
+<p>Além de ter me ajudado a resolver a questão de um sistema de template, o <em>Tenjin</em> tornou meu código mais simples e me fez aprender um pouco mais sobre <em>Ruby</em>.</p>
+
+<p>Deparei-me com um problema ao rodar meus testes, que me deixou um pouco desconfiado do código, pois ao rodar os testes, em geral, os warnings do <em>Ruby</em> estão ativados. E o <em>Tenjin</em> gera muitos!</p>
+
+<p>Ou se desabilita os <em>warnings</em>, não gostei disso pois gosto de deixar o código limpo, ou parte para a desabilitação dos <em>warnings</em> apenas para o <em>Tenjin</em>, como podemos ver aqui:</p>
+
+<p><a href="http://mislav.net/2011/06/ruby-verbose-mode/">Ruby verbose mode and how it&#39;s broken</a></p>
+
+<p>Só não estou usando essa opção por não ter estudado com mais afinco, e ser um pouco antiga. Mas eu testei, e funciona.</p>
+
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Biblioteca Tenjin para templates em Ruby"
+    data-url="https://paulohrpinheiro.xyz/texts/ruby/2017-01-09-biblioteca-tenjin-para-templates-em-ruby.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Biblioteca Tenjin para templates em Ruby"
+    data-url="https://paulohrpinheiro.xyz/texts/ruby/2017-01-09-biblioteca-tenjin-para-templates-em-ruby.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Biblioteca Tenjin para templates em Ruby"
+    data-url="https://paulohrpinheiro.xyz/texts/ruby/2017-01-09-biblioteca-tenjin-para-templates-em-ruby.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Biblioteca Tenjin para templates em Ruby"
+    data-url="https://paulohrpinheiro.xyz/texts/ruby/2017-01-09-biblioteca-tenjin-para-templates-em-ruby.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Biblioteca Tenjin para templates em Ruby"
+    data-url="https://paulohrpinheiro.xyz/texts/ruby/2017-01-09-biblioteca-tenjin-para-templates-em-ruby.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2017, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+</body>
+</html>

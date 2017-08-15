@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Testes funcionais em Rust</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Como fazer testes em Rust? Aqui segue uma forma, e algumas coisas que descobri sobre a linguagem.">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores e sysadmins</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Testes funcionais em Rust</h2>
+
+<h3>Como fazer testes em Rust? Aqui segue uma forma, e algumas coisas que descobri sobre a linguagem.</h3>
+
+<p><img src="images/rust.jpg" alt="Descrição"></p>
+
+<p>Aprendendo a programar em <a href="https://www.rust-lang.org">Rust</a>, uma coisa que chamou muito a minha atenção foi o esquema para geração de documentação a partir do próprio código fonte. Dentro disso, como gerar testes funcionais como parte da documentação. Tudo muito prático, tudo facilitando a escrita desses testes.</p>
+
+<p>A linguagem <em>Rust</em> tem <a href="https://doc.rust-lang.org/book/"><strong>O</strong> Livro</a>. Vamos começar pela parte que fala sobre <a href="https://doc.rust-lang.org/book/comments.html">Comentários</a>.</p>
+
+<p>Os comentários normais são feitos com <code class="prettyprint">//</code>, tanto em uma linha dedicada a isso como ao final de um comando. Começa a ficar interessante se usarmos <code class="prettyprint">///</code>, pois assim teremos suporte a <a href="https://daringfireball.net/projects/markdown/">Markdown</a>. Esse é o <em>Doc comment</em>. Há, por fim, uma variação, <code class="prettyprint">||!</code>, que serve para comentários gerais, por exemplo, descrever o que faz uma biblioteca.</p>
+
+<p>A diferença está em que <code class="prettyprint">///</code> se aplica ao código que segue imediatamente ao comentário, e <code class="prettyprint">//!</code> se aplica a todo o código de um arquivo, como se fosse um cabeçalho. E duas barras <code class="prettyprint">//</code> são os comentários específicos ao código, sem propósito de testes ou geração de documentação.</p>
+
+<p>E dentro dos comentários de documentação, podemos colocar trechos de código, seguindo o que o <em>markdown</em> nos permite:</p>
+<pre><code class="language-rust">
+&#x2F;&#x2F;&#x2F; A função `negue` deve receber um valor boleano (verdadeiro ou falso) e
+&#x2F;&#x2F;&#x2F; retornar a negação desse valor.
+&#x2F;&#x2F;&#x2F;
+&#x2F;&#x2F;&#x2F; # Examples
+&#x2F;&#x2F;&#x2F;
+&#x2F;&#x2F;&#x2F; ```
+&#x2F;&#x2F;&#x2F; extern crate rust;
+&#x2F;&#x2F;&#x2F; assert_eq!(true, rust::problems::negue(false));
+&#x2F;&#x2F;&#x2F; assert_eq!(false, rust::problems::negue(true));
+&#x2F;&#x2F;&#x2F; ```
+pub fn negue(value:bool) -&gt; bool {
+    !value
+}
+
+</code></pre>
+<blockquote>
+<p>O código acima faz parte de um projeto meu, o <a href="https://github.com/paulohrpinheiro/test-driven-learning">Test Driven Learning</a>. O código completo está em <a href="https://github.com/paulohrpinheiro/test-driven-learning/blob/solved/000_novice/rust/src/problems.rs">000_novice/rust</a>.</p>
+</blockquote>
+
+<p>Temos três elementos nesse comentário. Nas duas primeiras linhas, há o comentário descritivo. A seguir, um título na notação <em>markdown</em>, e por fim, o código, que está entre a marcação de código. Logo abaixo, a função.</p>
+
+<p>Esse código são os testes funcionais. A ferramenta de testes (função do sistema <a href="https://doc.rust-lang.org/book/getting-started.html#hello-cargo">cargo</a>), executará cada linha quando os testes forem executados. Note que se estiver escrevendo uma biblioteca, só será possível realizar os testes nas funções que forem públicas.</p>
+
+<p>Para executar os testes, executa-se o comando <code class="prettyprint">cargo test</code> na raiz do projeto:</p>
+
+<p><img src="images/run-tests.gif" alt="Executando os testes"></p>
+
+<p>E para gerar a documentação, basta executar o comando <code class="prettyprint">cargo doc --package NOME</code>, em que <em>NOME</em> é o que está definido no arquivo <code class="prettyprint">Cargo.toml</code>. Isso gerará todos os arquivos necessários (fontes, css, html, javascript, etc) necessários à apresentação. O <em>index</em> estará em <code class="prettyprint">doc/lib/index.html</code>.</p>
+
+<p><a href="https://paulohrpinheiro.github.io/arquivos/testes-funcionais-em-rust/lib/">Nesse link</a> está a saída para esse exemplo.</p>
+
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Testes funcionais em Rust"
+    data-url="https://paulohrpinheiro.xyz/texts/rust/2016-11-16-testes-funcionais-em-rust.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Testes funcionais em Rust"
+    data-url="https://paulohrpinheiro.xyz/texts/rust/2016-11-16-testes-funcionais-em-rust.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Testes funcionais em Rust"
+    data-url="https://paulohrpinheiro.xyz/texts/rust/2016-11-16-testes-funcionais-em-rust.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Testes funcionais em Rust"
+    data-url="https://paulohrpinheiro.xyz/texts/rust/2016-11-16-testes-funcionais-em-rust.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Testes funcionais em Rust"
+    data-url="https://paulohrpinheiro.xyz/texts/rust/2016-11-16-testes-funcionais-em-rust.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2017, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,192 @@
+<?xml version="1.0"?>
+
+<rss version="2.0">
+  <channel>
+    <title>Paulo Henrique Rodrigues Pinheiro</title>
+    <link>https://paulohrpinheiro.xyz</link>
+    <description>Blog sobre programação para programadores e sysadmins</description>
+    <language>pt-br</language>
+
+    <item>
+      <title>Data Science do Zero</title>
+      <link>https://paulohrpinheiro.xyz/texts/python/2017-07-23-data-science-do-zero.html</link>
+      <description>Um livro bem legal</description>
+      <pubDate>Sun, 23 Jul 2017 12:00:00 -0300</pubDate>
+    </item>
+    <item>
+      <title>Caipyra 2017</title>
+      <link>https://paulohrpinheiro.xyz/texts/python/2017-06-28-caipyra2017.html</link>
+      <description>Meu primeiro evento de Python</description>
+      <pubDate>Wed, 28 Jun 2017 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Ficando velho: carreira em TI e idade</title>
+      <link>https://paulohrpinheiro.xyz/texts/diversos/2017-06-11-ficando-velho-carreira-em-ti-e-idade.html</link>
+      <description>Sobre continuar na carreira em um cargo operacional, apesar da idade e experiência.</description>
+      <pubDate>Sun, 11 Jun 2017 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Reflexões geradas pelo livro &quot;Economia do Acesso&quot;</title>
+      <link>https://paulohrpinheiro.xyz/texts/diversos/2017-03-03-reflexões-geradas-pelo-livro-economia-doa-acesso.html</link>
+      <description>Minhas impressões geradas pelo livro &quot;Economia do Acesso&quot;, de Rodrigo Dantas, editado pela Casa do Código.</description>
+      <pubDate>Fri, 3 Mar 2017 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Meu &quot;hello world&quot; em Haskell</title>
+      <link>https://paulohrpinheiro.xyz/texts/haskell/2017-01-28-meu-hello-world-em-haskell.html</link>
+      <description>Para começar bem no Haskell, nada melhor que um &quot;Hello World&quot; firulento</description>
+      <pubDate>Sat, 28 Jan 2017 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Um tail -f desfalcado</title>
+      <link>https://paulohrpinheiro.xyz/texts/c/2017-01-19-um-tail-f-descalcado.html</link>
+      <description>Treinando com C para uma implementação pessoal do tail -f</description>
+      <pubDate>Thu, 19 Jan 2017 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Lazy evaluation em python com django</title>
+      <link>https://paulohrpinheiro.xyz/texts/python/2017-01-17-lazy-evaluation-em-python-com-django.html</link>
+      <description>Uma experiência frustrada tentando usar Lazy Evaluation no Python, com o framework Django.</description>
+      <pubDate>Tue, 17 Jan 2017 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>O pokerface nosso de cada dia</title>
+      <link>https://paulohrpinheiro.xyz/texts/diversos/2017-01-16-o-poker-face-nosso-de-cada-dia.html</link>
+      <description>Lembrando as humilhações ao longo da carreira</description>
+      <pubDate>Mon, 16 Jan 2017 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Gerablog, um modesto gerador de blog estático</title>
+      <link>https://paulohrpinheiro.xyz/texts/ruby/2017-01-15-gerablog-gerador-de-blog-estatico.html</link>
+      <description>Liberado no RubyGems o gerador de blog estático que uso para este blog: Gerablog.</description>
+      <pubDate>Sun, 15 Jan 2017 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Biblioteca Tenjin para templates em Ruby</title>
+      <link>https://paulohrpinheiro.xyz/texts/ruby/2017-01-09-biblioteca-tenjin-para-templates-em-ruby.html</link>
+      <description>Aprendendo e usando uma alternativa à biblioteca padrão ERB, no Ruby, para templates de texto</description>
+      <pubDate>Mon, 9 Jan 2017 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Anti-socializando nas redes</title>
+      <link>https://paulohrpinheiro.xyz/texts/programadorbipolar/2017-01-04-nadando-contra-a-corrente.html</link>
+      <description>Um pouco sobre como resolvi assumir minha anti-socialidade e não gastar tempo com certas redes sociais, além de vencer uma pesada depressão.</description>
+      <pubDate>Wed, 4 Jan 2017 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Saiu a nova versão do ruby-txt2tags</title>
+      <link>https://paulohrpinheiro.xyz/texts/ruby/2016-12-24-nova-versao-do-ruby-txt2tags.html</link>
+      <description>O que há de novo na versão 0.1.0 do ruby-txt2tags?</description>
+      <pubDate>Sat, 24 Dec 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Ruby e o deep copy</title>
+      <link>https://paulohrpinheiro.xyz/texts/ruby/2016-12-16-ruby-e-o-deep-copy.html</link>
+      <description>Uma quase alucinada busca de uma forma de fazer *deep copy* em *Ruby*, apenas por preguiça de copiar, e pra não ferir o orgulho e repetir código.</description>
+      <pubDate>Fri, 16 Dec 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Usando *strings* e `doctest` em *Python2* e *Python3* simultaneamente.</title>
+      <link>https://paulohrpinheiro.xyz/texts/python/2016-12-16-doctest-py2-e-py3.html</link>
+      <description>Usando strings de uma forma que funciona tanto no Python2 como no Python3, especialmente quando fazendo testes com `doctest`.</description>
+      <pubDate>Fri, 16 Dec 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Quase</title>
+      <link>https://paulohrpinheiro.xyz/texts/programadorbipolar/2016-12-15-quase.html</link>
+      <description>Procurei, encontrei...</description>
+      <pubDate>Thu, 15 Dec 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Refatorando um programa escrito em Rust — Primeira empreitada</title>
+      <link>https://paulohrpinheiro.xyz/texts/rust/2016-12-07-refatorando-download-primeira.html</link>
+      <description>Algumas coisas me chamaram a atenção em um recente texto, sobre como baixar arquivos remotos com Rust. Essas coisas despertaram uma imensa vontade de refatorar esse código.</description>
+      <pubDate>Wed, 7 Dec 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Uma aplicação Flask esquelética</title>
+      <link>https://paulohrpinheiro.xyz/texts/python/2016-11-30-flask-esqueletico.html</link>
+      <description>Configurando um servidor nginx para rodar uma aplicação Flask, precisei verificar se a conexão WSGI estava funcionando, e mais que isso, que uma aplicação *Flask* funcionaria. Para isso adaptei uma aplicação mínima, mas bem compartimentada, apenas com esse objetivo.</description>
+      <pubDate>Wed, 30 Nov 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Rust Pills — Download de arquivos</title>
+      <link>https://paulohrpinheiro.xyz/texts/rust/2016-11-21-download-arquivos.html</link>
+      <description>Mais um crawler está surgindo na praça. Decidi fazer em Rust, só pra exercitar. Por agora a tarefa aqui é simples: dada um lista de URLs, baixa-se o conteúdo de todas e salva-se localmente. Bora construir isso.</description>
+      <pubDate>Mon, 21 Nov 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Lidando com erros em Rust</title>
+      <link>https://paulohrpinheiro.xyz/texts/rust/2016-11-17-lidando-com-erros-em-rust.html</link>
+      <description>Como retornar de funções em Rust valores e status.</description>
+      <pubDate>Thu, 17 Nov 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Testes funcionais em Rust</title>
+      <link>https://paulohrpinheiro.xyz/texts/rust/2016-11-16-testes-funcionais-em-rust.html</link>
+      <description>Como fazer testes em Rust? Aqui segue uma forma, e algumas coisas que descobri sobre a linguagem.</description>
+      <pubDate>Wed, 16 Nov 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Iniciando no Ruby</title>
+      <link>https://paulohrpinheiro.xyz/texts/ruby/2016-11-08-iniciando-no-ruby.html</link>
+      <description>Antes de sair por aí programando e instalando *gems* como um doido, convém habituar-se a preparar o ambiente para cada novo projeto.</description>
+      <pubDate>Tue, 8 Nov 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Começando em JavaScript</title>
+      <link>https://paulohrpinheiro.xyz/texts/javascript/2016-11-05-comecando-em-javascript.html</link>
+      <description>Até altero algum código em *JavaScript*, mas nunca aprendi de fato. Aqui vão algumas experiências, de um pequeno projeto que fiz em *JavaScript*, sem saber nada dele.</description>
+      <pubDate>Sat, 5 Nov 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Colaborando no github</title>
+      <link>https://paulohrpinheiro.xyz/texts/diversos/2016-11-03-colaborando-no-github.html</link>
+      <description>Uma interessante experiência no mundo do Software Livre.</description>
+      <pubDate>Thu, 3 Nov 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Blogando no github</title>
+      <link>https://paulohrpinheiro.xyz/texts/diversos/2016-10-20-blogando-no-github.html</link>
+      <description>Qual a forma mais rápida e com menos dependências de montar um blog usando o github? Essa era uma dúvida que me acompanhava por um bom tempo. Hoje falarei sobre como sanei essa dúvida.</description>
+      <pubDate>Thu, 20 Oct 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Nota sobre o livro Test-Driven Development: Teste e Design no Mundo Real com Ruby</title>
+      <link>https://paulohrpinheiro.xyz/texts/ruby/2016-10-05-test-driven-development.html</link>
+      <description>Divulgando um livro que acabei de ler e que achei legal pra caramba!</description>
+      <pubDate>Wed, 5 Oct 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Presente de Deus</title>
+      <link>https://paulohrpinheiro.xyz/texts/prosaeverso/2016-07-19-presente-de-deus.html</link>
+      <description>Salamalaia</description>
+      <pubDate>Tue, 19 Jul 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Intolerancia</title>
+      <link>https://paulohrpinheiro.xyz/texts/prosaeverso/2016-06-28-intolerancia.html</link>
+      <description>Salamalaia</description>
+      <pubDate>Tue, 28 Jun 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Sete meses...</title>
+      <link>https://paulohrpinheiro.xyz/texts/programadorbipolar/2016-05-31-sete-meses.html</link>
+      <description>Sete meses de incapacidade...</description>
+      <pubDate>Tue, 31 May 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>A marcha do tempo</title>
+      <link>https://paulohrpinheiro.xyz/texts/programadorbipolar/2016-05-23-a-marcha-do-tempo.html</link>
+      <description>É sem volta...</description>
+      <pubDate>Mon, 23 May 2016 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Hibernando</title>
+      <link>https://paulohrpinheiro.xyz/texts/programadorbipolar/2016-05-16-hibernando.html</link>
+      <description>É assim que funciona...</description>
+      <pubDate>Mon, 16 May 2016 00:00:00 +0000</pubDate>
+    </item>
+
+  </channel>
+</rss>

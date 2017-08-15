@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Data Science do Zero</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Um livro bem legal">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores e sysadmins</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Data Science do Zero</h2>
+
+<h3>Um livro bem legal</h3>
+
+<p><img src="images/ds_from_0.jpg" alt="Capa do livro Data Science do Zero"></p>
+
+<blockquote>
+<p>Organizando um projeto a partir dos exemplos contidos no livro Data Science do Zero.</p>
+</blockquote>
+
+<h4>Um interesse</h4>
+
+<p>Sou um quase matemático (abandonei os estudos no último ano), que ama programar. Após abandonar a faculdade de Matemática, estabeleci-me como um profissional de TI, mas sempre dando uma olhadinha nas coisas específicas à matemática, com um ar saudosista. Recentemente decidi que essa é uma meta maior em minha vida, unir programação e matemática.</p>
+
+<p>Mas os conhecimentos de matemática eu perdi, por isso precisava encontrar um caminho para recomeçar. O que voltar a estudar? E assim achei esse livro, <a href="http://www.altabooks.com.br/data-science-do-zero.html"><em>Data Science do Zero</em></a>, no Brasil editado pela Alta Books.</p>
+
+<p>O autor, <a href="http://joelgrus.com/">Joel Grus</a>, se propõe a apresentar, de maneira mais rasa, os algoritmos e instrumental matemático básicos necessários à entrada no mundo do <em>data science</em>. E isso não é ruim, pois é uma primeira abordagem, com mãos na massa, que permite aprofundar os conhecimentos necessários numa segunda etapa.</p>
+
+<h4>Empacado</h4>
+
+<p>Comecei a ler o livro, que tem um capítulo dedicado a introduzir a linguagem Python, que me foi bem útil também. É sempre bom rever os fundamentos!</p>
+
+<p>Mas a cada exemplo dado no livro, eu empacava tentando chegar aos resultados apresentados de outra forma. Isso me rendeu algumas boas experiências, mas não me permitiu seguir em frente...</p>
+
+<p>Foi aí que decidi escrever uma &quot;classinha&quot; e uns &quot;téstinhos&quot;.</p>
+
+<p>Disso para a ideia de registrar e compartilhar meus progressos nessa empreitada, foi rapidinho.</p>
+
+<h4>Ampliando horizontes</h4>
+
+<p>Mas estou estudando outros dois livros de Python, que estão sendo úteis nessa caminhada. O primeiro, é do <a href="https://twitter.com/ramalhoorg">Luciano Ramalho</a>, o <a href="https://novatec.com.br/livros/pythonfluente/">Python Fluente</a>, e o outro é <a href="https://novatec.com.br/livros/padroes-projeto-python/">Aprendendo padrões de projeto em Python</a>, de <a href="https://twitter.com/cjgiridhar">Chetan Giridhar</a>.</p>
+
+<p>Eu aprendo efetivamente se me dedico a algo prático, então pensei que poderia ampliar meus conhecimentos nessas três frentes, ao mesmo tempo, servindo ao meu objetivo maior de conhecer <em>data science</em>.</p>
+
+<h4>O projeto</h4>
+
+<p>O projeto está no meu <a href="https://github.com/paulohrpinheiro/ds_from_0">GitHub</a>, e vou usar <em>tags</em> para cada novo texto que eu publicar. Para esse texto, a <em>tag</em> será <a href="https://github.com/paulohrpinheiro/ds_from_0/tree/001_beginning">001_beginning</a>.</p>
+
+<p>Para os testes, decidi que o melhor era pegar os dados apresentados no livro como <em>fixtures</em>, e usar os exemplos como casos de teste. Se eu chegar aos mesmos resultados do livro, minha implementação está correta, em relação às respostas.</p>
+
+<h4>Classe User</h4>
+
+<p>Nesse começo, temos uma classe <em>User</em>, responsável por armazenar os usuários e seus relacionamentos de amizade (mudaremos isso? aguardem!):</p>
+<pre><code class="language-python">
+from collections import UserList
+
+
+class User(UserList):
+    &quot;&quot;&quot;Users data store.&quot;&quot;&quot;
+
+    def __init__(self, *args):
+        &quot;&quot;&quot;Init data with args or with a empty list.&quot;&quot;&quot;
+        if args is not None:
+            self.data = list(args)
+        else:
+            self.data = list()
+
+        self.friendships = list()
+
+    def make_friend(self, user, friend):
+        &quot;&quot;&quot;Register a new friendship.&quot;&quot;&quot;
+        self.friendships.append({&#x27;user&#x27;: user, &#x27;friend&#x27;: friend})
+        self.friendships.append({&#x27;user&#x27;: friend, &#x27;friend&#x27;: user})
+
+    def friends(self, user_id):
+        &quot;&quot;&quot;Returns a friends list for a given user.&quot;&quot;&quot;
+        return [x[1] for x in self.friendships if x[0] == user_id]
+
+</code></pre>
+<p>A função <code class="prettyprint">make_friend</code> registra as amizades da rede social. Se eu sou amigo de alguém, esse alguém é amigo meu. Por isso o registro duplo, para facilitar as pesquisas. E a <code class="prettyprint">friends</code> retorna uma lista com os <code class="prettyprint">ids</code> dos amigos.</p>
+
+<p>E na função <code class="prettyprint">__init__</code> temos um código necessário pra uma boa implementação da herança de <code class="prettyprint">collections.UserList</code>. Descobri essa maravilha a partir do Ramalho, lendo sobre <code class="prettyprint">UserDict</code>. Com ela, ao invés de codificar uma classe que contenha a lista e me preocupar com o gerenciamento dos elementos, apenas herdo e construo as funcionalidades adicionais.</p>
+
+<h4>Fixtures</h4>
+
+<p>Estou usando para os testes os dados apresentados no livro. Em <code class="prettyprint">fixtures/</code> temos dois arquivos em <em>JSON</em>: <code class="prettyprint">user.json</code> para os usuários e <code class="prettyprint">friendship.json</code> para as relações de amizade.</p>
+
+<p>Para carregá-los, uso a biblioteca padrão <a href="https://docs.python.org/3/library/json.html">json</a> do Python.</p>
+
+<h4>Testes</h4>
+
+<p>Eles dependem das <code class="prettyprint">fixtures</code> abordadas agora há pouco.</p>
+
+<p>Há, no diretório <code class="prettyprint">tests/</code>, o arquivo <code class="prettyprint">helper_test.py</code>, responsável por carregar as <em>fixtures</em>:</p>
+<pre><code class="language-python">
+import json
+
+
+class Fixtures:
+    def read_json_file(cls, filename):
+        with open(filename) as fp:
+            return json.load(fp)
+
+    def __new__(cls):
+        if not hasattr(cls, &#x27;instance&#x27;):
+            cls.instance = super().__new__(cls)
+
+        return cls.instance
+
+    def __init__(self):
+        if not hasattr(self, &#x27;users&#x27;):
+            self.users = self.read_json_file(&#x27;fixtures&#x2F;user.json&#x27;)
+
+        if not hasattr(self, &#x27;friendships&#x27;):
+            self.friendships = self.read_json_file(
+                &#x27;fixtures&#x2F;friendship.json&#x27;
+                )
+
+</code></pre>
+<p>Aqui, seguindo o que aprendi no livro de <em>patterns</em>, criei uma classe do tipo <code class="prettyprint">singleton</code>. Dessa forma, os arquivos são lidos uma única vez, e uma única instância da classe <code class="prettyprint">Fixtures</code> é criada. Vamos economizar recursos!</p>
+
+<p>Para executá-los, basta um:</p>
+<pre><code class="language-python">
+python3 -m unittest tests&#x2F;test_*.py
+
+</code></pre>
+<h4>Concluindo</h4>
+
+<p>Esse projeto, agora, reflete as primeiras páginas do livro, com as primeiras informações que nosso personagem, um cientista de dados em seu primeiro dia de trabalho, recebe. Mais problemas virão, e nosso herói irá resolvê-los, e nós seguiremos aprendendo.</p>
+
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Data Science do Zero"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2017-07-23-data-science-do-zero.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Data Science do Zero"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2017-07-23-data-science-do-zero.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Data Science do Zero"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2017-07-23-data-science-do-zero.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Data Science do Zero"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2017-07-23-data-science-do-zero.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Data Science do Zero"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2017-07-23-data-science-do-zero.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2017, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+</body>
+</html>
