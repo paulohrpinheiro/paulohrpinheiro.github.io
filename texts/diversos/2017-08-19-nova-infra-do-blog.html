@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Nova infra desse Blog</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Nesse texto explico o que mudou na infraestrutura do blog.">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores e sysadmins</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Nova infra desse Blog</h2>
+
+<h3>Nesse texto explico o que mudou na infraestrutura do blog.</h3>
+
+<p><img src="images/eniac.jpg" alt="O bom e velho Eniac!"></p>
+
+<h3>Motivação</h3>
+
+<p>Esse blog já passou por algumas mudanças, de visual, de infraestrutura, de sistema usado. Em geral, curiosidade e falta do que fazer ou um estado mental de profunda compulsão.</p>
+
+<p>Dessa vez, o motivo foi financeiro. Estava para pagar a conta do VPS em que o blog era hospedado (sim, eu configurei meu próprio NginX, com as melhores e mais seguras e mais performáticas opções, um velho vício).</p>
+
+<p>Aí pensei, caramba, ninguém lê esse blog, ele só serve para que eu conheça os bots mais ativos da Internet, e para que eu registre e fixe em minha cabeça as coisas que vou descobrindo.</p>
+
+<p>Eu posso ter isso sem pagar nada! E o que é mais importante, de forma melhor.</p>
+
+<h3>Escolha</h3>
+
+<p>Eu já tinha usado o github de duas formas: criando página e usando a renderização de arquivos Markdown no próprio repositório mesmo. Ficava bonitinho, e era fácil de alterar. Comitava, tava valendo.</p>
+
+<p>Mas o GitHub Pages tem um problema. Para domínios próprios, não há HTTPS. Que vergonha, no final de 2017, fazer algo em HTTP... Na verdade, minha preocupação é o Google ficar brabo, e não me ranquear devidamente.</p>
+
+<p>Pesquisei um pouco e encontrei <a href="https://blog.cloudflare.com/secure-and-fast-github-pages-with-cloudflare/">um texto sugerindo e explicando uma forma de ter GitHub Pages, HTTPS e domínio próprio</a>.</p>
+
+<p>Enfim, o CloudFlare e o GitHub Pages se entendem, e eu não tenho mais que me preocupar em cada três meses renovar o certificado da <a href="https://letsencrypt.org/">LetsEncrypt</a>.</p>
+
+<h3>Implementação</h3>
+
+<p>Em uns 20 minutos, fiz toda a migração do blog, incluindo DNS, além da inclusão do site em um sistema de monitoramento de tráfego. Ainda não decidi com qual vou ficar, estou testando dois:</p>
+
+<ul>
+<li><a href="https://clicky.com">https://clicky.com</a></li>
+<li><a href="https://statcounter.com">https://statcounter.com</a></li>
+</ul>
+
+<p>O Google Analytics é um canhão para mim, só preciso saber que páginas são acessadas e por quais caminhos chegam ao meu blog.</p>
+
+<p>E tudo isso só é possível por eu estar usando um gerador de blog estático, o sensacional e caótico <a href="https://paulohrpinheiro.xyz/texts/ruby/2017-01-15-gerablog-gerador-de-blog-estatico.html">GeraBlog</a>, escrito por mim como uma forma de me iniciar em Ruby.</p>
+
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Nova infra desse Blog"
+    data-url="https://paulohrpinheiro.xyz/texts/diversos/2017-08-19-nova-infra-do-blog.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Nova infra desse Blog"
+    data-url="https://paulohrpinheiro.xyz/texts/diversos/2017-08-19-nova-infra-do-blog.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Nova infra desse Blog"
+    data-url="https://paulohrpinheiro.xyz/texts/diversos/2017-08-19-nova-infra-do-blog.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Nova infra desse Blog"
+    data-url="https://paulohrpinheiro.xyz/texts/diversos/2017-08-19-nova-infra-do-blog.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Nova infra desse Blog"
+    data-url="https://paulohrpinheiro.xyz/texts/diversos/2017-08-19-nova-infra-do-blog.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2017, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+<a title="Web Analytics" href="http://clicky.com/101066960"><img alt="Web Analytics" src="//static.getclicky.com/media/links/badge.gif" border="0" /></a>
+<script src="//static.getclicky.com/js" type="text/javascript"></script>
+<script type="text/javascript">try{ clicky.init(101066960); }catch(e){}</script>
+<noscript><p><img alt="Clicky" width="1" height="1" src="//in.getclicky.com/101066960ns.gif" /></p></noscript>
+
+<!-- Start of StatCounter Code for Default Guide -->
+<script type="text/javascript">
+var sc_project=11424422; 
+var sc_invisible=1; 
+var sc_security="182eb83e"; 
+var scJsHost = (("https:" == document.location.protocol) ?
+"https://secure." : "http://www.");
+document.write("<sc"+"ript type='text/javascript' src='" +
+scJsHost+
+"statcounter.com/counter/counter.js'></"+"script>");
+</script>
+<noscript><div class="statcounter"><a title="web statistics"
+href="http://statcounter.com/" target="_blank"><img
+class="statcounter"
+src="//c.statcounter.com/11424422/0/182eb83e/1/" alt="web
+statistics"></a></div></noscript>
+<!-- End of StatCounter Code for Default Guide -->
+
+</body>
+</html>
