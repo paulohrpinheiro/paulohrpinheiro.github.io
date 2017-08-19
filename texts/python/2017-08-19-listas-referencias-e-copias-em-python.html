@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Listas, referências e cópias em Python</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Um erro bem comum (pelo menos pra mim), lidando com listas em Python">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores e sysadmins</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Listas, referências e cópias em Python</h2>
+
+<h3>Um erro bem comum (pelo menos pra mim), lidando com listas em Python</h3>
+
+<p><img src="images/piada.jpg" alt="Capa do livro Data Science do Zero"></p>
+
+<h4>Uma ideia linda mas com resultados adversos</h4>
+
+<p>Eu, me sentindo o gênio do Python, resolvo usar uma forma de inicialização de matriz bem bonitinha:</p>
+<pre><code class="language-python">
+➜  ipython
+Python 3.6.2 (default, Aug  5 2017, 23:01:38) 
+Type &#x27;copyright&#x27;, &#x27;credits&#x27; or &#x27;license&#x27; for more information
+IPython 6.1.0 -- An enhanced Interactive Python. Type &#x27;?&#x27; for help.
+
+In [1]: matrix = [[&#x27;O&#x27;] * 3] * 4
+
+In [2]: matrix
+Out[2]: [[&#x27;O&#x27;, &#x27;O&#x27;, &#x27;O&#x27;], [&#x27;O&#x27;, &#x27;O&#x27;, &#x27;O&#x27;], [&#x27;O&#x27;, &#x27;O&#x27;, &#x27;O&#x27;], [&#x27;O&#x27;, &#x27;O&#x27;, &#x27;O&#x27;]]
+
+In [3]: matrix[3][2] = &#x27;A&#x27;
+
+In [4]: matrix
+Out[4]: [[&#x27;O&#x27;, &#x27;O&#x27;, &#x27;A&#x27;], [&#x27;O&#x27;, &#x27;O&#x27;, &#x27;A&#x27;], [&#x27;O&#x27;, &#x27;O&#x27;, &#x27;A&#x27;], [&#x27;O&#x27;, &#x27;O&#x27;, &#x27;A&#x27;]]
+
+</code></pre>
+<p>Perceberam? As quatro linhas da matriz tiveram seu terceiro elemento alterado. Eu descobri isso numa prova que estava fazendo, cansado já, implementando os últimos requisitos, num teste de unidade. E, claro, demorou para eu perceber essa obviedade.</p>
+
+<p>Lendo o comando que cria a matriz, poderia-se traduzi-lo para português, mais ou menos assim:</p>
+
+<blockquote>
+<p>Crie uma lista de três elementos &quot;O&quot;, e armazene quatro cópias dela em outra lista.</p>
+</blockquote>
+
+<p>Aí que está o problema. O Python, obediente, fez o que mandei. Vamos dar uma inspecionada no resultado:</p>
+<pre><code class="language-python">
+In [5]: [id(x) for x in matrix]
+Out[5]: [140365740409672, 140365740409672, 140365740409672, 140365740409672]
+
+</code></pre>
+<p>Está aí a prova. Criada uma lista, a referência a ela foi repetida.</p>
+
+<p>Uma forma de resolver? Ah, eu já tinha lido sobre isso, mas claro, ficou perdido na memória. O texto <a href="https://paulohrpinheiro.xyz/texts/python/2015-02-23-tuplas-mutantes.html">Tuplas mutantes em Python, do Luciano Ramalho</a>, explica bem isso.</p>
+
+<p>Então, o nosso problema é criar uma lista 4 vezes, ou melhor dito, criar quatro listas, o que podemos traduzir em python como:</p>
+<pre><code class="language-python">
+In [12]: matrix = [[&#x27;O&#x27;] * 3 for x in range(4)]
+
+In [13]: matrix
+Out[13]: [[&#x27;O&#x27;, &#x27;O&#x27;, &#x27;O&#x27;], [&#x27;O&#x27;, &#x27;O&#x27;, &#x27;O&#x27;], [&#x27;O&#x27;, &#x27;O&#x27;, &#x27;O&#x27;], [&#x27;O&#x27;, &#x27;O&#x27;, &#x27;O&#x27;]]
+
+In [14]: [id(x) for x in matrix]
+Out[14]: [140365740472520, 140365751981000, 140365740750408, 140365740637064]
+
+In [15]: matrix[3][2] = &#x27;A&#x27;
+
+In [16]: matrix
+Out[16]: [[&#x27;O&#x27;, &#x27;O&#x27;, &#x27;O&#x27;], [&#x27;O&#x27;, &#x27;O&#x27;, &#x27;O&#x27;], [&#x27;O&#x27;, &#x27;O&#x27;, &#x27;O&#x27;], [&#x27;O&#x27;, &#x27;O&#x27;, &#x27;A&#x27;]]
+
+</code></pre>
+<p>Ou, otimizando um pouco:</p>
+<pre><code class="language-python">
+In [17]: line = [&#x27;O&#x27;] * 3
+
+In [18]: matrix = [list(line) for x in range(4)]
+
+In [19]: [id(x) for x in matrix]
+Out[19]: [140365752100936, 140365752653384, 140365752654664, 140365752655240]
+
+</code></pre>
+<p>Usei <code class="prettyprint">list</code> aqui, porque ele inicializa um novo objeto a cada chamada, garantindo que não lidaremos com referências a um único.</p>
+
+<p>E pra finalizar, será que isso é mesmo uma otimização?</p>
+
+<p>Primeiro, organizemos melhor o código para as experiências seguintes:</p>
+<pre><code class="language-python">
+In [50]: def pre_line(): return [list(line) for x in range(4)]
+
+In [51]: def in_line(): return [[&#x27;O&#x27;] * 3 for x in range(4)]
+
+In [52]: pre_line()
+Out[52]: [[&#x27;O&#x27;, &#x27;O&#x27;, &#x27;O&#x27;], [&#x27;O&#x27;, &#x27;O&#x27;, &#x27;O&#x27;], [&#x27;O&#x27;, &#x27;O&#x27;, &#x27;O&#x27;], [&#x27;O&#x27;, &#x27;O&#x27;, &#x27;O&#x27;]]
+
+In [53]: in_line()
+Out[53]: [[&#x27;O&#x27;, &#x27;O&#x27;, &#x27;O&#x27;], [&#x27;O&#x27;, &#x27;O&#x27;, &#x27;O&#x27;], [&#x27;O&#x27;, &#x27;O&#x27;, &#x27;O&#x27;], [&#x27;O&#x27;, &#x27;O&#x27;, &#x27;O&#x27;]]
+
+</code></pre>
+<p>Vamos ver com o <a href="https://docs.python.org/3/library/timeit.html">módulo <code class="prettyprint">timeit</code></a>:</p>
+<pre><code class="language-python">
+In [29]: from timeit import timeit
+
+In [30]: times = 1000000
+
+In [54]: timeit(in_line, number=times)
+Out[54]: 1.8307351850089617
+
+In [55]: timeit(pre_line, number=times)
+Out[55]: 2.4262633040198125
+
+</code></pre>
+<p>Eu pensei que fosse, mas pelo visto não é. Mas qual a razão? Vejamos.</p>
+
+<p>Primeiro com a otimização:</p>
+<pre><code class="language-python">
+In [68]: cProfile.run(&#x27;pre_line()&#x27;)
+         5 function calls in 0.000 seconds
+
+   Ordered by: standard name
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.000    0.000 &lt;ipython-input-66-4ae8eb4f3808&gt;:1(&lt;listcomp&gt;)
+        1    0.000    0.000    0.000    0.000 &lt;ipython-input-66-4ae8eb4f3808&gt;:1(pre_line)
+        1    0.000    0.000    0.000    0.000 &lt;string&gt;:1(&lt;module&gt;)
+        1    0.000    0.000    0.000    0.000 {built-in method builtins.exec}
+        1    0.000    0.000    0.000    0.000 {method &#x27;disable&#x27; of &#x27;_lsprof.Profiler&#x27; objects}
+
+</code></pre>
+<p>Agora sem a otimização:</p>
+<pre><code class="language-python">
+In [69]: cProfile.run(&#x27;in_line()&#x27;)
+         5 function calls in 0.000 seconds
+
+   Ordered by: standard name
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.000    0.000 &lt;ipython-input-67-b4163c10d5c0&gt;:1(&lt;listcomp&gt;)
+        1    0.000    0.000    0.000    0.000 &lt;ipython-input-67-b4163c10d5c0&gt;:1(in_line)
+        1    0.000    0.000    0.000    0.000 &lt;string&gt;:1(&lt;module&gt;)
+        1    0.000    0.000    0.000    0.000 {built-in method builtins.exec}
+        1    0.000    0.000    0.000    0.000 {method &#x27;disable&#x27; of &#x27;_lsprof.Profiler&#x27; objects}
+
+</code></pre>
+<p>Putz, nenhuma informação...</p>
+
+<p>Então, vamos ver se o problema é mesmo o uso do <code class="prettyprint">list</code>:</p>
+<pre><code class="language-python">
+In [70]: def run_line(): return list(line)
+
+In [71]: def run_mult(): return [&#x27;O&#x27;] * 3
+
+In [72]: timeit(run_line, number=times)
+Out[72]: 0.4813398620171938
+
+In [73]: timeit(run_mult, number=times)
+Out[73]: 0.3437652220018208
+
+</code></pre>
+<p>De fato, o uso do <code class="prettyprint">list</code> é a forma mais lenta. Alguém aí ajuda a encontrar uma resposta?</p>
+
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Listas, referências e cópias em Python"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2017-08-19-listas-referencias-e-copias-em-python.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Listas, referências e cópias em Python"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2017-08-19-listas-referencias-e-copias-em-python.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Listas, referências e cópias em Python"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2017-08-19-listas-referencias-e-copias-em-python.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Listas, referências e cópias em Python"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2017-08-19-listas-referencias-e-copias-em-python.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Listas, referências e cópias em Python"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2017-08-19-listas-referencias-e-copias-em-python.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2017, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+<!-- Start of StatCounter Code for Default Guide -->
+<script type="text/javascript">
+var sc_project=11424422; 
+var sc_invisible=1; 
+var sc_security="182eb83e"; 
+var scJsHost = (("https:" == document.location.protocol) ?
+"https://secure." : "http://www.");
+document.write("<sc"+"ript type='text/javascript' src='" +
+scJsHost+
+"statcounter.com/counter/counter.js'></"+"script>");
+</script>
+<noscript><div class="statcounter"><a title="web statistics"
+href="http://statcounter.com/" target="_blank"><img
+class="statcounter"
+src="//c.statcounter.com/11424422/0/182eb83e/1/" alt="web
+statistics"></a></div></noscript>
+<!-- End of StatCounter Code for Default Guide -->
+
+</body>
+</html>
