@@ -8,15 +8,27 @@
     <language>pt-br</language>
 
     <item>
-      <title>Listas, referências e cópias em Python</title>
-      <link>https://paulohrpinheiro.xyz/texts/python/2017-08-19-listas-referencias-e-copias-em-python.html</link>
-      <description>Um erro bem comum (pelo menos pra mim), lidando com listas em Python</description>
-      <pubDate>Sat, 19 Aug 2017 18:52:00 -0300</pubDate>
+      <title>Iniciando em GOLANG (GO) e BrainFuck</title>
+      <link>https://paulohrpinheiro.xyz/texts/go/2017-11-02-iniciando-em-go-e-em-brainfuck.html</link>
+      <description>Fiz um test-drive em GO, e para isso aprendi um pouco de BrainFuck</description>
+      <pubDate>Thu, 2 Nov 2017 19:50:00 +0200</pubDate>
+    </item>
+    <item>
+      <title>Intercon 2017</title>
+      <link>https://paulohrpinheiro.xyz/texts/diversos/2017-10-24-intercom-2017.html</link>
+      <description>Palestras legais que vi na Intercon 2017.</description>
+      <pubDate>Tue, 24 Oct 2017 00:00:00 +0000</pubDate>
     </item>
     <item>
       <title>Nova infra desse Blog</title>
       <link>https://paulohrpinheiro.xyz/texts/diversos/2017-08-19-nova-infra-do-blog.html</link>
       <description>Nesse texto explico o que mudou na infraestrutura do blog.</description>
+      <pubDate>Sat, 19 Aug 2017 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Listas, referências e cópias em Python</title>
+      <link>https://paulohrpinheiro.xyz/texts/python/2017-08-19-listas-referencias-e-copias-em-python.html</link>
+      <description>Um erro bem comum (pelo menos pra mim), lidando com listas em Python</description>
       <pubDate>Sat, 19 Aug 2017 00:00:00 +0000</pubDate>
     </item>
     <item>
@@ -174,18 +186,6 @@
       <link>https://paulohrpinheiro.xyz/texts/prosaeverso/2016-07-19-presente-de-deus.html</link>
       <description>Salamalaia</description>
       <pubDate>Tue, 19 Jul 2016 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Intolerancia</title>
-      <link>https://paulohrpinheiro.xyz/texts/prosaeverso/2016-06-28-intolerancia.html</link>
-      <description>Salamalaia</description>
-      <pubDate>Tue, 28 Jun 2016 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Sete meses...</title>
-      <link>https://paulohrpinheiro.xyz/texts/programadorbipolar/2016-05-31-sete-meses.html</link>
-      <description>Sete meses de incapacidade...</description>
-      <pubDate>Tue, 31 May 2016 00:00:00 +0000</pubDate>
     </item>
 
   </channel>

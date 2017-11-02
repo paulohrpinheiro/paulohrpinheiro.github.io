@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Iniciando em GOLANG (GO) e BrainFuck</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Fiz um test-drive em GO, e para isso aprendi um pouco de BrainFuck">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores e sysadmins</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/go/">
+        go
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Iniciando em GOLANG (GO) e BrainFuck</h2>
+
+<h3>Fiz um test-drive em GO, e para isso aprendi um pouco de BrainFuck</h3>
+
+<p><img src="images/gopher.png" alt="Gopher"></p>
+
+<h4>Outra linguagem para aprender</h4>
+
+<p>Há alguns anos ouço falar em GO. Especialmente por atualmente ter Python como principal linguagem para sobreviver, chega a mim muito material sobre GO através da comunidade Python.</p>
+
+<p>Embora prático, eficiente e com um mercado de trabalho bem abrangente, o mundo das linguagens dinâmicas não me apetece mais como antes. Por isso, estava ensaiando uma volta à programação C, e com isso, cheguei ao Rust.</p>
+
+<p>Mas, embora sendo nada de mais grave, também me incomoda na comunidade Rust o fato de muita coisa ainda depender do compilador gerado no dia, com o que tem na <code class="prettyprint">master</code>, os nightly builds.</p>
+
+<p>Enfim, quero compilar as coisas, não quero ter que instalar ambientes virtuais e ficar instalando dependências a cada deploy, alem é claro, de ter ferramentas estáveis e com uma abrangente biblioteca padrão.</p>
+
+<p>Mas eis que esses dias percebi um pequeno detalhe sobre a linguagem GO. Um de seus idealizadores é nada mais nada menos que Ken Thompson, um dos mentores do UNIX, e da linguagem precursora do C, entre outras coisas.</p>
+
+<p>Pois é, tive que ceder a esse &quot;apelo à autoridade&quot;, e gostei.</p>
+
+<p>E cá estou eu tentando entender como é a linguagem.</p>
+
+<p>Pensando no que fazer pra estudá-la, lembrei do BrainFuck. Inspirei-me nela e implementei um conjunto reduzido de seus comandos (a linguagem original tem 8).</p>
+
+<p>Assim ficou o meu primeiro programa em GO:</p>
+<pre><code class="language-go">
+package main
+
+import (
+    &quot;bufio&quot;
+    &quot;fmt&quot;
+    &quot;log&quot;
+    &quot;os&quot;
+)
+
+type Language struct {
+    source []rune
+    tokens map[rune]func(*Language)
+    memory [100]int
+    pos    int
+}
+
+func (l *Language) Execute() {
+    for _, token := range l.source {
+        if function, ok := l.tokens[token]; ok {
+            function(l)
+        } else {
+            log.Fatalf(&quot;Invalid token [%c]\n&quot;, token)
+        }
+    }
+}
+
+func (l *Language) AddToken(t rune, f func(*Language)) {
+    if l.tokens == nil {
+        l.tokens = make(map[rune]func(*Language))
+    }
+
+    l.tokens[t] = f
+}
+
+func (l *Language) AddToSource(line string) {
+    for _, c := range line {
+        if _, ok := l.tokens[c]; ok {
+            l.source = append(l.source, c)
+        }
+    }
+}
+
+func main() {
+    var program Language
+
+    var tokens = map[rune]func(*Language){
+        &#x27;&gt;&#x27;: func(l *Language) { l.pos++ },
+        &#x27;&lt;&#x27;: func(l *Language) { l.pos-- },
+        &#x27;+&#x27;: func(l *Language) { l.memory[l.pos]++ },
+        &#x27;-&#x27;: func(l *Language) { l.memory[l.pos]-- },
+        &#x27;.&#x27;: func(l *Language) { fmt.Println(l.memory[l.pos]) },
+    }
+
+    for t, f := range tokens {
+        (&amp;program).AddToken(t, f)
+    }
+
+    scanner := bufio.NewScanner(os.Stdin)
+    for scanner.Scan() {
+        line := scanner.Text()
+        (&amp;program).AddToSource(line)
+    }
+
+    (&amp;program).Execute()
+}
+
+</code></pre>
+<p>Vamos aos detalhes desse código.</p>
+
+<h4>Cabeçalho</h4>
+
+<p>A primeiro linha - <code class="prettyprint">package main</code> - declara o nome do pacote. O nome <code class="prettyprint">main</code> é especial, e deve ser usado quando estamos trabalhando em um arquivo único ou em um arquivo que será um executável.</p>
+
+<h4>Pacotes</h4>
+
+<p>Logo tem-se a listagem dos pacotes usados no programa:</p>
+<pre><code class="language-go">
+import (
+    &quot;bufio&quot;
+    &quot;fmt&quot;
+    &quot;log&quot;
+    &quot;os&quot;
+)
+
+</code></pre>
+<ul>
+<li><code class="prettyprint">bufio</code>
+<a href="https://golang.org/pkg/bufio/">Buferização e atalhos para I/o textual.</a></li>
+<li><code class="prettyprint">fmt</code>
+<a href="https://golang.org/pkg/fmt">Entrada e saída formatadas.</a></li>
+<li><code class="prettyprint">log</code>
+<a href="https://golang.org/pkg/log/">Log básico.</a></li>
+<li><code class="prettyprint">os</code>
+<a href="https://golang.org/pkg/os/">Serviços do sistema operacional independentes da plataforma.</a></li>
+</ul>
+
+<p>Se fosse necessário apenas um pacote, poderia-se importá-lo como, por exemplo, em <code class="prettyprint">import &quot;fmt&quot;</code>.</p>
+
+<h4>Um tipo que define uma estrutura</h4>
+<pre><code class="language-go">
+type Language struct {
+    source []rune
+    tokens map[rune]func(*Language)
+    memory [100]int
+    pos    int
+}
+
+</code></pre>
+<p>Quando digo a GO <code class="prettyprint">type Language struct</code>, ele entende que quero definir um tipo que seja uma estrutura, cujo nome é <code class="prettyprint">Language</code>.</p>
+
+<p>Usamos alguns tipos nessa estrutura:</p>
+
+<ul>
+<li><a href="https://golang.org/ref/spec#Numeric_types">Tipos numéricos</a>:
+
+<ul>
+<li><code class="prettyprint">rune</code> é um apelido para <code class="prettyprint">int32</code> e é usado para conter um caractere UNICODE.</li>
+<li><code class="prettyprint">int</code> é o tipo inteiro que caracteriza a arquitetura (por exemplo, 32 ou 64 bits)</li>
+</ul></li>
+</ul>
+
+<p>A declaração <code class="prettyprint">source []rune</code> diz que <code class="prettyprint">source</code> é um array de tipos <code class="prettyprint">rune</code>, de tamanho não definido, e portanto, não pronto para uso.</p>
+
+<p>Já em <code class="prettyprint">tokens map[rune]func(*Language)</code>, definimos que <code class="prettyprint">token</code> será um mapa contento funções (associadas ao tipo que está sendo criado, ou seja, <code class="prettyprint">Language</code>) cada uma identificada por um <code class="prettyprint">rune</code>. O asterisco é o que permitirá a essas funções alterarem dados da estrutura (melhor dizendo, até se altera os dados sem essa &quot;permissão&quot;, mas são perdidas ao final da função).</p>
+
+<p>A linha <code class="prettyprint">memory [100]int</code> define um array de tamanho fixo de 100 números inteiros.</p>
+
+<p>A última, e mais fácil, define <code class="prettyprint">pos</code> como um número inteiro.</p>
+
+<h4>Função associada que executa o programa</h4>
+<pre><code class="language-go">
+func (l *Language) Execute() {
+    for _, token := range l.source {
+        if function, ok := l.tokens[token]; ok {
+            function(l)
+        } else {
+            log.Fatalf(&quot;Invalid token [%c]\n&quot;, token)
+        }
+    }
+}
+
+</code></pre>
+<p>Na primeira linha lemos que uma função está sendo definida (<code class="prettyprint">func</code>), usando a variável <code class="prettyprint">l</code> como referência aos dados, com &quot;poder de escrita&quot; (<code class="prettyprint">*</code>) associada à estrutura <code class="prettyprint">Language</code>, função essa cujo nome é <code class="prettyprint">Execute</code>, e que não recebe parâmetros <code class="prettyprint">()</code>, e também não retorna nada (pela ausência de informações).</p>
+
+<p>A instrução <code class="prettyprint">for</code> (única forma de repetição em GO), aqui tem uma de suas formas. Em geral, o <code class="prettyprint">for</code> pode ser escrito como se escreve em C, mas nesse caso temos a palavra <code class="prettyprint">range</code> que provê a funcionalidade de retornar elemento a elemento de um <code class="prettyprint">map</code> ou array. No caso de um array (<code class="prettyprint">l.source</code>), é retornado em cada iteração o índice e o valor. Como não precisamos do índice,fazemos uma &quot;atribuição vazia&quot;, usando <code class="prettyprint">_</code> para descartar o valor, e a variável <code class="prettyprint">token</code> recebe o elemento da vez.</p>
+
+<p>O <code class="prettyprint">if</code> permite uma construção inicial de atribuição antes de efetivamente fazer a verificação. Nesse caso, estamos verificando se o <code class="prettyprint">token</code> da vez existe em nosso mapa de tokens. Essa verificação também retorna dois valores, nesse caso o valor (<code class="prettyprint">function</code>), se existir, e um valor boleano em <code class="prettyprint">ok</code>, que será verificado logo em seguida.</p>
+
+<p>Caso exista o <code class="prettyprint">token</code> chamamos a função passando a variável <code class="prettyprint">l</code>, que contem a estrutura. Caso não exista (<code class="prettyprint">ele</code>) abortamos o programa com uma mensagem na tela.</p>
+
+<h4>Função associada que alimenta o mapa de tokens</h4>
+<pre><code class="language-go">
+func (l *Language) AddToken(t rune, f func(*Language)) {
+    if l.tokens == nil {
+        l.tokens = make(map[rune]func(*Language))
+    }
+
+    l.tokens[t] = f
+}
+
+</code></pre>
+<p>Nessa outra função (<code class="prettyprint">func</code>) que usa <code class="prettyprint">l</code> como referência, com poder de escrita (<code class="prettyprint">*</code>), sobre a estrutura <code class="prettyprint">Language</code> cujo nome é <code class="prettyprint">AddToken</code> e que recebe como parâmetros a variável <code class="prettyprint">t</code> do tipo <code class="prettyprint">rune</code> e <code class="prettyprint">f</code> do tipo função (<code class="prettyprint">func</code>) com &quot;poder de escrita&quot; (<code class="prettyprint">(*</code>) associada à estrutura <code class="prettyprint">Language</code>, ufa!, verificamos se <code class="prettyprint">tokens</code> ainda está vazio, para, se for o caso, criarmos um <code class="prettyprint">map</code> com <code class="prettyprint">make</code>, e então passar a adicionar elementos, o que é feito por simples atribuição: <code class="prettyprint">l.tokens[t] = f</code>.</p>
+
+<h4>Função associada que recebe o código-fonte e limpa</h4>
+
+<p>Também temos outra função associada (não farei a leitura completa), que recebe <code class="prettyprint">line</code> como parâmetro e tem o tipo <code class="prettyprint">string</code>.</p>
+<pre><code class="language-go">
+func (l *Language) AddToSource(line string) {
+    for _, c := range line {
+        if _, ok := l.tokens[c]; ok {
+            l.source = append(l.source, c)
+        }
+    }
+}
+
+</code></pre>
+<p>A novidade é o método <code class="prettyprint">append</code>, usado para adicionar elementos em um array. Seu funcionamento é tão interessante, que vale mais à pena ler diretamente a documentação.</p>
+
+<p>Temos que passar o array como parâmetro, pois pode ocorrer de uma nova matriz ser criada.</p>
+
+<h4>Finalmente a execução</h4>
+<pre><code class="language-go">
+func main() {
+    var program Language
+
+    var tokens = map[rune]func(*Language){
+        &#x27;&gt;&#x27;: func(l *Language) { l.pos++ },
+        &#x27;&lt;&#x27;: func(l *Language) { l.pos-- },
+        &#x27;+&#x27;: func(l *Language) { l.memory[l.pos]++ },
+        &#x27;-&#x27;: func(l *Language) { l.memory[l.pos]-- },
+        &#x27;.&#x27;: func(l *Language) { fmt.Println(l.memory[l.pos]) },
+    }
+
+    for t, f := range tokens {
+        (&amp;program).AddToken(t, f)
+    }
+
+    scanner := bufio.NewScanner(os.Stdin)
+    for scanner.Scan() {
+        line := scanner.Text()
+        (&amp;program).AddToSource(line)
+    }
+
+    (&amp;program).Execute()
+}
+
+</code></pre>
+<p>Finalmente o ponto de entrada. Como estamos no <code class="prettyprint">package main</code> devemos ter uma <code class="prettyprint">func main</code>. Nada demais aqui.</p>
+
+<p>Logo em seguida declaramos (<code class="prettyprint">var</code>) que usaremos a variável <code class="prettyprint">program</code> do tipo <code class="prettyprint">Language</code>.</p>
+
+<p>Também definimos um mapa, com os tokens de nossa linguagem. Veja que é uma mapa com chaves do tipo <code class="prettyprint">rune</code> apontando para elementos do tipo <code class="prettyprint">func</code>, com poder de escrita, associada ao tipo <code class="prettyprint">Language</code>. Usei funções anônimas, para deixar mais clara a associação entre os tokens e suas ações.</p>
+
+<p>Populamos nossa estrutura com os tokens através de um <code class="prettyprint">for</code>.</p>
+
+<p>Também lemos a entrada padrão e jogamos, linha a linha, para nossa estrutura, que filtra o conteúdo que interessa.</p>
+
+<p>Finalmente executamos o programa que recebemos.</p>
+
+<h4>Resultados</h4>
+
+<p>O objetivo não era, pelo menos até agora :), escrever um interpretador para uma linguagem BrainFuck-like. Considero que fiz uma prova de conceito, e bem sucedida.</p>
+
+<p>A documentação é muito boa, e artigos e respostas a dúvidas pontuais são encontrados com facilidade.</p>
+
+<p>A ausência de orientação a objetos é um alívio! Fico aliviado em ter uma boa opção para fugir de abstrações exageradas.</p>
+
+<p>Opa, faltou um teste manual desse programa:</p>
+<pre><code class="language-go">
+$ echo &#x27;.+.&gt;.++.&lt;.-.&#x27; | go run mfbil.go 
+0
+1
+0
+2
+1
+0
+
+$ go build mfbil.go 
+$ echo &#x27;.+.&gt;.++.&lt;.-.&#x27; | .&#x2F;mfbil 
+0
+1
+0
+2
+1
+0
+
+</code></pre>
+<p>O programa <code class="prettyprint">.+.&gt;.++.&lt;.-.</code> faz o seguinte:</p>
+
+<ul>
+<li>imprima o valor do registro atual (0)</li>
+<li>some 1 a esse valor (agora vale 1)</li>
+<li>imprima o valor do registro atual (1)</li>
+<li>vá para o próximo registro (vale zero na inicialização)</li>
+<li>imprima o valor do registro atual (0)</li>
+<li>some 1 a esse valor (agora vale 1)</li>
+<li>some 1 a esse valor (agora vale 2)</li>
+<li>imprima o valor do registro atual (2)</li>
+<li>vá para o registro anterior (volta para o primeiro)</li>
+<li>imprima o valor do registro atual (1)</li>
+<li>subtraia 1 desse valor (agora vale 0)</li>
+<li>imprima o valor do registro atual (0)</li>
+</ul>
+
+<p>Agora é continuar os estudos.</p>
+
+<h4>Leituras recomendadas</h4>
+
+<ul>
+<li><a href="https://golang.org/">Go Lang em inglês</a></li>
+<li><a href="http://www.golangbr.org/">Go Lang em português</a></li>
+<li><a href="https://blog.golang.org/">Blog do projeto</a></li>
+<li><a href="https://golangweekly.com/">Semanário em inglês</a></li>
+<li><a href="https://www.getrevue.co/profile/a-semana-go">Semanário em português</a></li>
+<li><a href="https://pt.wikipedia.org/wiki/Brainfuck">BrainFuck</a></li>
+</ul>
+
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Iniciando em GOLANG (GO) e BrainFuck"
+    data-url="https://paulohrpinheiro.xyz/texts/go/2017-11-02-iniciando-em-go-e-em-brainfuck.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Iniciando em GOLANG (GO) e BrainFuck"
+    data-url="https://paulohrpinheiro.xyz/texts/go/2017-11-02-iniciando-em-go-e-em-brainfuck.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Iniciando em GOLANG (GO) e BrainFuck"
+    data-url="https://paulohrpinheiro.xyz/texts/go/2017-11-02-iniciando-em-go-e-em-brainfuck.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Iniciando em GOLANG (GO) e BrainFuck"
+    data-url="https://paulohrpinheiro.xyz/texts/go/2017-11-02-iniciando-em-go-e-em-brainfuck.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Iniciando em GOLANG (GO) e BrainFuck"
+    data-url="https://paulohrpinheiro.xyz/texts/go/2017-11-02-iniciando-em-go-e-em-brainfuck.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2017, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+<!-- Start of StatCounter Code for Default Guide -->
+<script type="text/javascript">
+var sc_project=11424422; 
+var sc_invisible=1; 
+var sc_security="182eb83e"; 
+var scJsHost = (("https:" == document.location.protocol) ?
+"https://secure." : "http://www.");
+document.write("<sc"+"ript type='text/javascript' src='" +
+scJsHost+
+"statcounter.com/counter/counter.js'></"+"script>");
+</script>
+<noscript><div class="statcounter"><a title="web statistics"
+href="http://statcounter.com/" target="_blank"><img
+class="statcounter"
+src="//c.statcounter.com/11424422/0/182eb83e/1/" alt="web
+statistics"></a></div></noscript>
+<!-- End of StatCounter Code for Default Guide -->
+
+</body>
+</html>
