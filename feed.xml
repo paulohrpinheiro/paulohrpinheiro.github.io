@@ -8,10 +8,16 @@
     <language>pt-br</language>
 
     <item>
+      <title>Trabalhando remotamente (e em casa!)</title>
+      <link>https://paulohrpinheiro.xyz/texts/diversos/2018-05-19-trabalhando-remotamente.html</link>
+      <description>Um pouco sobre minha nova fase de homeoffice.</description>
+      <pubDate>Sat, 19 May 2018 18:30:00 -0300</pubDate>
+    </item>
+    <item>
       <title>Iniciando em GOLANG (GO) e BrainFuck</title>
       <link>https://paulohrpinheiro.xyz/texts/go/2017-11-02-iniciando-em-go-e-em-brainfuck.html</link>
       <description>Fiz um test-drive em GO, e para isso aprendi um pouco de BrainFuck</description>
-      <pubDate>Thu, 2 Nov 2017 00:00:00 -0200</pubDate>
+      <pubDate>Thu, 2 Nov 2017 00:00:00 +0000</pubDate>
     </item>
     <item>
       <title>Intercon 2017</title>
@@ -180,12 +186,6 @@
       <link>https://paulohrpinheiro.xyz/texts/ruby/2016-10-05-test-driven-development.html</link>
       <description>Divulgando um livro que acabei de ler e que achei legal pra caramba!</description>
       <pubDate>Wed, 5 Oct 2016 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Presente de Deus</title>
-      <link>https://paulohrpinheiro.xyz/texts/prosaeverso/2016-07-19-presente-de-deus.html</link>
-      <description>Salamalaia</description>
-      <pubDate>Tue, 19 Jul 2016 00:00:00 +0000</pubDate>
     </item>
 
   </channel>
