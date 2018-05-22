@@ -8,6 +8,12 @@
     <language>pt-br</language>
 
     <item>
+      <title>Adicionando loop ao meu interpretador BrainFuck</title>
+      <link>https://paulohrpinheiro.xyz/texts/go/2018-05-22-adicionando-loop-ao-mfbil.html</link>
+      <description>Continuando o projeto de fazer um interpretador brainfuck em GO</description>
+      <pubDate>Tue, 22 May 2018 00:00:00 +0000</pubDate>
+    </item>
+    <item>
       <title>Iniciando em GOLANG (GO) e BrainFuck</title>
       <link>https://paulohrpinheiro.xyz/texts/go/2017-11-02-iniciando-em-go-e-em-brainfuck.html</link>
       <description>Fiz um test-drive em GO, e para isso aprendi um pouco de BrainFuck</description>

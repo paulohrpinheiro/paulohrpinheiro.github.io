@@ -8,10 +8,16 @@
     <language>pt-br</language>
 
     <item>
+      <title>Adicionando loop ao meu interpretador BrainFuck</title>
+      <link>https://paulohrpinheiro.xyz/texts/go/2018-05-22-adicionando-loop-ao-mfbil.html</link>
+      <description>Continuando o projeto de fazer um interpretador brainfuck em GO</description>
+      <pubDate>Tue, 22 May 2018 19:20:00 -0300</pubDate>
+    </item>
+    <item>
       <title>Trabalhando remotamente (e em casa!)</title>
       <link>https://paulohrpinheiro.xyz/texts/diversos/2018-05-19-trabalhando-remotamente.html</link>
       <description>Um pouco sobre minha nova fase de homeoffice.</description>
-      <pubDate>Sat, 19 May 2018 18:30:00 -0300</pubDate>
+      <pubDate>Sat, 19 May 2018 00:00:00 +0000</pubDate>
     </item>
     <item>
       <title>Iniciando em GOLANG (GO) e BrainFuck</title>
@@ -180,12 +186,6 @@
       <link>https://paulohrpinheiro.xyz/texts/diversos/2016-10-20-blogando-no-github.html</link>
       <description>Qual a forma mais rápida e com menos dependências de montar um blog usando o github? Essa era uma dúvida que me acompanhava por um bom tempo. Hoje falarei sobre como sanei essa dúvida.</description>
       <pubDate>Thu, 20 Oct 2016 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Nota sobre o livro Test-Driven Development: Teste e Design no Mundo Real com Ruby</title>
-      <link>https://paulohrpinheiro.xyz/texts/ruby/2016-10-05-test-driven-development.html</link>
-      <description>Divulgando um livro que acabei de ler e que achei legal pra caramba!</description>
-      <pubDate>Wed, 5 Oct 2016 00:00:00 +0000</pubDate>
     </item>
 
   </channel>

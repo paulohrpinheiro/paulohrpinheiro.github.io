@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Adicionando loop ao meu interpretador BrainFuck</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Continuando o projeto de fazer um interpretador brainfuck em GO">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores e sysadmins</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/go/">
+        go
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/database/">
+        database
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Adicionando loop ao meu interpretador BrainFuck</h2>
+
+<h3>Continuando o projeto de fazer um interpretador brainfuck em GO</h3>
+
+<p><img src="images/gopher.png" alt="Gopher"></p>
+
+<h4>Preguiça</h4>
+
+<p>Uma coisa tão simples, mas que ficou meses parado, foi implementar loop para meu interpretador BrainFuck, descrito no meu texto <a href="file:///home/paulohrpinheiro/Dropbox/projetos/paulohrpinheiro.xyz/blog/output/texts/go/2017-11-02-iniciando-em-go-e-em-brainfuck.html">Iniciando em GOLANG (GO) e BrainFuck</a>. Hoje fiz a implementação mais rápida e tosca possível, que ainda não permite loops aninhados. Mas já podemos usar os operadores <code class="prettyprint">[</code> e <code class="prettyprint">]</code> para cercar o código a ser repetido.</p>
+
+<p>O código para esse texto está na <a href="https://github.com/paulohrpinheiro/mfbil/tree/0.0.3">tag 0.0.3</a> no <a href="https://github.com/paulohrpinheiro/mfbil">repositório GitHub</a>.</p>
+
+<p>Para os mais curiosos e pacientes, há a <a href="https://github.com/paulohrpinheiro/mfbil/tree/0.0.2">tag 0.0.2</a> com uma baita confusão e uma mudança que não sei como não tive que fazer antes: implementar um contador de instrução.</p>
+
+<p>Voltando ao que interessa...</p>
+
+<p>O que precisava ser feito é determinar o início e o fim do loop, e o que fazer em cada caso :).</p>
+
+<p>Primeira coisa foi implementar um contador de instrução, para que saibamos qual instrução executar:</p>
+<pre><code class="language-go">
+ type Language struct {
+       source      []rune
+       tokens      map[rune]func(*Language)
+       memory      [100]int
+       pos         int
+       instruction int
+ }
+
+</code></pre>
+<p>Se encontrarmos o início do loop, verificaremos se devemos entrar. A posição corrente na memória deve ser diferente de 0 (zero). E seguimos para o próximo comando. Caso contrário, encontramos o final do loop e continuamos:</p>
+<pre><code class="language-go">
+func open_bracket(l *Language) {
+       if l.memory[l.pos] == 0 {
+               l.instruction = search(&#x27;]&#x27;, l.source[:])
+       }
+}
+
+</code></pre>
+<p>Se encontrarmos o final do loop, devemos decidir se sairemos. A posição corrente na memória deve ser igual a zero. Se não for, encontramos o começo do loop, caso contrário próximo comando e segue a vida.</p>
+<pre><code class="language-go">
+func close_bracket(l *Language) {
+       if l.memory[l.pos] != 0 {
+               l.instruction = search(&#x27;[&#x27;, l.source[:])
+       }
+}
+
+</code></pre>
+<p>Foi implementada uma função de busca, <code class="prettyprint">search</code>, que recebe como parâmetros o elemento a buscar e onde buscar, retornando -1 caso haja erro. A linguagem GO tem um jeito melhor de lidar com erros, mas por enquanto vai assim mesmo:</p>
+<pre><code class="language-go">
+func search(element rune, array []rune) int {
+       var index = -1
+
+       for i, v := range array {
+               if element == v {
+                       index = i
+                       break
+               }
+       }
+
+       return index
+}
+
+</code></pre>
+<p>Note que para usar a função <code class="prettyprint">search</code> passamos o array como <code class="prettyprint">[:]</code>, ou seja, um <a href="https://tour.golang.org/moretypes/7">slice (fatia)</a> do array (matriz).</p>
+
+<p>Finalmente, incrementamos nossa &quot;máquina virtual&quot; com os dois comandos:</p>
+<pre><code class="language-go">
+&#x27;[&#x27;: func(l *Language) { open_bracket(l) },
+&#x27;]&#x27;: func(l *Language) { close_bracket(l) },
+
+</code></pre>
+<p>Mas o coração de nossa máquina virtual também foi recauchutado:</p>
+<pre><code class="language-go">
+ func (l *Language) Execute() {
+-       for _, token := range l.source {
++       for {
++               var token = l.source[l.instruction]
++
+                if function, ok := l.tokens[token]; ok {
+                        function(l)
+                } else {
+                        log.Fatalf(&quot;Invalid token [%c]\n&quot;, token)
+                }
++
++               l.instruction++
++
++               if l.instruction &gt;= len(l.source) {
++                       break
++               }
+        }
+ }
+
+</code></pre>
+<p>Deixei as marcas do <code class="prettyprint">diff</code> para ressaltar as mudanças, que no final, é a implementação de um contador para a instrução a ser executada.</p>
+
+<p>Para testar as novidades, vamos contar e imprimir valores:</p>
+<pre><code class="language-go">
+➤ echo &#x27;+++++.[-.]&#x27; | go run mfbil.go
+5
+4
+3
+2
+1
+0
+
+</code></pre>
+<p>Na posição zero, somamos 1 por cinco vezes e imprimimos, entramos num loop que subtrai e imprime, até que seja zero. É isso aê!</p>
+
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Adicionando loop ao meu interpretador BrainFuck"
+    data-url="https://paulohrpinheiro.xyz/texts/go/2018-05-22-adicionando-loop-ao-mfbil.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Adicionando loop ao meu interpretador BrainFuck"
+    data-url="https://paulohrpinheiro.xyz/texts/go/2018-05-22-adicionando-loop-ao-mfbil.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Adicionando loop ao meu interpretador BrainFuck"
+    data-url="https://paulohrpinheiro.xyz/texts/go/2018-05-22-adicionando-loop-ao-mfbil.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Adicionando loop ao meu interpretador BrainFuck"
+    data-url="https://paulohrpinheiro.xyz/texts/go/2018-05-22-adicionando-loop-ao-mfbil.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Adicionando loop ao meu interpretador BrainFuck"
+    data-url="https://paulohrpinheiro.xyz/texts/go/2018-05-22-adicionando-loop-ao-mfbil.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2017, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+<!-- Start of StatCounter Code for Default Guide -->
+<script type="text/javascript">
+var sc_project=11424422; 
+var sc_invisible=1; 
+var sc_security="182eb83e"; 
+var scJsHost = (("https:" == document.location.protocol) ?
+"https://secure." : "http://www.");
+document.write("<sc"+"ript type='text/javascript' src='" +
+scJsHost+
+"statcounter.com/counter/counter.js'></"+"script>");
+</script>
+<noscript><div class="statcounter"><a title="web statistics"
+href="http://statcounter.com/" target="_blank"><img
+class="statcounter"
+src="//c.statcounter.com/11424422/0/182eb83e/1/" alt="web
+statistics"></a></div></noscript>
+<!-- End of StatCounter Code for Default Guide -->
+
+</body>
+</html>
