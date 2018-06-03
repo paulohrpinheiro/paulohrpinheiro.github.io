@@ -8,10 +8,16 @@
     <language>pt-br</language>
 
     <item>
+      <title>Copiando arquivos em linguagem C</title>
+      <link>https://paulohrpinheiro.xyz/texts/c/2018-06-03-copiando-arquivos-em-linguagem-c.html</link>
+      <description>Analisa-se algumas formas de copiar um arquivo na linguagem C, com mmap, read/write e sendfile, buscando uma abordagem &quot;zero-copy&quot;</description>
+      <pubDate>Sun, 3 Jun 2018 17:30:00 -0300</pubDate>
+    </item>
+    <item>
       <title>Adicionando loop ao meu interpretador BrainFuck</title>
       <link>https://paulohrpinheiro.xyz/texts/go/2018-05-22-adicionando-loop-ao-mfbil.html</link>
       <description>Continuando o projeto de fazer um interpretador brainfuck em GO</description>
-      <pubDate>Tue, 22 May 2018 19:20:00 -0300</pubDate>
+      <pubDate>Tue, 22 May 2018 00:00:00 +0000</pubDate>
     </item>
     <item>
       <title>Trabalhando remotamente (e em casa!)</title>
@@ -180,12 +186,6 @@
       <link>https://paulohrpinheiro.xyz/texts/diversos/2016-11-03-colaborando-no-github.html</link>
       <description>Uma interessante experiência no mundo do Software Livre.</description>
       <pubDate>Thu, 3 Nov 2016 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Blogando no github</title>
-      <link>https://paulohrpinheiro.xyz/texts/diversos/2016-10-20-blogando-no-github.html</link>
-      <description>Qual a forma mais rápida e com menos dependências de montar um blog usando o github? Essa era uma dúvida que me acompanhava por um bom tempo. Hoje falarei sobre como sanei essa dúvida.</description>
-      <pubDate>Thu, 20 Oct 2016 00:00:00 +0000</pubDate>
     </item>
 
   </channel>

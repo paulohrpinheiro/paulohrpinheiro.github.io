@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Copiando arquivos em linguagem C</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Analisa-se algumas formas de copiar um arquivo na linguagem C, com mmap, read/write e sendfile, buscando uma abordagem &quot;zero-copy&quot;">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores e sysadmins</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/go/">
+        go
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/database/">
+        database
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Copiando arquivos em linguagem C</h2>
+
+<h3>Analisa-se algumas formas de copiar um arquivo na linguagem C, com mmap, read/write e sendfile, buscando uma abordagem &quot;zero-copy&quot;</h3>
+
+<p><img src="images/context.gif" alt="struct stat"></p>
+
+<p>Em uma <a href="https://twitter.com/hannelita/status/989263349467709440">postagem do twitter</a>, foi colocada a questão de copiar arquivos sem transferir dados pelo <em>user space</em>. Por um acaso eu tinha em minha memória que era possível usar a chamada <a href="http://man7.org/linux/man-pages/man2/sendfile.2.html">sendfile()</a> no Linux para isso, e foi o que indiquei. Mas desde então, fico com a questão &quot;como é que ficaria isso&quot; na cabeça, até que comecei a codar.</p>
+
+<p>A promessa é que uma abordagem <a href="https://en.wikipedia.org/wiki/Zero-copy">zero-copy</a> torna o processo mais rápido e menos custoso, pois tudo (ou quase tudo) é feito em espaço de <em>kernel</em>.</p>
+
+<p>E lá fui eu pesquisar. Dentre os textos mais legais, deixo esses dois registrados aqui:</p>
+
+<ul>
+<li><a href="https://www.ibm.com/developerworks/library/j-zerocopy/">Efficient data transfer through zero copy</a></li>
+<li><a href="https://www.linuxjournal.com/article/6345?page=0,0">Zero Copy I: User-Mode Perspective</a></li>
+</ul>
+
+<p>Nessa pesquisa, vi várias pessoas indicando o uso da chamada <a href="http://man7.org/linux/man-pages/man2/mmap.2.html">mmap()</a>, que, aparentemente, é uma abordagem superior pelo simples fato de não ter que se preocupar em ler e escrever o arquivo. Por fim, o <em>sendfile</em>, tradicionalmente usado em <em>sockets</em>, mas que no Linux pode ser usado para transferir arquivos locais.</p>
+
+<p>Não encontrei essa funcionalidade em outros sistema Unix (nem para NetBSD ou Solaris):</p>
+
+<ul>
+<li><a href="https://www.freebsd.org/cgi/man.cgi?query=sendfile&sektion=2">FreeBSD</a></li>
+<li><a href="https://man.openbsd.org/FreeBSD-11.1/sendfile.2">OpenBSD</a></li>
+<li><a href="https://www.dragonflybsd.org/cgi/web-man?section=2&command=sendfile">DragonFly</a></li>
+</ul>
+
+<h4>Minha história com o a chamada sendfile()</h4>
+
+<p>Essa chamada mudou minha vida! Não me lembro muito bem de como eram as configurações mais &quot;nervosas&quot; do apache (trabalhei alguns anos com ele), mas em algum momento de minha carreira, comecei a usar Nginx para criar <em>clusters</em> <em>PHP</em>. Dentre outras coisas, usar a chamada <em>sendfile()</em> para servir arquivos estáticos é uma primeira providência que dá resultados visíveis.</p>
+
+<ul>
+<li><a href="https://docs.nginx.com/nginx/admin-guide/web-server/serving-static-content/#optimize">Optimizing Performance for Serving Content</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_core_module.html#sendfile">Opções de configuração do Nginx - sendfile</a></li>
+</ul>
+
+<h4>A solução óbvia (ingênua)</h4>
+
+<p>O mais simples, em C, é abrir o arquivo, ler e escrever pequenos pedaços, até o fim:</p>
+<pre><code class="language-c">
+while(0 != (readed = read(from_fd, buffer, block_size))) {
+    write(to_fd, buffer, readed);
+}
+
+</code></pre>
+<p>O problema nessa abordagem, é que pedimos para o <em>kernel</em>, muitas vezes, um pedaço do arquivo que ele nos retorna, para, muitas vezes, enviarmos para o <em>kernel</em> esses mesmos pedaços para que sejam escritos no arquivo destino.</p>
+
+<p>Essa implementação, com as devidas checagens de erro, pode ser encontrada nesse arquivo: <a href="https://github.com/paulohrpinheiro/mycp/blob/master/naive.c">naive.c</a></p>
+
+<h4>A solução média</h4>
+
+<p>Tem-se ainda uma abordagem mais aclamada em termos de velocidade e economia de recursos, <a href="https://github.com/paulohrpinheiro/mycp/blob/master/mmap.c">usando a chamada mmap()</a>:</p>
+<pre><code class="language-c">
+source = mmap(NULL, filesize, PROT_READ, MAP_SHARED, from_fd, 0);
+target = mmap(NULL, filesize, PROT_READ|PROT_WRITE, MAP_SHARED, to_fd, 0);
+
+memcpy(target, source, filesize);
+
+</code></pre>
+<h4>A solução topzera!</h4>
+
+<p>Finalmente, <a href="https://github.com/paulohrpinheiro/mycp/blob/master/sendfile.c">usando sendfile()</a>:</p>
+<pre><code class="language-c">
+while(offset&lt;filesize) {
+    sendfile(to_fd, from_fd, &amp;offset, transfer_size);
+}
+
+</code></pre>
+<p>A chamada _ sendfile_  tem uma pegadinha, que eventualmente ela não transfere tudo que foi pedido, e, portanto, é necessário tentar até que tudo seja transferido.</p>
+
+<h4>Comparando as abordagens</h4>
+
+<p>Em um teste muito simples, comparou-se a cópia de arquivos variando de 3K a 3G, para todas as abordagens, verificando-se o tempo gasto e a quantidade de <em>syscalls</em> usadas, De vinte testes para cada situação, os quartis superior e inferior foram descartados, e então calculada a média dos valores: </p>
+
+<p><strong>naive</strong></p>
+<pre><code class="language-c">
+| filesize | time      | calls   |
+| -------- | --------- | ------- |
+|   3K     |  0.043396 |      42 |
+|  30K     |  0.038677 |      56 |
+| 300K     |  0.062573 |     190 |
+|   3M     |  0.120692 |    1542 |
+|  30M     |  0.717253 |   15064 |
+| 300M     |  7.583485 |  150285 |
+|   3G     | 77.759165 | 1502496 |
+
+</code></pre>
+<p><strong>mmap</strong></p>
+<pre><code class="language-c">
+| filesize | time      | calls   |
+| -------- | --------- | ------- |
+|   3K     |  0.041350 |      45 |
+|  30K     |  0.047594 |      45 |
+| 300K     |  0.059993 |      45 |
+|   3M     |  0.099452 |      45 |
+|  30M     |  0.447214 |      52 |
+| 300M     |  3.344450 |     124 |
+|   3G     | 34.680524 |     800 |
+
+</code></pre>
+<p><strong>sendfile</strong></p>
+<pre><code class="language-c">
+| filesize | time      | calls   |
+| -------- | --------- | ------- |
+|   3K     |  0.044158 |      40 |
+|  30K     |  0.034627 |      40 |
+| 300K     |  0.035980 |      40 |
+|   3M     |  0.053271 |      40 |
+|  30M     |  0.229736 |      50 |
+| 300M     |  2.336326 |     146 |
+|   3G     | 22.134009 |     854 |
+
+</code></pre>
+<p>Tanto na quantidade de chamadas de sistema, como no tempo, usar <em>sendfile</em> é mais performático, embora restrito ao Linux. Usando a abordagem que chamei de <em>naive</em>, tem-se um código portável entre os diversos <em>Unix</em>, e usando o <em>mmap</em>, temos uma ótima solução, também portável.</p>
+
+<p>Há ainda a possibilidade de usar chamadas <em>ioctl</em> para <em>clonar</em> um arquivo, mas isso depende da implementação de cada <em>filesystem</em>. Um exemplo de uso está <a href="https://www.gnu.org/software/coreutils/coreutils.html">na implementação do CP da GNU</a>, e chamada <a href="http://man7.org/linux/man-pages/man2/splice.2.html">splice</a>.</p>
+
+<p>Os programas para esses testes estão <a href="https://github.com/paulohrpinheiro/mycp/">nesse repositório do GitHub</a>.</p>
+
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Copiando arquivos em linguagem C"
+    data-url="https://paulohrpinheiro.xyz/texts/c/2018-06-03-copiando-arquivos-em-linguagem-c.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Copiando arquivos em linguagem C"
+    data-url="https://paulohrpinheiro.xyz/texts/c/2018-06-03-copiando-arquivos-em-linguagem-c.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Copiando arquivos em linguagem C"
+    data-url="https://paulohrpinheiro.xyz/texts/c/2018-06-03-copiando-arquivos-em-linguagem-c.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Copiando arquivos em linguagem C"
+    data-url="https://paulohrpinheiro.xyz/texts/c/2018-06-03-copiando-arquivos-em-linguagem-c.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Copiando arquivos em linguagem C"
+    data-url="https://paulohrpinheiro.xyz/texts/c/2018-06-03-copiando-arquivos-em-linguagem-c.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2017, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+<!-- Start of StatCounter Code for Default Guide -->
+<script type="text/javascript">
+var sc_project=11424422; 
+var sc_invisible=1; 
+var sc_security="182eb83e"; 
+var scJsHost = (("https:" == document.location.protocol) ?
+"https://secure." : "http://www.");
+document.write("<sc"+"ript type='text/javascript' src='" +
+scJsHost+
+"statcounter.com/counter/counter.js'></"+"script>");
+</script>
+<noscript><div class="statcounter"><a title="web statistics"
+href="http://statcounter.com/" target="_blank"><img
+class="statcounter"
+src="//c.statcounter.com/11424422/0/182eb83e/1/" alt="web
+statistics"></a></div></noscript>
+<!-- End of StatCounter Code for Default Guide -->
+
+</body>
+</html>

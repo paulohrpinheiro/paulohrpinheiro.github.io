@@ -8,6 +8,12 @@
     <language>pt-br</language>
 
     <item>
+      <title>Copiando arquivos em linguagem C</title>
+      <link>https://paulohrpinheiro.xyz/texts/c/2018-06-03-copiando-arquivos-em-linguagem-c.html</link>
+      <description>Analisa-se algumas formas de copiar um arquivo na linguagem C, com mmap, read/write e sendfile, buscando uma abordagem &quot;zero-copy&quot;</description>
+      <pubDate>Sun, 3 Jun 2018 00:00:00 +0000</pubDate>
+    </item>
+    <item>
       <title>Um tail -f desfalcado</title>
       <link>https://paulohrpinheiro.xyz/texts/c/2017-01-19-um-tail-f-descalcado.html</link>
       <description>Treinando com C para uma implementação pessoal do tail -f</description>
