@@ -8,6 +8,12 @@
     <language>pt-br</language>
 
     <item>
+      <title>Desenvolvendo e publicando um site Javascript na Amazon AWS</title>
+      <link>https://paulohrpinheiro.xyz/texts/javascript/2018-06-09-hospedagem-javascript-amazon.html</link>
+      <description>Como hospedar uma aplicação React (javascript em geral) na Amazon, sem se preocupar com servidores.</description>
+      <pubDate>Sat, 9 Jun 2018 00:00:00 +0000</pubDate>
+    </item>
+    <item>
       <title>Começando em JavaScript</title>
       <link>https://paulohrpinheiro.xyz/texts/javascript/2016-11-05-comecando-em-javascript.html</link>
       <description>Até altero algum código em *JavaScript*, mas nunca aprendi de fato. Aqui vão algumas experiências, de um pequeno projeto que fiz em *JavaScript*, sem saber nada dele.</description>

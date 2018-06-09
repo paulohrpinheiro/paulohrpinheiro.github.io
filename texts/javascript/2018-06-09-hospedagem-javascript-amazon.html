@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Desenvolvendo e publicando um site Javascript na Amazon AWS</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Como hospedar uma aplicação React (javascript em geral) na Amazon, sem se preocupar com servidores.">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores e sysadmins</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/go/">
+        go
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/database/">
+        database
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Desenvolvendo e publicando um site Javascript na Amazon AWS</h2>
+
+<h3>Como hospedar uma aplicação React (javascript em geral) na Amazon, sem se preocupar com servidores.</h3>
+
+<p><img src="images/javascript-aws.png" alt="Meu cantinho de trabalho!"></p>
+
+<h4>O problema</h4>
+
+<p>Normalmente, se quero servir arquivos, subo um servidor Nginx e pronto. Um <code class="prettyprint">git pull</code> no servidor ou <code class="prettyprint">git push</code> na máquina do desenvolvedor com <code class="prettyprint">webhook</code> no repositório resolve tudo.</p>
+
+<p>Mas deparei-me novamente com esse problema, na <a href="https://cargobr.com">CARGOBR</a>, empresa em que estou atualmente trabalhando, quando decidiu-se separar algumas aplicações entre frontend e backend, saindo do modelo clássico oferecido pelo Django, em que se resolve a interação com usuários através de templates. Eu cheguei na empresa no meio do caminho desse processo de migração. E com o crescimento das demandas, ao invés de termos essa separação estrita entre back e front, ficamos com times quase autossuficientes para cada produto, compartilhando apenas, ainda, o pessoal de UX e de projetos.</p>
+
+<p>Uma necessidade que sentimos, é dar ao pessoal de Front a liberdade de rapidamente comitarem código e terem a versão publicada em um ambiente igual ao de produção. Como se trata de uma aplicação em React que consome uma API, nada muito especial é necessário.</p>
+
+<p>Mas chegou-se a outra questão: como testar o software antes de publicar? Tem a saída &quot;acessa aí&quot;, e também os testes automatizados. Atualmente não há porque fugir de primeiro fazer testes automatizados, para só então aplicar o método &quot;acessa aí&quot;.</p>
+
+<p>Esse texto é sobre como integramos na CARGOBR várias ferramentas para possibilitar aos nossos desenvolvedores frontend essa agilidade no trabalho. O que está descrito aqui abrange o desenvolvimento até a etapa de homologação, mas para pequenas aplicações, pode-se muito bem usar isso que será descrito para ter um processo automático de publicação em produção.</p>
+
+<h4>Soluções</h4>
+
+<p>Antes de chegarmos a essa solução, avaliamos algumas mais simples.</p>
+
+<p>Primeiro, aproveitar a aplicação legada para hospedar a aplicação SPA (Single Page Aplication). Quase nada teria que ser feito, a não ser alguma configuração para garantir links amigáveis e um diretório exclusivo, no <code class="prettyprint">statics</code> do Django. Isso teria o problema de que os desenvolvedores frontend teriam que ter a aplicação completa em sua máquina, e a cada <code class="prettyprint">deploy</code>, toda a aplicação deveria ser publicada.</p>
+
+<p>Também poderíamos manter um repositório separado, e no <code class="prettyprint">deploy</code>, colocar esses arquivos no servidor em que está o legado. Essa abordagem ainda manteria dependência entre back e front, desnecessariamente.</p>
+
+<p>Finalmente pensamos em utilizar o serviço S3 que possibilita hospedagem estática de arquivos.</p>
+
+<p>Há a possibilidade de configurar, num servidor HTTP, redirecionamentos para os arquivos no S3, mas isso tiraria a flexibilidade da aplicação responder a qualquer página.</p>
+
+<p>Mas separando um domínio para a aplicação, e um servidor/serviço exclusivo, as aplicações estariam independentes nos seus processos de deploy.</p>
+
+<h4>Tornando os arquivos públicos</h4>
+
+<p>Essa é a primeira parte, que nos possibilita ter a aplicação disponível.</p>
+
+<p>Podemos muito bem copiar os arquivos para o S3, seja pela interface web da Amazon, seja montando o filesystem na máquina, seja usando um cliente S3 que permita jogar os arquivos lá.</p>
+
+<p>Independente de como os arquivos cheguem ao S3, o importante é ter configurados os serviços que permitem serví-los publicamente.</p>
+
+<h5>Amazon S3</h5>
+
+<p>A primeira providência é ter os arquivos na Amazon, lá no S3. O que precisamos é de um bucket. Nessa tela será informada a URL em que se pode encontrar nossos arquivos, no campo &#39;Endpoint&#39;:</p>
+
+<p><img src="images/amazon-s3-website.png" alt="Amazon S3 Properties/website"></p>
+
+<p>Com essas configurações, nossos arquivos podem ser acessados por qualquer cliente HTTP.</p>
+
+<p>Mas é preciso permissão para acessá-los sem autenticação, publicamente:</p>
+
+<p><img src="images/amazon-s3-permissions.png" alt="Amazon S3 Properties/Permissions"></p>
+
+<p>Feitas essas configurações, pode-se subir os arquivos e acessá-los no endereço indicado.</p>
+
+<h5>Amazon CloudFront</h5>
+
+<p>Uma evolução de nossa &quot;hospedagem&quot; é ter um grande cache na frente, servindo nossos arquivos da melhor forma possível. Enquanto o S3 é uma forma mais de armazenar os arquivos, para eventuais downloads ou acessos, o CloudFront nos provê um cache global, que propicia uma experiência melhor para o usuário, independente de onde esteja.</p>
+
+<p>Vamos configurar uma distribuição, atrelada ao nosso bucket S3.</p>
+
+<p>Primeiro passo, em &#39;General&#39;, informar o nome que iremos usar:</p>
+
+<p><img src="images/amazon-cf-domain.png" alt=""></p>
+
+<p>Agora, vamos configurar o SSL. Temos, a CARGOBR, na Amazon, um certificado que nos permite criar subdomínios ilimitados. Vamos escolhê-lo aqui:</p>
+
+<p><img src="images/amazon-cf-ssl.png" alt=""></p>
+
+<p>Caso não tenha ou não queira usar um certificado próprio, pode usar o domínio e certificado sugerido pela Amazon em &#39;Default CloudFront Certificate.</p>
+
+<p>E, em sequencia, é importante informar o &#39;Default Root Object&#39;:</p>
+
+<p><img src="images/amazon-cf-http.png" alt=""></p>
+
+<p>Em &#39;Origins&#39;, devemos indicar o endereço que nos foi fornecido na configuração do S3:</p>
+
+<p><img src="images/amazon-cf-origin.png" alt=""></p>
+
+<p>Em &#39;Behaviors&#39;, deve-se escolher o &#39;Origin&#39; e selecionar &#39;GET, HEAD&#39; em &#39;Allowed HTTP Methods&#39;:</p>
+
+<p><img src="images/amazon-cf-behavior.png" alt=""></p>
+
+<p>E, finalmente, o &#39;pulo do gato&#39;. Essa configuração nos permitirá servir qualquer página inexistente, sem erros, redirecionando para o <code class="prettyprint">index.html</code>, permitindo, dessa forma, que uma aplicação feita em React, por exemplo, possa fazer seus roteamentos, e de quebra, não criar problemas de indexação em mecanismos de busca:</p>
+
+<p><img src="images/amazon-cf-error_pages.png" alt=""></p>
+
+<p>Devemos criar a página para acesso proibido:</p>
+
+<p><img src="images/javascrip-cf-403.png" alt=""></p>
+
+<p>E a página para não encontrado:</p>
+
+<p><img src="images/javascrip-cf-400.png" alt=""></p>
+
+<h5>Amazon Route 53</h5>
+
+<p>Vamos configurar o DNS, para que o nome escolhido possa ser usado por qualquer &quot;navegante&quot;:</p>
+
+<p><img src="images/amazon-r53.png" alt=""></p>
+
+<h4>Resumão</h4>
+
+<p>O que precisamos, é garantir essas configurações:</p>
+
+<h5>Bucket S3</h5>
+<pre><code class="language-javascript">
+* Properties
+    * Static Web Site Hosting
+* Permissions
+    * Public Access
+        * Everyone
+            * Read bucket permissions
+
+</code></pre>
+<h5>CloudFront</h5>
+<pre><code class="language-javascript">
+* Origins
+    * Associar ao bucket S3
+* SSL
+    * Associar ao certificado geral da empresa, ou usar o padrão do CloudFront
+* Behaviors
+    * Origin - bucket S3
+    * Viewer Protocol Policy
+        * Redirect HTTP to HTTPS
+    * Allowed HTTP Methods
+        * GET, HEAD
+    * Error Pages
+        * 403
+            * Customize Error Response
+            * Response Page Path
+                * &#x2F;index.html
+            * HTTP Response Code
+                * 200: OK
+        * 404
+            * Customize Error Response
+            * Response Page Path
+                * &#x2F;index.html
+            * HTTP Response Code
+                * 200: OK
+
+</code></pre>
+<h5>Route53</h5>
+<pre><code class="language-javascript">
+* name
+    * Preencher name com nome desejado para o domínio
+* Type
+    * CNAME
+* Alias
+    * NO
+* Value
+    * domínio gerado no CloudFront (p. ex., xxxxxxxxxxxxx.cloudfront.net)
+
+</code></pre>
+<h3>Bitbucket</h3>
+
+<p>E que tal deploiar assim que a master receba uma atualização? Usamos <a href="https://bitbucket.com">Bitbucket</a> na CARGOBR, então vai um exemplo usando os <a href="https://bitbucket.org/product/features/pipelines">Pipelines dele</a>.</p>
+
+<p>Você ira, na verdade, configurar uma imagem docker para executar seus testes e fazer o deploy. O primeiro passo que falhar, por exemplo um linter ou um teste, a operação toda é finalizada.</p>
+
+<p>Para isso, basta criar um arquivo chamado <code class="prettyprint">bitbucket-pipelines.yml</code>, na raiz de seu repositório:</p>
+<pre><code class="language-javascript">
+clone:
+  depth: 1
+options:
+  max-time: 30
+pipelines:
+  default:
+    - step:
+        name: Build assets
+        image: node:9.11-alpine
+        caches:
+          - node
+        script:
+          - npm install
+          - npm run-script test
+          - npm run-script build
+        artifacts:
+          - dist&#x2F;**
+    - step:
+        name: Deploy assets to AWS S3
+        image: python:3.6-alpine3.7
+        deployment: test
+        script:
+          - pip install awscli
+          - aws s3 sync --acl public-read --content-encoding utf-8 --delete dist&#x2F; $CARGOBR_S3_BUCKET
+          - aws cloudfront create-invalidation --distribution-id $CARGOBR_CF_DISTRIBUTION_ID --paths=&quot;&#x2F;*&quot;
+
+</code></pre>
+<p>O importante aqui é que nosso processo está separado em dois passos. Primeiro (primeiro <code class="prettyprint">step</code>) construímos a aplicação e preservamos o diretório <code class="prettyprint">dist</code> (é isso que o <code class="prettyprint">artifacts</code> faz). Depois, no segundo <code class="prettyprint">step</code>, fazemos o deploy propriamente dito, com a ajuda do comando <code class="prettyprint">aws</code>.</p>
+
+<p>Para que tudo isso funcione, demos configurar as seguintes variáveis de ambiente nas configurações do repositório, em <code class="prettyprint">settings/PIPELINES/Environment variables</code>:</p>
+
+<p><img src="images/bitbucket-env.png" alt=""></p>
+
+<p>Os nomes das variáveis são quase todos bem claros, à exceção da variável <code class="prettyprint">CARGOBR_CF_DISTRIBUTION_ID</code>, que deve contem o <code class="prettyprint">ID</code> da distribuição criada no CloudFront.</p>
+
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Desenvolvendo e publicando um site Javascript na Amazon AWS"
+    data-url="https://paulohrpinheiro.xyz/texts/javascript/2018-06-09-hospedagem-javascript-amazon.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Desenvolvendo e publicando um site Javascript na Amazon AWS"
+    data-url="https://paulohrpinheiro.xyz/texts/javascript/2018-06-09-hospedagem-javascript-amazon.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Desenvolvendo e publicando um site Javascript na Amazon AWS"
+    data-url="https://paulohrpinheiro.xyz/texts/javascript/2018-06-09-hospedagem-javascript-amazon.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Desenvolvendo e publicando um site Javascript na Amazon AWS"
+    data-url="https://paulohrpinheiro.xyz/texts/javascript/2018-06-09-hospedagem-javascript-amazon.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Desenvolvendo e publicando um site Javascript na Amazon AWS"
+    data-url="https://paulohrpinheiro.xyz/texts/javascript/2018-06-09-hospedagem-javascript-amazon.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2017, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+<!-- Start of StatCounter Code for Default Guide -->
+<script type="text/javascript">
+var sc_project=11424422; 
+var sc_invisible=1; 
+var sc_security="182eb83e"; 
+var scJsHost = (("https:" == document.location.protocol) ?
+"https://secure." : "http://www.");
+document.write("<sc"+"ript type='text/javascript' src='" +
+scJsHost+
+"statcounter.com/counter/counter.js'></"+"script>");
+</script>
+<noscript><div class="statcounter"><a title="web statistics"
+href="http://statcounter.com/" target="_blank"><img
+class="statcounter"
+src="//c.statcounter.com/11424422/0/182eb83e/1/" alt="web
+statistics"></a></div></noscript>
+<!-- End of StatCounter Code for Default Guide -->
+
+</body>
+</html>
