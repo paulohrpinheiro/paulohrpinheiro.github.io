@@ -8,10 +8,16 @@
     <language>pt-br</language>
 
     <item>
+      <title>Loops alinhados ao meu interpretador BrainFuck</title>
+      <link>https://paulohrpinheiro.xyz/texts/go/2018-07-02-loops-aninhados-mfbil.html</link>
+      <description>Continuando o projeto de fazer um interpretador brainfuck em GO</description>
+      <pubDate>Mon, 2 Jul 2018 18:30:00 -0300</pubDate>
+    </item>
+    <item>
       <title>Desenvolvendo e publicando um site Javascript na Amazon AWS</title>
       <link>https://paulohrpinheiro.xyz/texts/javascript/2018-06-09-hospedagem-javascript-amazon.html</link>
       <description>Como hospedar uma aplicação React (javascript em geral) na Amazon, sem se preocupar com servidores.</description>
-      <pubDate>Sat, 9 Jun 2018 17:40:00 -0300</pubDate>
+      <pubDate>Sat, 9 Jun 2018 00:00:00 +0000</pubDate>
     </item>
     <item>
       <title>Copiando arquivos em linguagem C</title>
@@ -180,12 +186,6 @@
       <link>https://paulohrpinheiro.xyz/texts/ruby/2016-11-08-iniciando-no-ruby.html</link>
       <description>Antes de sair por aí programando e instalando *gems* como um doido, convém habituar-se a preparar o ambiente para cada novo projeto.</description>
       <pubDate>Tue, 8 Nov 2016 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Começando em JavaScript</title>
-      <link>https://paulohrpinheiro.xyz/texts/javascript/2016-11-05-comecando-em-javascript.html</link>
-      <description>Até altero algum código em *JavaScript*, mas nunca aprendi de fato. Aqui vão algumas experiências, de um pequeno projeto que fiz em *JavaScript*, sem saber nada dele.</description>
-      <pubDate>Sat, 5 Nov 2016 00:00:00 +0000</pubDate>
     </item>
 
   </channel>

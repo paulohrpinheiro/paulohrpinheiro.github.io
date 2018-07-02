@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Loops alinhados ao meu interpretador BrainFuck</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Continuando o projeto de fazer um interpretador brainfuck em GO">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores e sysadmins</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/go/">
+        go
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/database/">
+        database
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Loops alinhados ao meu interpretador BrainFuck</h2>
+
+<h3>Continuando o projeto de fazer um interpretador brainfuck em GO</h3>
+
+<p><img src="images/gopher.png" alt="Gopher"></p>
+
+<h4>O Problema</h4>
+
+<p>É algo simples, &quot;eu já tinha pensado nisso&quot;, mas não me animava a implementar. Se temos <em>loops</em> aninhados, precisamos de um tratamento especial. Eis um exemplo:</p>
+<pre><code class="language-go">
++++++[&lt;&lt;,-----[&gt;]&gt;&gt;[&lt;&lt;+++&gt;&gt;[-]]]&gt;.
+
+</code></pre>
+<p>E finalmente tomei coragem para fazer essa implementação. Na <a href="https://github.com/paulohrpinheiro/mfbil/tree/0.0.4">tag 0.0.4</a>, eu tentei resolver isso implementado um <em>stack</em>, mas claro que não deu certo. Como eu sei quando um <code class="prettyprint">]</code> é relativo ao <code class="prettyprint">[</code> em que estou? Esse era o problema que eu estava ignorando.</p>
+
+<p><a href="https://github.com/paulohrpinheiro/mfbil/compare/0.0.3...0.0.5?diff=split&name=0.0.5">Aqui um diff completo</a> em relação ao <a href="https://paulohrpinheiro.xyz/texts/go/2018-05-22-adicionando-loop-ao-mfbil.html">último texto</a>.</p>
+
+<h4>Nem só isso</h4>
+
+<p>Uma importante alteração foi o controle sobre o valor do ponteiro de memória. Eu não tinha feito nada para controlar <em>underflow</em> ou <em>overflow</em>, até que me deparei com códigos que funcionam como se não houvesse amanhã!</p>
+<pre><code class="language-go">
+if l.pos &lt; 0 {
+        l.pos = len(l.memory) - 1
+} else if l.pos &gt;= len(l.memory) {
+        l.pos = 0
+}
+
+</code></pre>
+<p>Não importa o que se faça, sempre se estará apontando para uma região válida da memória.</p>
+
+<p>Também resolvi imprimir o caractere correspondente ao número armazenado, para pode rodar os programas <strong>BF</strong> que tem por aí e comparar a saída:</p>
+<pre><code class="language-go">
+ func main() {
+@@ -84,7 +107,7 @@ func main() {
+                &#x27;&lt;&#x27;: func(l *Language) { l.pos-- },
+                &#x27;+&#x27;: func(l *Language) { l.memory[l.pos]++ },
+                &#x27;-&#x27;: func(l *Language) { l.memory[l.pos]-- },
+-               &#x27;.&#x27;: func(l *Language) { fmt.Println(l.memory[l.pos]) },
++               &#x27;.&#x27;: func(l *Language) { fmt.Print(string(l.memory[l.pos])) },
+                &#x27;[&#x27;: func(l *Language) { open_bracket(l) },
+                &#x27;]&#x27;: func(l *Language) { close_bracket(l) },
+        }
+
+</code></pre>
+<p>O interessante aqui é a função <code class="prettyprint">string</code>, que eu estava procurando sem saber que existia :).</p>
+
+<h4>Finalmente</h4>
+
+<p>Foram implementados os cuidados para quando se depara com um <code class="prettyprint">[</code>:</p>
+<pre><code class="language-go">
+func open_bracket(l *Language) {
+    if l.memory[l.pos] != 0 {
+        return
+    }
+
+    for depth := 1; depth &gt; 0; {
+        l.instruction++
+
+        instruction := l.source[l.instruction]
+        if instruction == &#x27;[&#x27; {
+            depth++
+        } else if instruction == &#x27;]&#x27; {
+            depth--
+        }
+    }
+}
+
+</code></pre>
+<p>Se o valor na posição corrente de memória for zero, nem entramos no loop, procurando seu final.</p>
+
+<p>E quando se depara com um <code class="prettyprint">]</code>, eis os cuidados:</p>
+<pre><code class="language-go">
+func close_bracket(l *Language) {
+    for depth := 1; depth &gt; 0; {
+        l.instruction--
+        instruction := l.source[l.instruction]
+        if instruction == &#x27;[&#x27; {
+            depth--
+        } else if instruction == &#x27;]&#x27; {
+            depth++
+        }
+    }
+    l.instruction--
+}
+
+</code></pre>
+<p>Simplesmente procuramos o <code class="prettyprint">[</code> correspondente, onde a verificação do <em>loop</em> está.</p>
+
+<p>As ideias para a busca dos limitadores de <em>loop</em> foram copiados dessas implementações:</p>
+
+<ul>
+<li><a href="https://github.com/EvanHahn/brainfuck-interpreter/blob/master/brainfuck.py">EvanHahn/brainfuck-interpreter
+</a></li>
+<li><a href="https://github.com/brandly/bf.go/blob/master/bf.go">brandly/bf.go
+</a></li>
+</ul>
+
+<p><em>Torture Tests</em> para seu interpretador <strong>BF</strong> podem ser encontrados <a href="https://ideone.com/fork/9fQ2Ej">nesse link</a>.</p>
+
+<h2>O Futuro</h2>
+
+<p>Está quase no ponto em que essa série deixará de ser sobre <em>GO</em> e o mais importante será a linguagem <strong>BF</strong>. Algumas coisas que pretendo resolver logo:</p>
+
+<ul>
+<li>A leitura do código fonte ser por arquivo, e não pelo <em>stdin</em>.</li>
+<li>Implementar a entrada de dados com o comando <code class="prettyprint">,</code>.</li>
+<li>Opção, em linha de comando, para tamanho da memória e tempo máximo de execução, ou quantidade máxima de instruções executadas (minimizar os efeitos de loops infinitos).</li>
+<li>Um jeito visual de apresentar a execução dos programas, com apresentação dos valores em memória.</li>
+<li>Testes, muitos testes.</li>
+</ul>
+
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Loops alinhados ao meu interpretador BrainFuck"
+    data-url="https://paulohrpinheiro.xyz/texts/go/2018-07-02-loops-aninhados-mfbil.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Loops alinhados ao meu interpretador BrainFuck"
+    data-url="https://paulohrpinheiro.xyz/texts/go/2018-07-02-loops-aninhados-mfbil.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Loops alinhados ao meu interpretador BrainFuck"
+    data-url="https://paulohrpinheiro.xyz/texts/go/2018-07-02-loops-aninhados-mfbil.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Loops alinhados ao meu interpretador BrainFuck"
+    data-url="https://paulohrpinheiro.xyz/texts/go/2018-07-02-loops-aninhados-mfbil.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Loops alinhados ao meu interpretador BrainFuck"
+    data-url="https://paulohrpinheiro.xyz/texts/go/2018-07-02-loops-aninhados-mfbil.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2017, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+<!-- Start of StatCounter Code for Default Guide -->
+<script type="text/javascript">
+var sc_project=11424422; 
+var sc_invisible=1; 
+var sc_security="182eb83e"; 
+var scJsHost = (("https:" == document.location.protocol) ?
+"https://secure." : "http://www.");
+document.write("<sc"+"ript type='text/javascript' src='" +
+scJsHost+
+"statcounter.com/counter/counter.js'></"+"script>");
+</script>
+<noscript><div class="statcounter"><a title="web statistics"
+href="http://statcounter.com/" target="_blank"><img
+class="statcounter"
+src="//c.statcounter.com/11424422/0/182eb83e/1/" alt="web
+statistics"></a></div></noscript>
+<!-- End of StatCounter Code for Default Guide -->
+
+</body>
+</html>
