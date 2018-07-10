@@ -8,6 +8,12 @@
     <language>pt-br</language>
 
     <item>
+      <title>Mockando o que tá meio mockado</title>
+      <link>https://paulohrpinheiro.xyz/texts/python/2018-07-09-mockando-o-que-tah-meio-mockado.html</link>
+      <description>Um mock especial para Python unittest</description>
+      <pubDate>Mon, 9 Jul 2018 00:00:00 +0000</pubDate>
+    </item>
+    <item>
       <title>Listas, referências e cópias em Python</title>
       <link>https://paulohrpinheiro.xyz/texts/python/2017-08-19-listas-referencias-e-copias-em-python.html</link>
       <description>Um erro bem comum (pelo menos pra mim), lidando com listas em Python</description>

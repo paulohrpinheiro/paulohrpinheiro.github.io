@@ -8,6 +8,12 @@
     <language>pt-br</language>
 
     <item>
+      <title>Mockando o que tá meio mockado</title>
+      <link>https://paulohrpinheiro.xyz/texts/python/2018-07-09-mockando-o-que-tah-meio-mockado.html</link>
+      <description>Um mock especial para Python unittest</description>
+      <pubDate>Mon, 9 Jul 2018 22:45:00 -0300</pubDate>
+    </item>
+    <item>
       <title>Suporte a loops aninhados em meu interpretador BrainFuck</title>
       <link>https://paulohrpinheiro.xyz/texts/go/2018-07-02-loops-aninhados-mfbil.html</link>
       <description>Continuando o projeto de fazer um interpretador brainfuck em GO</description>
@@ -180,12 +186,6 @@
       <link>https://paulohrpinheiro.xyz/texts/rust/2016-11-16-testes-funcionais-em-rust.html</link>
       <description>Como fazer testes em Rust? Aqui segue uma forma, e algumas coisas que descobri sobre a linguagem.</description>
       <pubDate>Wed, 16 Nov 2016 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Iniciando no Ruby</title>
-      <link>https://paulohrpinheiro.xyz/texts/ruby/2016-11-08-iniciando-no-ruby.html</link>
-      <description>Antes de sair por aí programando e instalando *gems* como um doido, convém habituar-se a preparar o ambiente para cada novo projeto.</description>
-      <pubDate>Tue, 8 Nov 2016 00:00:00 +0000</pubDate>
     </item>
 
   </channel>

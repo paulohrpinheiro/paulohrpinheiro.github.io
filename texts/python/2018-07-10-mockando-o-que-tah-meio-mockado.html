@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Mockando o que tá meio mockado</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Um mock especial para Python unittest">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/go/">
+        go
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/database/">
+        database
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Mockando o que tá meio mockado</h2>
+
+<h3>Um mock especial para Python unittest</h3>
+
+<p><img src="images/mock.png" alt="To Mock or not to mock?"></p>
+
+<h4>Ah, um problema</h4>
+
+<p>E estava eu preocupado com um teste que deveria escrever para uma aplicação Django. Era muita coisa pra preparar o contexto da função a ser chamada. E deixei quieto, no fim de semana resolvo isso, só isso.</p>
+
+<p>Com a cabeça mais fria, liguei-me que eu estava querendo retestar o que estava testado, e, portando, a pior parte de tudo poderia ser resolvida com um mock.</p>
+
+<p>Coisa simples, pois a aplicação está bem estruturada, funções muito específicas, que são chamadas por outras funções específicas, enfim.</p>
+
+<p>O <code class="prettyprint">patch</code> tava lá, com o nome certinho da função e o caminho.</p>
+
+<h4>Simulando</h4>
+
+<p>Como se trata de código da empresa em que trabalho, aqui vai um simulado, que está:</p>
+<pre><code class="language-python">
+.
+├── __init__.py
+├── mod1
+│   ├── __init__.py
+│   ├── services.py
+│   └── tests
+│       ├── __init__.py
+│       └── test_mod1.py
+└── mod2
+    ├── __init__.py
+    ├── services.py
+    └── tests
+        ├── __init__.py
+        └── test_mod2.py
+
+</code></pre>
+<p>Isso é o <code class="prettyprint">mod2/services.py</code>:</p>
+<pre><code class="language-python">
+def mod2_function():
+    return &#x27;This is REAL mod2!&#x27;
+
+</code></pre>
+<p>E isso é o <code class="prettyprint">mod1/services.py</code>:</p>
+<pre><code class="language-python">
+from mod2.services import mod2_function
+
+
+def mod1_function():
+    mod2 = mod2_function()
+
+return &#x27;From _mod1_ I get this from _mod2_: [{}]&#x27;.format(mod2)
+
+</code></pre>
+<p>O detalhe é que <code class="prettyprint">mod1</code> usa <code class="prettyprint">mod2</code>.</p>
+
+<p>O teste, intencionalmente falho, para <code class="prettyprint">mod1/tests/test_mod1.py</code>:</p>
+<pre><code class="language-python">
+from unittest import TestCase
+
+from ..services import mod1_function
+
+
+class TestMod1(TestCase):
+    def test_mod1(self):
+        expected = &#x27;I don\&#x27;t remember&#x27;
+        result = mod1_function()
+
+self.assertEqual(result, expected)
+
+</code></pre>
+<p>E o teste para <code class="prettyprint">mod2/testes/test_mod2.py</code>:</p>
+<pre><code class="language-python">
+from unittest import TestCase
+
+from ..services import mod2_function
+
+
+class TestMod2(TestCase):
+    def test_mod2(self):
+        expected = &#x27;This is REAL mod2!&#x27;
+        mod2_result = mod2_function()
+
+self.assertEqual(mod2_result, expected)
+
+</code></pre>
+<p>Rodando os testes:</p>
+<pre><code class="language-python">
+paulohrpinheiro@phrp:~&#x2F;D&#x2F;p&#x2F;c&#x2F;mocking|master✓
+➤ python -munittest -v
+test_mod1 (mod1.tests.test_mod1.TestMod1) ... FAIL
+test_mod2 (mod2.tests.test_mod2.TestMod2) ... ok
+
+======================================================================
+FAIL: test_mod1 (mod1.tests.test_mod1.TestMod1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File &quot;&#x2F;home&#x2F;paulohrpinheiro&#x2F;Dropbox&#x2F;projetos&#x2F;coisas&#x2F;mocking&#x2F;mod1&#x2F;tests&#x2F;test_mod1.py&quot;, line 11, in     test_mod1
+    self.assertEqual(result, expected)
+AssertionError: &#x27;From _mod1_ I get this from _mod2_: [This is REAL mod2!]&#x27; != &quot;I don&#x27;t remember&quot;
+- From _mod1_ I get this from _mod2_: [This is REAL mod2!]
++ I don&#x27;t remember
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.001s
+
+FAILED (failures=1)
+
+</code></pre>
+<p>Deu erro, como esperado. Eu fiz isso para ressaltar o fato de <code class="prettyprint">mod1</code> usa <code class="prettyprint">mod2</code>. Essa era a minha situação real. Agora, para arrumar o teste vou <em>mockar</em> um valor:</p>
+<pre><code class="language-python">
+➤ git diff
+diff --git a&#x2F;mocking&#x2F;mod1&#x2F;tests&#x2F;test_mod1.py b&#x2F;mocking&#x2F;mod1&#x2F;tests&#x2F;test_mod1.py
+index 7ff23c8..a772241 100644
+--- a&#x2F;mocking&#x2F;mod1&#x2F;tests&#x2F;test_mod1.py
++++ b&#x2F;mocking&#x2F;mod1&#x2F;tests&#x2F;test_mod1.py
+@@ -1,11 +1,14 @@
+ from unittest import TestCase
++from unittest.mock import patch
+
+ from ..services import mod1_function
+
+
+ class TestMod1(TestCase):
+-    def test_mod1(self):
+-        expected = &#x27;I don\&#x27;t remember&#x27;
++    @patch(&#x27;mod2.services.mod2_function&#x27;)
++    def test_mod1(self, mock_mod2):
++        mock_mod2.return_value = &#x27;MOCKED!&#x27;
++        expected = &#x27;From _mod1_ I get this from _mod2_: [MOCKED!]&#x27;
+         result = mod1_function()
+
+         self.assertEqual(result, expected)
+
+</code></pre>
+<p>Rodando o teste alterado:</p>
+<pre><code class="language-python">
+➤ python -munittest -v
+test_mod1 (mod1.tests.test_mod1.TestMod1) ... FAIL
+test_mod2 (mod2.tests.test_mod2.TestMod2) ... ok
+
+======================================================================
+FAIL: test_mod1 (mod1.tests.test_mod1.TestMod1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File &quot;&#x2F;home&#x2F;paulohrpinheiro&#x2F;.pyenv&#x2F;versions&#x2F;3.6.4&#x2F;lib&#x2F;python3.6&#x2F;unittest&#x2F;mock.py&quot;, line 1179, in patched
+    return func(*args, **keywargs)
+  File &quot;&#x2F;home&#x2F;paulohrpinheiro&#x2F;Dropbox&#x2F;projetos&#x2F;coisas&#x2F;mocking&#x2F;mod1&#x2F;tests&#x2F;test_mod1.py&quot;, line 13, in test_mod1
+    self.assertEqual(result, expected)
+AssertionError: &#x27;From _mod1_ I get this from _mod2_: [This is REAL mod2!]&#x27; != &#x27;From _mod1_ I get this from _mod2_: [MOCKED!]&#x27;
+- From _mod1_ I get this from _mod2_: [This is REAL mod2!]
+?                                      ^^^^^^^^^ ^^^^^^^
++ From _mod1_ I get this from _mod2_: [MOCKED!]
+?                                      ^^^^ ^
+
+</code></pre>
+<p>Lendo e relendo alguns textos, encontrei esse, muito claro sob meu problema:</p>
+
+<blockquote>
+<p><a href="http://bhfsteve.blogspot.com/2012/06/patching-tip-using-mocks-in-python-unit.html">Patching tip using mocks in python unit tests, do Steve&#39;s Blog</a></p>
+</blockquote>
+
+<p>Que me deu a luz para essa alteração:</p>
+<pre><code class="language-python">
+➤ git diff
+diff --git a&#x2F;mocking&#x2F;mod1&#x2F;tests&#x2F;test_mod1.py b&#x2F;mocking&#x2F;mod1&#x2F;tests&#x2F;test_mod1.py
+index 8f66098..2b05c63 100644
+--- a&#x2F;mocking&#x2F;mod1&#x2F;tests&#x2F;test_mod1.py
++++ b&#x2F;mocking&#x2F;mod1&#x2F;tests&#x2F;test_mod1.py
+@@ -5,7 +5,7 @@ from ..services import mod1_function
+
+
+ class TestMod1(TestCase):
+-    @patch(&#x27;mod2.services.mod2_function&#x27;, return_value=&#x27;MOCKED!&#x27;)
++    @patch(&#x27;mod1.services.mod2_function&#x27;, return_value=&#x27;MOCKED!&#x27;)
+     def test_mod1(self, mock_mod2):
+         expected = &#x27;From _mod1_ I get this from _mod2_: [MOCKED!]&#x27;
+         result = mod1_function()
+
+</code></pre>
+<p>Finalmente:</p>
+<pre><code class="language-python">
+➤ python -munittest -v
+test_mod1 (mod1.tests.test_mod1.TestMod1) ... ok
+test_mod2 (mod2.tests.test_mod2.TestMod2) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.001s
+
+OK
+
+</code></pre>
+<h4>A razão disso</h4>
+
+<p>Quando, em <code class="prettyprint">mod1/services.py</code> realizo o <code class="prettyprint">import</code>, estou adicionando ao contexto local a função <code class="prettyprint">mod2_function</code>. Por isso que o caminho para o patch deve ser <code class="prettyprint">mod1.services.mod2_funcion</code>, e não o caminho de onde a função foi escrita.</p>
+
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Mockando o que tá meio mockado"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2018-07-10-mockando-o-que-tah-meio-mockado.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Mockando o que tá meio mockado"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2018-07-10-mockando-o-que-tah-meio-mockado.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Mockando o que tá meio mockado"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2018-07-10-mockando-o-que-tah-meio-mockado.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Mockando o que tá meio mockado"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2018-07-10-mockando-o-que-tah-meio-mockado.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Mockando o que tá meio mockado"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2018-07-10-mockando-o-que-tah-meio-mockado.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2017, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+<!-- Start of StatCounter Code for Default Guide -->
+<script type="text/javascript">
+var sc_project=11424422; 
+var sc_invisible=1; 
+var sc_security="182eb83e"; 
+var scJsHost = (("https:" == document.location.protocol) ?
+"https://secure." : "http://www.");
+document.write("<sc"+"ript type='text/javascript' src='" +
+scJsHost+
+"statcounter.com/counter/counter.js'></"+"script>");
+</script>
+<noscript><div class="statcounter"><a title="web statistics"
+href="http://statcounter.com/" target="_blank"><img
+class="statcounter"
+src="//c.statcounter.com/11424422/0/182eb83e/1/" alt="web
+statistics"></a></div></noscript>
+<!-- End of StatCounter Code for Default Guide -->
+
+</body>
+</html>
