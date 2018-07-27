@@ -8,10 +8,16 @@
     <language>pt-br</language>
 
     <item>
+      <title>O prazer da leitura de livros impressos</title>
+      <link>https://paulohrpinheiro.xyz/texts/diversos/2018-07-27-o-prazer-de-ler-livros-impressos.html</link>
+      <description>Leituras novas que me lembraram antigas</description>
+      <pubDate>Fri, 27 Jul 2018 18:00:00 -0300</pubDate>
+    </item>
+    <item>
       <title>Mockando o que tá meio mockado</title>
       <link>https://paulohrpinheiro.xyz/texts/python/2018-07-09-mockando-o-que-tah-meio-mockado.html</link>
       <description>Um mock especial para Python unittest</description>
-      <pubDate>Mon, 9 Jul 2018 22:45:00 -0300</pubDate>
+      <pubDate>Mon, 9 Jul 2018 00:00:00 +0000</pubDate>
     </item>
     <item>
       <title>Suporte a loops aninhados em meu interpretador BrainFuck</title>
@@ -180,12 +186,6 @@
       <link>https://paulohrpinheiro.xyz/texts/rust/2016-11-17-lidando-com-erros-em-rust.html</link>
       <description>Como retornar de funções em Rust valores e status.</description>
       <pubDate>Thu, 17 Nov 2016 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Testes funcionais em Rust</title>
-      <link>https://paulohrpinheiro.xyz/texts/rust/2016-11-16-testes-funcionais-em-rust.html</link>
-      <description>Como fazer testes em Rust? Aqui segue uma forma, e algumas coisas que descobri sobre a linguagem.</description>
-      <pubDate>Wed, 16 Nov 2016 00:00:00 +0000</pubDate>
     </item>
 
   </channel>
