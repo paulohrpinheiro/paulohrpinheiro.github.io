@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Continuando o livro Data Science do Zero</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Agora implementamos a busca por pessoas que possuam conexões com nossas conexões">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/go/">
+        go
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/database/">
+        database
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Continuando o livro Data Science do Zero</h2>
+
+<h3>Agora implementamos a busca por pessoas que possuam conexões com nossas conexões</h3>
+
+<p><img src="images/ds_from_0.jpg" alt="Capa do livro Data Science do Zero"></p>
+
+<h4>Prolegômenos</h4>
+
+<p>Este é o segundo texto sobre esse livro. Se você não viu o primeiro texto, por favor, <a href="https://paulohrpinheiro.xyz/texts/python/2017-07-23-data-science-do-zero.html">aqui está ele</a>.</p>
+
+<p>Uma ano se passou, com esse livro me olhando torto toda vez que passava por ele. Um ano se passou, com a alteração que fiz no código me olhando torto toda vez que eu não conseguia fazer os teste voltarem a funcionar.</p>
+
+<p>Chegou a hora de implementar uma busca mais elaborada, aquela coisa nas redes sociais de &#39;pessoas que você talvez conheça&#39;. A abordagem do livro é, na seção &#39;Cientistas de Dados Que Você Talvez Conheça&#39; (pp. 6-7).</p>
+
+<p>A ideia aqui é verificar em todos os usuários que não são conexões sua, se eles tem conexão com alguma conexão sua. Se alguém não conectado com dada conta possui conexão com alguma conexão sua, possivelmente se conheçam, ou muito provavelmente seja interessante conhecer-se.</p>
+
+<p>Relembrando, minha ideia é escrever testes (que validem os exemplos e dados usados no livro) e classes que implementem as ideias apresentadas no texto, ao invés de apenas copiar o código lá exibido.</p>
+
+<h4>Primeiras alterações</h4>
+
+<h5>Testes</h5>
+
+<p>Facilitar a execução dos testes foi algo bem fácil. Bastou incluir um <code class="prettyprint">__init__.py_</code> no diretório de testes, para que a execução dos mesmos fosse disparada com o simples comando:</p>
+<pre><code class="language-python">
+➤ python3 -munittest
+.......
+----------------------------------------------------------------------
+Ran 7 tests in 0.002s
+
+OK
+
+</code></pre>
+<p>Também um alteração em como as <em>fixtures</em> são inseridas no objeto <code class="prettyprint">User</code>:</p>
+<pre><code class="language-python">
+--- a&#x2F;tests&#x2F;test_friendship.py
++++ b&#x2F;tests&#x2F;test_friendship.py
+@@ -12,6 +12,8 @@ class TestFriendship(unittest.TestCase):
+         &quot;&quot;&quot;Get friendships array.&quot;&quot;&quot;
+         fixtures = helper_test.Fixtures()
+         self.users = user.User()
++        [self.users.append(x) for x in fixtures.users]
++
+
+</code></pre>
+<h5>Lista de amigos</h5>
+
+<p>Outra alteração, bem simples, foi em como conseguir uma lista de conexões de um dado usuário:</p>
+<pre><code class="language-python">
+     def friends(self, user_id):
+         &quot;&quot;&quot;Returns a friends list for a given user.&quot;&quot;&quot;
+-        return [x[1] for x in self.friendships if x[0] == user_id]
++        return [x[&#x27;friend&#x27;] for x in self.friendships if x[&#x27;user&#x27;] == user_id]
+
+</code></pre>
+<h4>Testes para o código novo</h4>
+
+<p>Um teste que foi implementado, após esse um ano de abandono, era na funcção <code class="prettyprint">how_many_friends</code>, que conta quantas conexões um dados usuário possui:</p>
+<pre><code class="language-python">
+def test_how_many_friends(self):
+    &quot;&quot;&quot;Test nymber of friends by user. Order is important.&quot;&quot;&quot;
+    expected = [
+        (1, 3), (2, 3), (3, 3), (5, 3), (8, 3),
+        (0, 2), (4, 2), (6, 2), (7, 2), (9, 1),
+    ]
+    self.assertEqual(expected, self.users.how_many_friends())
+
+</code></pre>
+<p>Lembrando que os dados do teste são os exemplos usados no livro. A ordem dos dados, pela quantidade de conexões é importante, pois um dos critérios para essa tarefa é justamente saber que &#39;é mais conectado&#39;.</p>
+
+<p>Outro teste e para saber se o cálculo de sugestões para novas conexões bate com a proposta apresentada:</p>
+<pre><code class="language-python">
+def test_friends_of_friend_ids(self):
+    &quot;&quot;&quot;Test list of common friends with a friend.&quot;&quot;&quot;
+    expected = {0: 2, 5: 1}
+    self.assertEqual(expected, self.users.friends_of_friend_ids(3))
+
+</code></pre>
+<h4>As funções adicionadas</h4>
+
+<p>Aqui calculamos quantas conexões um dado usuário tem. Levanta-se quais são as conexões, faz-se a contagem, ordena-se, e pronto.</p>
+<pre><code class="language-python">
+def how_many_friends(self):
+    &quot;&quot;&quot;Returns how many friends have each user.&quot;&quot;&quot;
+    friends_by_id = [
+        (user[&#x27;id&#x27;], self.friends(user[&#x27;id&#x27;]))
+        for user in self.data
+    ]
+    num_friends_by_id = [(x[0], len(x[1])) for x in friends_by_id]
+    return sorted(num_friends_by_id, key=lambda x: x[1], reverse=True)
+
+</code></pre>
+<p>Necessária para sugerir conexões novas, essa funcção verifica se quais são as conexões em comum de dois usuários usando a operação de interseção entre conjuntos. Por isso a conversão para o tipo <code class="prettyprint">set()</code>, e o uso de <code class="prettyprint">&amp;</code>, o operador Python para operação de interseção entre conjuntos.</p>
+<pre><code class="language-python">
+def common_friends(self, user1, user2):
+    friends1 = set(self.friends(user1))
+    friends2 = set(self.friends(user2))
+    return friends1 &amp; friends2
+
+</code></pre>
+<p>E aqui a pérola de hoje, que retorna uma lista de sugestões de conexão. Para cada usuário existente no sistema, que não é conectado ao usuário informado, verifica-se se tem conexões em comum. Exclui-se o próprio usuário pesquisado, e os já conectados.</p>
+<pre><code class="language-python">
+def friends_of_friend_ids(self, user_id):
+    &quot;&quot;&quot;Returns counters for commons friends of each friend.&quot;&quot;&quot;
+    my_friends = self.friends(user_id)
+    exclude = my_friends + [user_id, ]
+    commons = dict()
+    for person in [x[&#x27;user&#x27;] for x in self.friendships]:
+        if person in exclude:
+            continue
+        common = self.common_friends(user_id, person)
+        if len(common) &gt; 0:
+            commons[person] = len(common)
+    return commons
+
+</code></pre>
+<p>Essas mudanças estão na <a href="https://github.com/paulohrpinheiro/ds_from_0/tree/002_friends_of_a_friend">tag 002<em>friends</em>of<em>a</em>friend no GitHub</a>.</p>
+
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Continuando o livro Data Science do Zero"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2018-07-28-data-science-do-zero-conexoes-com-nossas-conexoes.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Continuando o livro Data Science do Zero"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2018-07-28-data-science-do-zero-conexoes-com-nossas-conexoes.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Continuando o livro Data Science do Zero"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2018-07-28-data-science-do-zero-conexoes-com-nossas-conexoes.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Continuando o livro Data Science do Zero"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2018-07-28-data-science-do-zero-conexoes-com-nossas-conexoes.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Continuando o livro Data Science do Zero"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2018-07-28-data-science-do-zero-conexoes-com-nossas-conexoes.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2017, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+<!-- Start of StatCounter Code for Default Guide -->
+<script type="text/javascript">
+var sc_project=11424422; 
+var sc_invisible=1; 
+var sc_security="182eb83e"; 
+var scJsHost = (("https:" == document.location.protocol) ?
+"https://secure." : "http://www.");
+document.write("<sc"+"ript type='text/javascript' src='" +
+scJsHost+
+"statcounter.com/counter/counter.js'></"+"script>");
+</script>
+<noscript><div class="statcounter"><a title="web statistics"
+href="http://statcounter.com/" target="_blank"><img
+class="statcounter"
+src="//c.statcounter.com/11424422/0/182eb83e/1/" alt="web
+statistics"></a></div></noscript>
+<!-- End of StatCounter Code for Default Guide -->
+
+</body>
+</html>

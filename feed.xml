@@ -8,10 +8,16 @@
     <language>pt-br</language>
 
     <item>
+      <title>Continuando o livro Data Science do Zero</title>
+      <link>https://paulohrpinheiro.xyz/texts/python/2018-07-28-data-science-do-zero-conexoes-com-nossas-conexoes.html</link>
+      <description>Agora implementamos a busca por pessoas que possuam conexões com nossas conexões</description>
+      <pubDate>Sat, 28 Jul 2018 21:30:00 -0300</pubDate>
+    </item>
+    <item>
       <title>O prazer da leitura de livros impressos</title>
       <link>https://paulohrpinheiro.xyz/texts/diversos/2018-07-27-o-prazer-de-ler-livros-impressos.html</link>
       <description>Leituras novas que me lembraram antigas</description>
-      <pubDate>Fri, 27 Jul 2018 18:00:00 -0300</pubDate>
+      <pubDate>Fri, 27 Jul 2018 00:00:00 +0000</pubDate>
     </item>
     <item>
       <title>Mockando o que tá meio mockado</title>
@@ -180,12 +186,6 @@
       <link>https://paulohrpinheiro.xyz/texts/rust/2016-11-21-download-arquivos.html</link>
       <description>Mais um crawler está surgindo na praça. Decidi fazer em Rust, só pra exercitar. Por agora a tarefa aqui é simples: dada um lista de URLs, baixa-se o conteúdo de todas e salva-se localmente. Bora construir isso.</description>
       <pubDate>Mon, 21 Nov 2016 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Lidando com erros em Rust</title>
-      <link>https://paulohrpinheiro.xyz/texts/rust/2016-11-17-lidando-com-erros-em-rust.html</link>
-      <description>Como retornar de funções em Rust valores e status.</description>
-      <pubDate>Thu, 17 Nov 2016 00:00:00 +0000</pubDate>
     </item>
 
   </channel>

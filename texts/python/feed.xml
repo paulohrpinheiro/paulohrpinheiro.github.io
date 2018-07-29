@@ -8,6 +8,12 @@
     <language>pt-br</language>
 
     <item>
+      <title>Continuando o livro Data Science do Zero</title>
+      <link>https://paulohrpinheiro.xyz/texts/python/2018-07-28-data-science-do-zero-conexoes-com-nossas-conexoes.html</link>
+      <description>Agora implementamos a busca por pessoas que possuam conexões com nossas conexões</description>
+      <pubDate>Sat, 28 Jul 2018 00:00:00 +0000</pubDate>
+    </item>
+    <item>
       <title>Mockando o que tá meio mockado</title>
       <link>https://paulohrpinheiro.xyz/texts/python/2018-07-09-mockando-o-que-tah-meio-mockado.html</link>
       <description>Um mock especial para Python unittest</description>
