@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Quase um deploy contínuo!</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Ainda não é um deploy contínuo (mas falta um pouquinho): usando os triggers do pipeline no Bitbucket.">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/go/">
+        go
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/database/">
+        database
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Quase um deploy contínuo!</h2>
+
+<h3>Ainda não é um deploy contínuo (mas falta um pouquinho): usando os triggers do pipeline no Bitbucket.</h3>
+
+<p><img src="images/bitbucket-pipeline.jpg" alt="Bitbucket Pipeline"></p>
+
+<h4>Continuando</h4>
+
+<p>Em texto anterior, <a href="https://paulohrpinheiro.xyz/texts/javascript/2018-06-09-hospedagem-javascript-amazon.html">Desenvolvendo e publicando um site Javascript na Amazon AWS</a>, foi mostrado como publicar automaticamente um site em javascript na Amazon, sem precisar de um servidor, e sem precisar mandar publicar.</p>
+
+<p>Uma forma de deploy contínuo, usando os <a href="https://bitbucket.org/product/features/pipelines">pipelines</a> do <a href="https://bitbucket.org">Bibucket</a>. Ideia simples: alterou a master, se os testes passarem, um <a href="https://aws.amazon.com/pt/s3/">bucket S3</a> é atualizado, que por sua vez, está atrelado a uma distribuição <a href="https://aws.amazon.com/pt/cloudfront">CloudFront</a>.</p>
+
+<h4>Outro problema</h4>
+
+<p>Até aí tudo bem, com essas configurações, conseguimos ter todo o processo de homologação sob controle. Mas e a produção? Um script pra publicar?</p>
+
+<p>Não!</p>
+
+<h4>Nova solução</h4>
+
+<p>Tentando resolver esse problema aqui na <a href="https://cargobr.com">CARGOBR</a>, deparei-me com <a href="https://confluence.atlassian.com/bitbucket/configure-bitbucket-pipelines-yml-792298910.htm">essa belezura que é um trigger por tag criado no git</a>.</p>
+
+<p>Criou uma tag no seu repositório, se ele bater com o padrão informado, uma ação é disparada. O padrão aqui exemplificado é: se uma tag começando com <code class="prettyprint">production-</code> for criada no repositório, ela será publicada em produção.</p>
+
+<p>Assim temos um processo automático de geração para homologação, e quando as coisas estiverem bem, vai pra produção, tudo feito ou através da interface do Bitbucket, ou linha de comando mesmo, com <code class="prettyprint">git push --tags</code>.</p>
+
+<p>Para isso, basta alterar o <code class="prettyprint">bitbucket-pipelines.yml</code> (veja o texto citado no começo), e adicionar o elemento <code class="prettyprint">tags</code>:</p>
+<pre><code class="language-javascript">
+tags:
+    production-*:
+      - step:
+          name: Build assets
+          image: node:9.11-alpine
+          caches:
+            - node
+          script:
+            - npm install
+            - npm run-script build
+          artifacts:
+            - dist&#x2F;**
+      - step:
+          name: Deploy assets to AWS S3 - Production
+          image: python:3.6-alpine3.7
+          deployment: production
+          script:
+            - pip install awscli
+            - aws s3 sync --acl public-read --content-encoding utf-8 --delete dist&#x2F; $CARGOBR_S3_BUCKET_PRODUCTION
+            - aws cloudfront create-invalidation --distribution-id $CARGOBR_CF_DISTRIBUTION_ID_PRODUCTION --paths=&quot;&#x2F;*&quot;
+
+</code></pre>
+<p>Três pontos a atentar:</p>
+
+<ol>
+<li>Adicionou-se a <em>glob</em> para verificar se a <em>tag</em> interessa ou não (<code class="prettyprint">production-*:</code>).</li>
+<li>Os passos são os mesmos, eu sei, está um copiar e colar do passo anterior.</li>
+<li>As variáveis de ambiente para produção são diferentes de homologação!</li>
+</ol>
+
+<p>Com isso:</p>
+
+<ul>
+<li>Ninguém da equipe de desenvolvimento precisa de acesso ao painel da <em>Amazon</em>.</li>
+<li>A equipe faz deploy numa boa, sem depender de mais ninguém.</li>
+<li>Pode-se ter vários ambientes de homologação, automáticos até o fim, ou por <em>tag</em>.</li>
+</ul>
+
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Quase um deploy contínuo!"
+    data-url="https://paulohrpinheiro.xyz/texts/javascript/2018-08-03-quase-um-deploy-continuo.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Quase um deploy contínuo!"
+    data-url="https://paulohrpinheiro.xyz/texts/javascript/2018-08-03-quase-um-deploy-continuo.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Quase um deploy contínuo!"
+    data-url="https://paulohrpinheiro.xyz/texts/javascript/2018-08-03-quase-um-deploy-continuo.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Quase um deploy contínuo!"
+    data-url="https://paulohrpinheiro.xyz/texts/javascript/2018-08-03-quase-um-deploy-continuo.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Quase um deploy contínuo!"
+    data-url="https://paulohrpinheiro.xyz/texts/javascript/2018-08-03-quase-um-deploy-continuo.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2017, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+<!-- Start of StatCounter Code for Default Guide -->
+<script type="text/javascript">
+var sc_project=11424422; 
+var sc_invisible=1; 
+var sc_security="182eb83e"; 
+var scJsHost = (("https:" == document.location.protocol) ?
+"https://secure." : "http://www.");
+document.write("<sc"+"ript type='text/javascript' src='" +
+scJsHost+
+"statcounter.com/counter/counter.js'></"+"script>");
+</script>
+<noscript><div class="statcounter"><a title="web statistics"
+href="http://statcounter.com/" target="_blank"><img
+class="statcounter"
+src="//c.statcounter.com/11424422/0/182eb83e/1/" alt="web
+statistics"></a></div></noscript>
+<!-- End of StatCounter Code for Default Guide -->
+
+</body>
+</html>
