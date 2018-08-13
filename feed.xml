@@ -8,10 +8,16 @@
     <language>pt-br</language>
 
     <item>
+      <title>Sobre o livro &quot;Orientação a Objetos e SOLID para Ninjas&quot;</title>
+      <link>https://paulohrpinheiro.xyz/texts/diversos/2018-08-13-livro-orientacao-a-objetos-e-solid-para-ninjas-projetando-classes-flexiveis.html</link>
+      <description>Uma primeira impressão sobre a obra de Maurício Aniche, &quot;Orientação a Objetos e SOLID para Ninjas - projetando classes flexíveis&quot;</description>
+      <pubDate>Mon, 13 Aug 2018 00:00:00 +0000</pubDate>
+    </item>
+    <item>
       <title>Quase um deploy contínuo!</title>
       <link>https://paulohrpinheiro.xyz/texts/javascript/2018-08-03-quase-um-deploy-continuo.html</link>
       <description>Ainda não é um deploy contínuo (mas falta um pouquinho): usando os triggers do pipeline no Bitbucket.</description>
-      <pubDate>Fri, 3 Aug 2018 19:30:00 -0300</pubDate>
+      <pubDate>Fri, 3 Aug 2018 00:00:00 +0000</pubDate>
     </item>
     <item>
       <title>Continuando o livro Data Science do Zero</title>
@@ -180,12 +186,6 @@
       <link>https://paulohrpinheiro.xyz/texts/rust/2016-12-07-refatorando-download-primeira.html</link>
       <description>Algumas coisas me chamaram a atenção em um recente texto, sobre como baixar arquivos remotos com Rust. Essas coisas despertaram uma imensa vontade de refatorar esse código.</description>
       <pubDate>Wed, 7 Dec 2016 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Uma aplicação Flask esquelética</title>
-      <link>https://paulohrpinheiro.xyz/texts/python/2016-11-30-flask-esqueletico.html</link>
-      <description>Configurando um servidor nginx para rodar uma aplicação Flask, precisei verificar se a conexão WSGI estava funcionando, e mais que isso, que uma aplicação *Flask* funcionaria. Para isso adaptei uma aplicação mínima, mas bem compartimentada, apenas com esse objetivo.</description>
-      <pubDate>Wed, 30 Nov 2016 00:00:00 +0000</pubDate>
     </item>
 
   </channel>
