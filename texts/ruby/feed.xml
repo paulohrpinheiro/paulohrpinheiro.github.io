@@ -8,6 +8,12 @@
     <language>pt-br</language>
 
     <item>
+      <title>Liberada nova versão do GeraBlog (0.2.0)</title>
+      <link>https://paulohrpinheiro.xyz/texts/ruby/2018-08-25-nova-versao-do-gerablog.html</link>
+      <description></description>
+      <pubDate>Sat, 25 Aug 2018 00:00:00 +0000</pubDate>
+    </item>
+    <item>
       <title>Gerablog, um modesto gerador de blog estático</title>
       <link>https://paulohrpinheiro.xyz/texts/ruby/2017-01-15-gerablog-gerador-de-blog-estatico.html</link>
       <description>Liberado no RubyGems o gerador de blog estático que uso para este blog: Gerablog.</description>

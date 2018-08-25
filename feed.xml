@@ -8,6 +8,12 @@
     <language>pt-br</language>
 
     <item>
+      <title>Liberada nova versão do GeraBlog (0.2.0)</title>
+      <link>https://paulohrpinheiro.xyz/texts/ruby/2018-08-25-nova-versao-do-gerablog.html</link>
+      <description></description>
+      <pubDate>Sat, 25 Aug 2018 11:00:00 -0300</pubDate>
+    </item>
+    <item>
       <title>Sobre o livro &quot;Orientação a Objetos e SOLID para Ninjas&quot;</title>
       <link>https://paulohrpinheiro.xyz/texts/diversos/2018-08-13-livro-orientacao-a-objetos-e-solid-para-ninjas-projetando-classes-flexiveis.html</link>
       <description>Uma primeira impressão sobre a obra de Maurício Aniche, &quot;Orientação a Objetos e SOLID para Ninjas - projetando classes flexíveis&quot;</description>
@@ -180,12 +186,6 @@
       <link>https://paulohrpinheiro.xyz/texts/programadorbipolar/2016-12-15-quase.html</link>
       <description>Procurei, encontrei...</description>
       <pubDate>Thu, 15 Dec 2016 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Refatorando um programa escrito em Rust — Primeira empreitada</title>
-      <link>https://paulohrpinheiro.xyz/texts/rust/2016-12-07-refatorando-download-primeira.html</link>
-      <description>Algumas coisas me chamaram a atenção em um recente texto, sobre como baixar arquivos remotos com Rust. Essas coisas despertaram uma imensa vontade de refatorar esse código.</description>
-      <pubDate>Wed, 7 Dec 2016 00:00:00 +0000</pubDate>
     </item>
 
   </channel>
