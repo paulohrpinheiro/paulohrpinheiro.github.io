@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Liberada nova versão do GeraBlog (0.2.0)</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/go/">
+        go
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/database/">
+        database
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Liberada nova versão do GeraBlog (0.2.0)</h2>
+
+<h3>Agora o GeraBlog lista os mais recentes textos da página inicial.</h3>
+
+<p><img src="images/gerablog.png" alt="I&#39;m GeraBlog">
+<em>Image created by https://robohash.org/</em></p>
+
+<h4>Meu legado preferido</h4>
+
+<p>Eu tenho meu sistema legado, meu monstrinho de estimação, o <a href="https://rubygems.org/gems/gerablog">GeraBlog</a>, meu gerador de sites estáticos, usado para esse <em>blog</em>.</p>
+
+<p><a href="https://paulohrpinheiro.xyz/texts/ruby/2017-01-15-gerablog-gerador-de-blog-estatico.html">Nesse texto</a> eu conto a história dele. Basicamente, eu não sabia (ainda não sei) programar em <em>Ruby</em>, mas decidi fazer um <em>script</em> para gerar meu <em>blog</em>. Do <em>script</em>, queria um sistema mais organizado, e aí saiu isso. É um código muito feio, mas é o que faz meu <em>blog</em> funcionar. Um típico sistema legado!</p>
+
+<h4>Como não fazer software livre</h4>
+
+<p>A única pessoa que interessou-se pelo sistema, pediu ajuda e eu pensei comigo &quot;amanhã eu vejo isso&quot;, e passou-se bem mais de um ano... Eram tempos difíceis, como conto <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">nesses textos</a>, que, graças a Deus, passaram. Era algo tão besta, mas agora está respondido.</p>
+
+<p>Também, algumas alterações que tinha feito durante esse tempo, eu apenas comitei localmente e não registrei em <em>Changelog</em> nem com mudança de versão. Espero que essas más práticas tenham acabado!</p>
+
+<h4>Nova versão</h4>
+
+<p>A página inicial de meu <em>blog</em> só tinha uma espécie de &quot;missão&quot;, e muitos links. Quem chegasse na <em>home</em> não tinha muita noção do que fazer, pra onde ir. Então há muito tempo estava pensando nisso: inserir uma lista de <em>links</em> para os mais recentes textos.</p>
+
+<p>Agora, existem <em>links</em> para os últimos cinco textos do <em>blog</em> na <em>home</em>, dando uma ideia inicial pra quem chega do nada, e também, imagino, para aquela pessoa que volta ao <em>blog</em> para ver as novidades, mas não curte <a href="https://paulohrpinheiro.xyz/feed.xml">feed</a>.</p>
+
+<h4>Um pouco de código</h4>
+
+<p>Pra manter a tradição, um pouco de código!</p>
+
+<p>Mesmo o código estando ruim, a alteração foi simples.</p>
+
+<h5>A nova feature</h5>
+
+<p>Na geração do <em>blog</em> e dos <em>feeds</em>, há uma lista de todos os <em>posts</em>, já renderizados. O que fiz foi alterar a configuração para incluir o parâmetro de quantidade de posts a exibir (<code class="prettyprint">itens_in_index</code>):</p>
+<pre><code class="language-ruby">
+@@ -28,7 +29,8 @@ module GeraBlog
+                   &#x27;name&#x27; =&gt; &#x27;GeraBlog Static Blog Generator&#x27;,
+                   &#x27;description&#x27; =&gt; &#x27;GeraBlog - My own static site generator&#x27;,
+                   &#x27;language&#x27; =&gt; &#x27;pt-br&#x27;,
+-                  &#x27;itens_in_rss&#x27; =&gt; &#x27;50&#x27;
++                  &#x27;itens_in_rss&#x27; =&gt; &#x27;50&#x27;,
++                  &#x27;itens_in_index&#x27; =&gt; 10
+     end
+
+</code></pre>
+<p>No meu arquivo de configuração deixei esse valor em 5, que me pareceu mais agradável.</p>
+
+<p>E no módulo <em>GeraBlog</em>, que está no arquivo <code class="prettyprint">lib/gerablog/blog.rb</code>, adicionei os posts ao contexto do template:</p>
+<pre><code class="language-ruby">
+@@ -156,7 +158,8 @@ module GeraBlog
+         title: {
+           title: @config[&#x27;blog&#x27;][&#x27;title&#x27;],
+           description: @config[&#x27;blog&#x27;][&#x27;description&#x27;]
+-        }
++        },
++        posts: @posts.take(Integer(@config[&#x27;blog&#x27;][&#x27;itens_in_index&#x27;]))
+       }
+
+</code></pre>
+<p>E no template <code class="prettyprint">templates/index.rbhtml</code> foi adicionar a nova variável e imprimir:</p>
+<pre><code class="language-ruby">
+diff --git a&#x2F;templates&#x2F;index.rbhtml b&#x2F;templates&#x2F;index.rbhtml
+index 47199b8..56f3fb1 100644
+--- a&#x2F;templates&#x2F;index.rbhtml
++++ b&#x2F;templates&#x2F;index.rbhtml
+@@ -1,4 +1,4 @@
+-&lt;?rb #@ARGS config, categories ?&gt;
++&lt;?rb #@ARGS config, categories, posts ?&gt;
+ &lt;?rb import config[&#x27;template&#x27;][&#x27;header&#x27;] ?&gt;
+
+ &lt;article&gt;
+@@ -7,4 +7,15 @@
+   &lt;&#x2F;p&gt;
+ &lt;&#x2F;article&gt;
+
++&lt;article&gt;
++    &lt;h3&gt;Recent posts&lt;&#x2F;h3&gt;
++
++    &lt;?rb for post in posts ?&gt;
++      &lt;a href=&quot;${post[:url]}&quot;&gt;
++        &lt;h3 class=&quot;textcal&quot;&gt;${post[:title]}&lt;&#x2F;h3&gt;
++        &lt;p class=&quot;textcal&quot;&gt;${post[:description]}&lt;&#x2F;p&gt;
++      &lt;&#x2F;a&gt;
++    &lt;?rb end ?&gt;
++&lt;&#x2F;article&gt;
++
+ &lt;?rb import config[&#x27;template&#x27;][&#x27;footer&#x27;] ?&gt;
+
+</code></pre>
+<h5>Atualizando a versão</h5>
+
+<p>As outras alterações foram para alterar a versão e documentar a mudança.</p>
+
+<p>No <code class="prettyprint">CHANGELOG.md</code>:</p>
+<pre><code class="language-ruby">
++## 0.2.0 (2018-08-25)
++
++* Show recent posts links in index
+
+</code></pre>
+<p>E no <code class="prettyprint">lib/gerablog/version.rb</code>:</p>
+<pre><code class="language-ruby">
+-  VERSION = &#x27;0.1.0&#x27;.freeze                                                                                                                                                                                                                     
++  VERSION = &#x27;0.2.0&#x27;.freeze
+
+</code></pre>
+<h5>Comandos que sempre esqueço</h5>
+
+<p>Versão nova, vamos gerar a <em>gem</em> novamente:</p>
+<pre><code class="language-ruby">
+gem build gerablog.gemspec
+
+</code></pre>
+<p>Instalar:</p>
+<pre><code class="language-ruby">
+gem install .&#x2F;gerablog-0.2.0.gem
+
+</code></pre>
+<p>E atualizar no <a href="https://rubygems.org">RubyGems</a>:</p>
+<pre><code class="language-ruby">
+gem push gerablog-0.2.0.gem
+
+</code></pre>
+<p>O que permite instalar remotamente com um simples <code class="prettyprint">gem install gerablog</code>.</p>
+
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Liberada nova versão do GeraBlog (0.2.0)"
+    data-url="https://paulohrpinheiro.xyz/texts/ruby/2018-08-25-nova-versao-do-gerablog.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Liberada nova versão do GeraBlog (0.2.0)"
+    data-url="https://paulohrpinheiro.xyz/texts/ruby/2018-08-25-nova-versao-do-gerablog.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Liberada nova versão do GeraBlog (0.2.0)"
+    data-url="https://paulohrpinheiro.xyz/texts/ruby/2018-08-25-nova-versao-do-gerablog.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Liberada nova versão do GeraBlog (0.2.0)"
+    data-url="https://paulohrpinheiro.xyz/texts/ruby/2018-08-25-nova-versao-do-gerablog.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Liberada nova versão do GeraBlog (0.2.0)"
+    data-url="https://paulohrpinheiro.xyz/texts/ruby/2018-08-25-nova-versao-do-gerablog.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2018, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+<!-- Start of StatCounter Code for Default Guide -->
+<script type="text/javascript">
+var sc_project=11424422; 
+var sc_invisible=1; 
+var sc_security="182eb83e"; 
+var scJsHost = (("https:" == document.location.protocol) ?
+"https://secure." : "http://www.");
+document.write("<sc"+"ript type='text/javascript' src='" +
+scJsHost+
+"statcounter.com/counter/counter.js'></"+"script>");
+</script>
+<noscript><div class="statcounter"><a title="web statistics"
+href="http://statcounter.com/" target="_blank"><img
+class="statcounter"
+src="//c.statcounter.com/11424422/0/182eb83e/1/" alt="web
+statistics"></a></div></noscript>
+<!-- End of StatCounter Code for Default Guide -->
+
+</body>
+</html>
