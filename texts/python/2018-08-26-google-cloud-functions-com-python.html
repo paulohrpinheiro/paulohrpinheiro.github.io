@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Usando Python no Google Cloud Functions, rumo ao serverless</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Um breve teste de conceito para ver &quot;qualé&quot; do Google Cloud Functions e dessa ideia de serverless">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/go/">
+        go
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/database/">
+        database
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Usando Python no Google Cloud Functions, rumo ao serverless</h2>
+
+<h3>Um breve teste de conceito para ver &quot;qualé&quot; do Google Cloud Functions e dessa ideia de serverless</h3>
+
+<p><img src="images/google-cloud-functions.png" alt="Google Cloud Functions"></p>
+
+<h4>Motivação</h4>
+
+<p>A ideia de <em>serverless</em> é muito tentadora, praticamente um estágio superior do <em>devops</em> (há quem fale em <em>noops</em>). Conectar <em>endpoints</em> a funções especializadas, e não se preocupar mais com regras de escalabilidade, regras para que servidores subam e sejam mortos sob demanda.</p>
+
+<p>Mas não é simples, dá trabalho, exige outra visão, outra organização, outra forma de desenvolver.</p>
+
+<p>Mas essa nova forma de desenvolver, é algo necessário: em tempos da ressaca do padrão <em>MVC</em>, em que, na prática, todas as regras de negócio acabam sendo sequestradas por algum <em>framework</em>, acredito que agora é o tempo de libertarmos nossas regras, trazê-las para a segurança de módulos e pacotes e classes que não queiram e nem precisem saber se as entidades são servidas por uma <em>API</em>, <em>REST</em> ou não, ou por um sistema que renderiza <em>templates</em> <em>html</em> no servidor e os devolve prontos, deixando para o <em>javascript</em> algumas questões de embelezamento apenas, ou se é uma modernosa SPA.</p>
+
+<p>Tendo esse isolamento, a maior parte do problema seria com o acesso e armazenamento, as regras poderiam ficar isoladas desses nada simples mas possessivos detalhes.</p>
+
+<p>E com um outro aspecto muito interessante. O preço. Pesquise, os pacotes para o primeiro milhão de requisições por mês em geral ficam na casa dos centavos de dólar. Para o milhão de requisições!</p>
+
+<p>Imagino uma aplicação <em>React</em>, por exemplo, hospedada em um serviço de arquivos estáticos, que acesse uma <em>API</em> baseada em funções, sendo uma boa pedida para a maioria dos sistemas <em>WEB</em>.</p>
+
+<h4>Migrar?</h4>
+
+<p>Uma forma de começar é usando para pequenas tarefas que devem ser feitas em background, como filas. <a href="">Recentemente a Amazon anunciou a integração de seus serviços</a> de funções <a href="">AWS Lambda</a> com o serviço de filas <a href="">SQS</a>.</p>
+
+<p>Enfim, não é algo para o qual devemos jogar todos nossos esforços de imediato para coisas existentes, e mesmo sistemas novos, podem ser mais práticos usando as velhas ferramentas.</p>
+
+<h4>Mas é legal pra caramba!</h4>
+
+<p>É, sem dúvida, um negócio muito legal. Então, vamos estudar, meter a mão na massa, para que possamos entender e vislumbrar seus melhores usos.</p>
+
+<p>Digamos que eu queira criar um único <em>Endpoint</em>. É só escrever a função e publicar. Muito mais fácil que subir um serviço, seja por <em>docker</em>, por máquina virtual, por máquina física. Mesmo serviços como <a href="https://herokuapp.com">Heroku</a> demandam uma configuração e um serviço rodando sempre. Com funções, você as deixa lá no provedor de serviço, e ela é executada quando necessário.</p>
+
+<h4>Chega de hype</h4>
+
+<p>Mãos à obra! Quero saber como responder a uma requisição HTTP.</p>
+
+<p>Tenha sua conta criada no <a href="">Google Cloud</a>. Ele exige cartão de crédito, mas a checagem é com valor zero, muito legal. E vem com US$ 300,00 pra você usar, como faz a Amazon AWS.</p>
+
+<p>Após isso, você será guiado a mais algumas configurações e para associar o serviço de funções à sua conta para faturamento. Ele lhe guiará para a instalação, em sua máquina, de ferramentas para linha de comando.</p>
+
+<p>Tudo pode ser feito via <em>console</em>, mas preferi a linha de comando para ir me habituando a futuras explorações com CI/CD.</p>
+
+<p>Com a ferramenta instalada e configurada, estamos a <a href="https://www.youtube.com/watch?v=VI2urq25AlE">dois passo do paraíso</a>, e pode acreditar, a documentação é muito boa e conduz seu leitor pelas mãos, para os lugares certos, sem confusão.</p>
+
+<h4>E o código?</h4>
+
+<p>Minha primeira surpresa, suas funções estão no contexto de uma aplicação <a href="">Flask</a>. Isso mesmo, você vai receber um objeto <em>request</em> do <em>Flask</em>. Ah, pra quem não se tocou ainda, estou usando <a href="">Python</a>. A alternativa é <a href="">Node JS</a>.</p>
+
+<p>O modo mais fácil de ter algo funcionando é criando um arquivo main.py para sua função:</p>
+<pre><code class="language-python">
+from flask import (
+    jsonify,
+    make_response,
+)
+
+from flask_api import status as http_status
+
+
+def response_json(message, status=&#x27;OK&#x27;, code=http_status.HTTP_200_OK):
+    response = {
+        &#x27;status&#x27;: status,
+        &#x27;message&#x27;: message,
+    }
+
+    return make_response(jsonify(response), code)
+
+
+def http_get(request):
+    if request.method != &#x27;GET&#x27;:
+        return response_json(
+            message=f&#x27;Invalid method {request.method}&#x27;,
+            status=&#x27;NOK&#x27;,
+            code=http_status.HTTP_405_METHOD_NOT_ALLOWED,
+        )
+
+    try:
+        remote_addr = request.remote_addr
+    except AttributeError:
+        return response_json(
+            message=&#x27;Inexistent remote address&#x27;,
+            status=&#x27;NOK&#x27;,
+            code=http_status.HTTP_400_BAD_REQUEST,
+        )
+
+    return response_json(f&#x27;The remote address is [{remote_addr}]&#x27;)
+
+</code></pre>
+<p>Deve-se escolher um nome para a função, que ficará registrada no serviço, e que deverá ser o nome da sua função (é possível, por parâmetros ter um comportamento diferente, mas aqui vai-se pelo mais fácil).</p>
+
+<p>Nesse exemplo, nossa função é <em>http_get</em>. Esse é nosso ponto de entrada, essa função é que será chamada com o objeto <em>request</em>.</p>
+
+<p>O que fazemos é simples. Se a requisição for um <em>GET</em>, retornamos o endereço do usuário, em um <em>JSON</em>.</p>
+
+<p>Outro método retornará erro, e se, num caso absurdo, não tivermos esse endereço, não perdemos o rebolado e retornamos outro tipo de erro.</p>
+
+<p>Aqui um exemplo de requisição bem sucedida (um <em>GET</em>):</p>
+
+<p><img src="images/http_get-GET.png" alt="Requisição com GET"></p>
+
+<p>E aqui um exemplo de requisição mal sucedida (um <em>POST</em>):</p>
+
+<p><img src="images/http_get-POST.png" alt="Requisição com POST"></p>
+
+<h4>Deployando</h4>
+
+<p>Só vai funcionar se deployarmos!</p>
+
+<p>Muito simples, em linha de comando:</p>
+<pre><code class="language-python">
+➤ gcloud beta functions deploy http_get --runtime python37 --trigger-http --memory=128MB
+
+</code></pre>
+<p>Resultando em uma saída assim:</p>
+<pre><code class="language-python">
+Deploying function (may take a while - up to 2 minutes)...done.                                                                                                                                                   
+availableMemoryMb: 128
+entryPoint: http_get
+httpsTrigger:
+  url: https:&#x2F;&#x2F;us-central1-XXXXXXXXXXXXXX.cloudfunctions.net&#x2F;http_get
+labels:
+  deployment-tool: cli-gcloud
+name: projects&#x2F;XXXXXXXXXXXXXX&#x2F;locations&#x2F;us-central1&#x2F;functions&#x2F;http_get
+runtime: python37
+serviceAccountEmail: XXXXXXXXXXXXXX@appspot.gserviceaccount.com
+sourceUploadUrl: https:&#x2F;&#x2F;storage.googleapis.com&#x2F;gcf-upload-us-(...)&amp;E_MUITOS_PARAMETROS_AQUI
+status: ACTIVE
+timeout: 60s
+updateTime: &#x27;2018-08-26T15:49:36Z&#x27;
+versionId: &#x27;6&#x27;
+
+</code></pre>
+<p>E basta acessar o endereço indicado nessa saída (<code class="prettyprint">httpsTrigger</code>)</p>
+
+<p>Os parâmetros são:</p>
+
+<ul>
+<li><code class="prettyprint">beta</code>: indica que estamos usando uma <em>feature</em> <em>beta</em> (o <em>Python</em> versão 3.7).</li>
+<li><code class="prettyprint">functions</code>: o serviço a ser usado.</li>
+<li><code class="prettyprint">deploy</code>: o comando, nesse caso de publicação.</li>
+<li><code class="prettyprint">http_get</code>: o nome da função (que deve ser o mesmo dentro do arquivo)</li>
+<li><code class="prettyprint">--runtime python37</code>: qual interpretador usar.</li>
+<li><code class="prettyprint">--trigger-http</code>: o tipo da função, nesse caso uma que responda a requisições <em>HTTP</em>.</li>
+<li> <code class="prettyprint">--memory=128MB</code>: a memória alocada para o ambiente; o padrão é 256MB.</li>
+</ul>
+
+<p>Aí está. Agora que vimos funcionar, é bolar algo que use banco de dados e seja útil. Já está na minha cabeça, quando estiver usável eu publico e explico.</p>
+
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Usando Python no Google Cloud Functions, rumo ao serverless"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2018-08-26-google-cloud-functions-com-python.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Usando Python no Google Cloud Functions, rumo ao serverless"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2018-08-26-google-cloud-functions-com-python.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Usando Python no Google Cloud Functions, rumo ao serverless"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2018-08-26-google-cloud-functions-com-python.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Usando Python no Google Cloud Functions, rumo ao serverless"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2018-08-26-google-cloud-functions-com-python.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Usando Python no Google Cloud Functions, rumo ao serverless"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2018-08-26-google-cloud-functions-com-python.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2018, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+<!-- Start of StatCounter Code for Default Guide -->
+<script type="text/javascript">
+var sc_project=11424422; 
+var sc_invisible=1; 
+var sc_security="182eb83e"; 
+var scJsHost = (("https:" == document.location.protocol) ?
+"https://secure." : "http://www.");
+document.write("<sc"+"ript type='text/javascript' src='" +
+scJsHost+
+"statcounter.com/counter/counter.js'></"+"script>");
+</script>
+<noscript><div class="statcounter"><a title="web statistics"
+href="http://statcounter.com/" target="_blank"><img
+class="statcounter"
+src="//c.statcounter.com/11424422/0/182eb83e/1/" alt="web
+statistics"></a></div></noscript>
+<!-- End of StatCounter Code for Default Guide -->
+
+</body>
+</html>

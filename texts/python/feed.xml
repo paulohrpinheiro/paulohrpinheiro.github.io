@@ -8,6 +8,12 @@
     <language>pt-br</language>
 
     <item>
+      <title>Usando Python no Google Cloud Functions, rumo ao serverless</title>
+      <link>https://paulohrpinheiro.xyz/texts/python/2018-08-26-google-cloud-functions-com-python.html</link>
+      <description>Um breve teste de conceito para ver &quot;qualé&quot; do Google Cloud Functions e dessa ideia de serverless</description>
+      <pubDate>Sun, 26 Aug 2018 00:00:00 +0000</pubDate>
+    </item>
+    <item>
       <title>Continuando o livro Data Science do Zero</title>
       <link>https://paulohrpinheiro.xyz/texts/python/2018-07-28-data-science-do-zero-conexoes-com-nossas-conexoes.html</link>
       <description>Agora implementamos a busca por pessoas que possuam conexões com nossas conexões</description>
