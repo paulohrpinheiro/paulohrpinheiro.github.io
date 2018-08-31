@@ -8,10 +8,16 @@
     <language>pt-br</language>
 
     <item>
+      <title>Sobre a carreira de desenvolvedor de software</title>
+      <link>https://paulohrpinheiro.xyz/texts/diversos/2018-08-31-sobre-a-carreira-de-desenvolvedor-de-software.html</link>
+      <description>Algumas questões que me vieram à cabeça escutando uma palestra sobre carreira</description>
+      <pubDate>Fri, 31 Aug 2018 21:00:00 -0300</pubDate>
+    </item>
+    <item>
       <title>Usando Python no Google Cloud Functions, rumo ao serverless</title>
       <link>https://paulohrpinheiro.xyz/texts/python/2018-08-26-google-cloud-functions-com-python.html</link>
       <description>Um breve teste de conceito para ver &quot;qualé&quot; do Google Cloud Functions e dessa ideia de serverless</description>
-      <pubDate>Sun, 26 Aug 2018 15:00:00 -0300</pubDate>
+      <pubDate>Sun, 26 Aug 2018 00:00:00 +0000</pubDate>
     </item>
     <item>
       <title>Liberada nova versão do GeraBlog (0.2.0)</title>
@@ -179,12 +185,6 @@
       <title>Ruby e o deep copy</title>
       <link>https://paulohrpinheiro.xyz/texts/ruby/2016-12-16-ruby-e-o-deep-copy.html</link>
       <description>Uma quase alucinada busca de uma forma de fazer *deep copy* em *Ruby*, apenas por preguiça de copiar, e pra não ferir o orgulho e repetir código.</description>
-      <pubDate>Fri, 16 Dec 2016 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Usando *strings* e `doctest` em *Python2* e *Python3* simultaneamente.</title>
-      <link>https://paulohrpinheiro.xyz/texts/python/2016-12-16-doctest-py2-e-py3.html</link>
-      <description>Usando strings de uma forma que funciona tanto no Python2 como no Python3, especialmente quando fazendo testes com `doctest`.</description>
       <pubDate>Fri, 16 Dec 2016 00:00:00 +0000</pubDate>
     </item>
 
