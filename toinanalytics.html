@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Recebedor de dados</title>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <script>
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST","https://us-central1-toinanalytics.cloudfunctions.net/page");
+            xhr.send();
+            document.querySelector("body").textContent = xhr.resposeText;
+        </script>
+    </body>
+</html>
