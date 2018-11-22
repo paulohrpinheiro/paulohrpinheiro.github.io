@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-55287192-10"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-55287192-10');
+    </script>
+
+  <title>Teste de carga e desempenho</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Testando a capacidade e desempenho de uma API com o framework Locust, em Python">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/go/">
+        go
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/database/">
+        database
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Teste de carga e desempenho</h2>
+
+<h3>Testando a capacidade e desempenho de uma API com o framework Locust, em Python</h3>
+
+<p><img src="images/locust.jpg" alt="Locust logo"></p>
+
+<h4>Inquietação</h4>
+
+<p>Uma preocupação que surgiu na empresa em que trabalho, a <a href="https://cargobr.com">CARGOBR</a>, é saber se nossa nova API vai dar conta do recado. E eis que alguém pode perguntar &quot;mas se é nova, qual a preocupação, não se garantem&quot;? Bem, ela é nova, mas usa em grande parte o motor de cotações que está em  sistemas legados, que datam do surgimento da empresa.</p>
+
+<p>Mas o que é dar conta do recado? Conversando com o pessoal que está mais ligado com as métricas e resultados, consegui números sobre o comportamento de nossos clientes, que me ajudaram a definir como executar esses testes, o que é desejável, o que é aceitável.</p>
+
+<p>Eu já tinha em minha cabeça que coisas simples como <a href="hhttps://httpd.apache.org/docs/trunk/programs/ab.html">Apache Bench</a> não dizem muita coisa. E também que instalar um <a href="https://jmeter.apache.org/">JMeter</a> estava além de minha necessidade de um primeiro experimento.</p>
+
+<p>E confesso, são duas ferramentas que já utilizei e me ajudaram muito.</p>
+
+<h4>A busca e o achado</h4>
+
+<p>Depois de uma googlada encontrei um framework, em Python, ponto a mais para isso, que me chamou a atenção. É o <a href="https://locust.io">Locust</a>.</p>
+
+<p>A proposta, simples e direta:</p>
+
+<blockquote>
+<p>&quot;Define user behaviour with Python code, and swarm your system with millions of simultaneous users.&quot;</p>
+</blockquote>
+
+<p>Daí (olha o curitibano se entregando) pensei comigo: <a href="https://www.youtube.com/watch?v=4j_L2yjPZH8">&quot;É disso que o velho gosta, é isso que o velho quer!&quot;</a>.</p>
+
+<h4>O MVP</h4>
+
+<p>Dadas as instruções contidas no CARD (viva o JIRA!), construí rapidamente um modelo, copiado da excelente documentação. Aqui apresento algo mais simples ainda, pra testar localmente:</p>
+<pre><code class="language-python">
+from locust import HttpLocust, TaskSet, task
+
+
+class UserBehavior(TaskSet):
+    @task
+    def get_antifascist(self):
+        self.client.get(&#x27;&#x2F;antifascist.png&#x27;)
+
+    @task
+    def get_chupacabra(self):
+        self.client.get(&#x27;&#x2F;chupacabra.jpg&#x27;)
+
+    @task
+    def get_democracia(self):
+        self.client.get(&#x27;&#x2F;democracia.jpg&#x27;)
+
+
+class WebsiteUser(HttpLocust):
+    task_set = UserBehavior
+    min_wait = 500
+    max_wait = 3000
+
+</code></pre>
+<p>Uma informação importante, é que esse framework usa a biblioteca <a href="http://docs.python-requests.org/en/master/">requests</a>, então use todo esse poder a seu favor.</p>
+
+<p>Para testar esse script, subiu um servidor simples com Python:</p>
+<pre><code class="language-python">
+➤ python3 -m http.server --directory ~&#x2F;Imagens&#x2F;
+Serving HTTP on 0.0.0.0 port 8000 (http:&#x2F;&#x2F;0.0.0.0:8000&#x2F;) ...
+
+</code></pre>
+<p>E rodei esse comando:</p>
+<pre><code class="language-python">
+locust -f localhost --host=http:&#x2F;&#x2F;localhost:8000 --no-web --run-time 1m -c 20 -r 1
+
+</code></pre>
+<p>Que me deu uma longa saída, mas a importante mesmo está no final:</p>
+<pre><code class="language-python">
+[2018-11-22 20:51:03,054] phrp&#x2F;INFO&#x2F;locust.main: Time limit reached. Stopping Locust.
+[2018-11-22 20:51:03,054] phrp&#x2F;INFO&#x2F;locust.main: Shutting down (exit code 0), bye.
+[2018-11-22 20:51:03,055] phrp&#x2F;INFO&#x2F;locust.main: Cleaning up runner...
+[2018-11-22 20:51:03,056] phrp&#x2F;INFO&#x2F;locust.main: Running teardowns...
+ Name                                                          # reqs      # fails     Avg     Min     Max  |  Median   req&#x2F;s
+--------------------------------------------------------------------------------------------------------------------------------------------
+ GET &#x2F;antifascist.png                                             203     0(0.00%)       9       5      21  |       9    4.00
+ GET &#x2F;chupacabra.jpg                                              187     0(0.00%)      10       5      20  |       9    3.80
+ GET &#x2F;democracia.jpg                                              191     0(0.00%)      10       5      27  |       9    3.30
+--------------------------------------------------------------------------------------------------------------------------------------------
+ Total                                                            581     0(0.00%)                                      11.10
+
+Percentage of the requests completed within given times
+ Name                                                           # reqs    50%    66%    75%    80%    90%    95%    98%    99%   100%
+--------------------------------------------------------------------------------------------------------------------------------------------
+ GET &#x2F;antifascist.png                                              203      9     10     11     11     13     15     17     18     21
+ GET &#x2F;chupacabra.jpg                                               187      9     10     11     12     13     16     18     19     20
+ GET &#x2F;democracia.jpg                                               191      9     10     11     12     14     16     19     21     27
+--------------------------------------------------------------------------------------------------------------------------------------------
+ Total                                                             581      9     10     11     12     13     15     18     19     27
+
+</code></pre>
+<p>Por padrão, o <code class="prettyprint">locust</code> disponibiliza uma interface gráfica na porta 8080, e para não ter isso é que passei a opção <code class="prettyprint">--no-web</code>.</p>
+
+<p>As outras opções que usei foram:</p>
+
+<ul>
+<li><code class="prettyprint">-f localhost</code>: o arquivo a executar, nesse caso salvei meu arquivo como <code class="prettyprint">localhost.py</code>.</li>
+<li><code class="prettyprint">--host=http://localhost:8000</code>: em qual host o <em>locust</em> vai pegar os <em>endpoints</em> indicados.</li>
+<li><code class="prettyprint">--run-time 1m</code>: por quanto tempo o script vai ficar trabalhando; caso não especificado fica executando até ser interrompido(CTRL-C).</li>
+<li><code class="prettyprint">-c 20</code>: quantas tarefas concorrentes teremos.</li>
+<li><code class="prettyprint">-r 1</code>: define a taxa de novas tarefas por segundo, até chegar ao limite acima definido.</li>
+</ul>
+
+<h4>Algumas breves explicações</h4>
+
+<p>O <em>decorator</em> <code class="prettyprint">@task</code> define, dentro da classe, que dada função é uma tarefa a ser executada. Opcionalmente, pode-se informar um número inteiro que será o peso com que essa tarefa será executada em relação às outras. Por exemplo, se eu precisar que um <em>endpoint</em> seja executa mais vezes que os outros, é aí que defino esse comportamento, algo como <code class="prettyprint">@task(10)</code>.</p>
+
+<p>A classe <code class="prettyprint">TaskSet</code> define um conjunto de tarefas a serem executadas, enquanto a classe <code class="prettyprint">HttpLocust</code> define o controlador de todas as tarefas.</p>
+
+<h4>O que realmente importa</h4>
+
+<p>Mas no final das contas, eu tenho um certo caminho a seguir em meus testes: autenticar, escolher algumas coisas, simular, verificar. Para isso existe a classe <code class="prettyprint">TaskSequence</code>, para usar ao invés de <code class="prettyprint">TaskSet</code>. E como decorator, deve-se usar <code class="prettyprint">@seq_task(1)</code>, com um número (nesse exemplo <code class="prettyprint">1</code>) indicando a sequência dos <em>endpoints</em> para cada conjunto de tarefas.</p>
+
+<p>Há ainda o problema de autenticar, e seguir com as demais requisições com um token. Mas isso é conversa pra um próximo texto!</p>
+
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="Teste de carga e desempenho"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2018-11-22-teste-de-carga-e-desempenho.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="Teste de carga e desempenho"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2018-11-22-teste-de-carga-e-desempenho.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="Teste de carga e desempenho"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2018-11-22-teste-de-carga-e-desempenho.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="Teste de carga e desempenho"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2018-11-22-teste-de-carga-e-desempenho.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="Teste de carga e desempenho"
+    data-url="https://paulohrpinheiro.xyz/texts/python/2018-11-22-teste-de-carga-e-desempenho.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2018, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+</body>
+</html>
