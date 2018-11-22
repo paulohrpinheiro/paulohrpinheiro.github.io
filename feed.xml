@@ -8,6 +8,12 @@
     <language>pt-br</language>
 
     <item>
+      <title>Teste de carga e desempenho</title>
+      <link>https://paulohrpinheiro.xyz/texts/python/2018-11-22-teste-de-carga-e-desempenho.html</link>
+      <description>Testando a capacidade e desempenho de uma API com o framework Locust, em Python</description>
+      <pubDate>Thu, 22 Nov 2018 00:00:00 +0000</pubDate>
+    </item>
+    <item>
       <title>Sobre a carreira de desenvolvedor de software</title>
       <link>https://paulohrpinheiro.xyz/texts/diversos/2018-08-31-sobre-a-carreira-de-desenvolvedor-de-software.html</link>
       <description>Algumas questões que me vieram à cabeça escutando uma palestra sobre carreira</description>
@@ -180,12 +186,6 @@
       <link>https://paulohrpinheiro.xyz/texts/ruby/2016-12-24-nova-versao-do-ruby-txt2tags.html</link>
       <description>O que há de novo na versão 0.1.0 do ruby-txt2tags?</description>
       <pubDate>Sat, 24 Dec 2016 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Ruby e o deep copy</title>
-      <link>https://paulohrpinheiro.xyz/texts/ruby/2016-12-16-ruby-e-o-deep-copy.html</link>
-      <description>Uma quase alucinada busca de uma forma de fazer *deep copy* em *Ruby*, apenas por preguiça de copiar, e pra não ferir o orgulho e repetir código.</description>
-      <pubDate>Fri, 16 Dec 2016 00:00:00 +0000</pubDate>
     </item>
 
   </channel>

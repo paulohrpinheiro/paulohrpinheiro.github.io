@@ -8,6 +8,12 @@
     <language>pt-br</language>
 
     <item>
+      <title>Teste de carga e desempenho</title>
+      <link>https://paulohrpinheiro.xyz/texts/python/2018-11-22-teste-de-carga-e-desempenho.html</link>
+      <description>Testando a capacidade e desempenho de uma API com o framework Locust, em Python</description>
+      <pubDate>Thu, 22 Nov 2018 00:00:00 +0000</pubDate>
+    </item>
+    <item>
       <title>Usando Python no Google Cloud Functions, rumo ao serverless</title>
       <link>https://paulohrpinheiro.xyz/texts/python/2018-08-26-google-cloud-functions-com-python.html</link>
       <description>Um breve teste de conceito para ver &quot;qualé&quot; do Google Cloud Functions e dessa ideia de serverless</description>
