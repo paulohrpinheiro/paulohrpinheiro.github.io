@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-55287192-10"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-55287192-10');
+    </script>
+
+  <title>DevFest Campinas 2018</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Sobre um grande encontro de desenvolvedores em Campinas/SP">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css" />
+  <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/go/">
+        go
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/database/">
+        database
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>DevFest Campinas 2018</h2>
+
+<h3>Sobre um grande encontro de desenvolvedores em Campinas/SP</h3>
+
+<p><img src="images/devfest.png" alt="DevFest logo"></p>
+
+<h4>Sobre</h4>
+
+<p>È um evento promovido especialmente pelo pessoal do <a href="https://www.meetup.com/pt-BR/gdgcampinas">Google Developers Group de Campinas</a>, que realiza encontros e eventos regulares.</p>
+
+<h4>Abertura</h4>
+
+<p>Como comentarei no final, o evento atrasou para começar, e, dentre as coisas explicadas na abertura, o que mais achei interessante é que o grupo organizador se coloca como facilitador para que mulheres ingressem em carreiras de TI. Mas não com um objetivo numérico a alcançar, mas ser um grupo que facilite as coisas para qualquer mulher que deseje participar. Uma visão um pouco diferente (sem desmerecer outras iniciativas mais tradicionais), e creio, mais interessante.</p>
+
+<h4>KeyNote inicial</h4>
+
+<blockquote>
+<p>More people are incorporating intelligent assistants into their lives every day. And as the users arrive, the playing field of available actions is becoming more crowded. One of the key differences between good actions and great actions - the kind that people return to - lies in the design. In this talk, Jon Bloom will talk to you about the design thinking, and the work, that needs to go into an action to make it not just &quot;good enough&quot;, but exceptional.</p>
+</blockquote>
+
+<p>Tivemos a opção de usar equipamento para escutar tradução simultânea da palestra de <a href="Senior%20Conversation%20Designer,%20Google">Jon Bloom</a> (Senior Conversation Designer, Google).</p>
+
+<p>Ele falou sobre o <a href="https://assistant.google.com">Google Assistent</a>, mas especialmente as dificuldades para reconhecer fala e escrita e tomar decisões, sem ser através de uma sequência fixa de passos (um menu de voz, por exemplo).</p>
+
+<p>Falou sobre a contextualização de frases, entonação de voz, expressões aparentemente inúteis, mas que devem ser reconhecidas como um pedido de tempo para pensar (&#39;uhh&#39; e &#39;uhmm&#39; são consideradas como pedidos de tempo para pensar, com 0.25s e 0.75s, só não lembro quem é quem).</p>
+
+<p>É uma área muito interessante e fiquei pensando que devo ler e estudar as contribuições científicas de <a href="https://pt.wikipedia.org/wiki/Noam_Chomsky">Noam Chomski</a> por mais esse motivo.</p>
+
+<h4>Do zero ao deploy - cultura DevOps na prática.</h4>
+
+<p>Começamos bem a trilha <em>backend</em>, com a palestra do <a href="https://twitter.com/pimentaflavio">Flávio Pimenta</a>:</p>
+
+<blockquote>
+<p>Sessão de live coding iniciando com a criação de um repositório git, codificação de uma api python com flesk, com testes unitários, pipeline no jenkins fazendo deploy em docker e finalizando com a criação de um teste de performance.</p>
+</blockquote>
+
+<p>Usando imagens <em>docker</em>, rapidinho o Flávio subiu uma infraestrutura para fazer integração contínua de um sistema <em>Python</em>. Uma <em>livecode</em>, que obviamente, teve problemas :). Perdemos tempo (sim, todos os presentes participamos), pois estávamos todos dando palpites conforme um problema surgia, e ele conduziu muito bem esse processo.</p>
+
+<p>Mas ficou em mim, que é muito mais fácil do que parece ter um repositório próprio com o <a href="https://gitlab.com">gitlab</a>, qual simpatizo muito, mas usando o <a href="https://gitlab.com/gitlab-org/gitlab-ce/">Community Edition</a>, que é <em>opensource</em> e permite que instalemos nossa própria e particular instância.</p>
+
+<p>E cada vez mais, o <a href="https://jenkins.io/">Jenkings</a> está em minha mira.</p>
+
+<h4>Depois do almoço</h4>
+
+<p>O <a href="https://twitter.com/pokemaobr">Pokemao</a> deu três palestras seguidas, foi uma loucura só. Só isso valeria o evento todo.</p>
+
+<h4>Do Zero ao Auto ML (From Zero to Auto ML)</h4>
+
+<blockquote>
+<p>Imagine poder usar tecnologias de aprendizagem de máquina sem ter PhD. Tudo isso é possível com apenas algumas chamadas REST para a API do Google Cloud. Com as APIs de Aprendizagem de Máquina classifique imagens, detecte sentimento em sentenças e use até seus dados para customizar e treinar modelos com o Auto ML (sem doutorado!).</p>
+</blockquote>
+
+<p><a href="https://twitter.com/gabidavila">Gabriela D&#39;Ávila Ferrara</a> é <em>Developer Advocate</em> para o <em>Google Cloud</em>. E a palestra não foi uma venda de produtos. Ela mostrou uma série de exemplos práticos sobre o que se pode fazer com a plataforma, sem ter conhecimentos profundos sobre a teoria que sustenta todos esses recursos.</p>
+
+<p>Ela falou claramente que não conhece essa base, mas que, como desenvolvedora, conseguia utilizar esses recursos para coisas muito práticas.</p>
+
+<p>Ficou a dica, a lição e a lembrança. Quantos sistemas complexos utilizamos, sem ter ciência dos pormenores de suas implementações?</p>
+
+<p>Essa é a grande lição. Tem muita coisa que pode ser feita utilizando esses recursos, de forma imediata, por exemplo, classificação e identificação de imagens.</p>
+
+<h4>Node.js a todo vapor! Liberando o poder da plataforma SEM O NPM</h4>
+
+<blockquote>
+<p>Você já deve ter usado Node.js junto com npm, porém, você sabia que só com o Node, conseguimos fazer coisas incríveis? Os módulos nativos do Node pode te ajudar em uma série de tarefas muito divertidas, e até te ajudar a entender como algumas das suas bibliotecas favoritas funcionam!</p>
+</blockquote>
+
+<p>O <a href="https://github.com/Hora">Igor França</a> falou sobre os problemas de desenvolver usando pacotes prontos para tudo, e foi um pouco a fundo na <em>virtual machine</em> do <em>nodejs</em>, e os cuidados e preocupações com segurança.</p>
+
+<p>A grande lição é ver o que já existe pronto e quando é realmente importante usar um pacote pronto. Seguiu uma <em>livecode *com os módulos *vm</em>, <em>fs</em> e <em>os</em> do <em>nodejs</em>.</p>
+
+<h4>Da AWS para o GCP</h4>
+
+<blockquote>
+<p>Hoje a CargoX utiliza CI&amp;CD full AWS. Mas como migrar de uma cloud pública para outra? O Terraform ajuda? Veremos quais os serviços equivalentes nos dois provedores, e quais os aprendizados para uma nova pipeline.</p>
+</blockquote>
+
+<p>o <a href="https://www.linkedin.com/in/williammoraes/">José William de Moraes</a>, deu alguns detalhes sobre a infraestrutra da <a href="https://cargox.com.br/">CargoX</a>, e propôs-se ao ao desafio de planejar uma hipotética migração para o GoogleCoude<a href="https://cloud.google.com/"></a>, saindo da <a href="https://aws.amazon.com">AWS</a>.</p>
+
+<p><strong>COMPLETAR</strong></p>
+
+<h4>O que mudará em minha aplicação com a lei de proteção de dados pessoais?</h4>
+
+<blockquote>
+<p>Nesta palestra abordaremos as implicações práticas da lei 13.709, de 14 de Agosto, em relação aos cuidados que devemos ter ao desenvolvermos aplicações.</p>
+</blockquote>
+
+<p><a href="https://www.linkedin.com/in/vperallis/">Vinicius Perallis</a> apresentou um excelente conteúdo, e primou pela didática da palestra. Ele <em>gamificou</em> a palestra, garantindo atenção e participação de todos, e certamente uma maior retenção do conteúdo.</p>
+
+<p>Além das questões importantes sobre a <a href="http://www.planalto.gov.br/ccivil_03/_Ato2015-2018/2018/Lei/L13709.htm">Lei Geral de Proteção de Dados Pessoais (LGPDP)</a>, aprovada recentemente, também nos falou sobre a importância de colocar segurança em primeiro lugar.</p>
+
+<p>Com essa lei, nada de MVPs rápidos que deixam a segurança pra depois!</p>
+
+<p>Comentou também sobre usar serviços de verificação de código-fonte, como uma boa prática no pipeline de desenvolvimento, e citou que a IBM tem um serviço assim no Watson.</p>
+
+<h4>Cabeça nas Nuvens: Trabalhando com Machine Learning no Google Cloud</h4>
+
+<blockquote>
+<p>Quer aprender sobre o processo de Aprendizado de Máquina e como isso roda na nuvem? Então não deixe de participar desta palestra, irei mostrar e descrever os serviços e ferramentas de Machine Learning ofertados na plataforma do Google Cloud, e exemplificar cada uma delas mostrando seus recursos e limitações.</p>
+</blockquote>
+
+<p>E a trilha encerrou com o <a href="https://www.linkedin.com/in/douglasaugusto/">Douglas Augusto</a> falando sobre aplicações de Machine Learning, e comparando os vários provedores na nuvem, e mostrando quais são mais adequados a que tipo de problemas.</p>
+
+<h4>KeyNote de Encerramento</h4>
+
+<p>Finalizando, o <a href="https://twitter.com/maujor">Maujor</a> fez uma apresentação que, acredito por eu estar muito cansado, não me agradou muito. Eu já vi muita coisa dele e esperava mais. Ele passou o maior tempo da palestra falando sobre o primeiro site que fez, também contou um pouco da sua história e conclamou a todos que sempre estejam aprendendo algo, o que é uma ótima mensagem.</p>
+
+<h4>Encerramento</h4>
+
+<p>Por fim, dois patrocinadores apresentaram-se, a <a href="https://www.movile.com/">Movile</a> e a <a href="https://cargox.com.br/">CargoX</a>, ambas quase recrutando à força desenvolvedores, como é comum e bem-vindo em quase todos os eventos, sejam grande ou encontros locais.</p>
+
+<p>Para quem está à procura:</p>
+
+<ul>
+<li><a href="https://bit.ly/moviledevfest/">MovileDev</a></li>
+<li><a href="https://jobs.kenoby.com/cargox">CargoX</a></li>
+</ul>
+
+<p>Depois rolou sorteio de vários brindes, como livros e camisetas, foto final, e eu fui embora, que já era hora de voltar pra casa.</p>
+
+<h4>Avaliação</h4>
+
+<p>Foram 7 trilhas simultâneas, fiquei na de <em>backend</em>, e participei de todas as palestras dela. Me desagradou o fato de o evento estar programado para começar às 8h30 e só ter começado depois das 10h00. Mas dá pra relevar, dado que fizeram alguns experimentos na forma, como por exemplo, transmissão da abertura e encerramentos para todas as salas, para não ficar todo mundo apertado em um só ambiente.</p>
+
+<p>Também o endereço que foi passado pelo aplicativo de ingresso estava errado por pouca coisa, mas o suficiente para eu me perder, o que me fez conhecer um pouquinho mais de Campinas. Também senti falta de um papel impresso com a programação (pois é, prefiro papel pra isso), ainda que a trilha que segui tenha me satisfeito.</p>
+
+<p>Mas o clima é muito bom, palestras excelentes, gente bonita e bacana, e algo muito especial: houve ambiente para crianças, com programação especial. Isso é algo que outros eventos poderiam copiar.</p>
+
+<p>Valeu à pena? Ô!</p>
+
+  </article>
+
+<hr>
+<h3>Compartilhe:</h3>
+  <button
+    class="sharer button"
+    data-sharer="twitter"
+    data-title="DevFest Campinas 2018"
+    data-url="https://paulohrpinheiro.xyz/texts/diversos/2018-11-25-devfest-campinas-2018.html">
+    <img src="/assets/images/icon-twitter.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="facebook"
+    data-title="DevFest Campinas 2018"
+    data-url="https://paulohrpinheiro.xyz/texts/diversos/2018-11-25-devfest-campinas-2018.html">
+    <img src="/assets/images/icon-facebook.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="linkedin"
+    data-title="DevFest Campinas 2018"
+    data-url="https://paulohrpinheiro.xyz/texts/diversos/2018-11-25-devfest-campinas-2018.html">
+    <img src="/assets/images/icon-linkedin.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="email"
+    data-title="DevFest Campinas 2018"
+    data-url="https://paulohrpinheiro.xyz/texts/diversos/2018-11-25-devfest-campinas-2018.html">
+    <img src="/assets/images/icon-email.png" height="48" width="48">
+  </button>
+  <button
+    class="sharer button"
+    data-sharer="googleplus"
+    data-title="DevFest Campinas 2018"
+    data-url="https://paulohrpinheiro.xyz/texts/diversos/2018-11-25-devfest-campinas-2018.html">
+    <img src="/assets/images/icon-googleplus.png" height="48" width="48">
+  </button>
+
+<hr>
+
+<div id="disqus_thread"></div>
+<script>
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//paulohrpinheiro.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2018, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+    <li>Social networks sharer by
+      <a href="http://www.ellison.rocks/sharer.js/">Sharer.js</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+</body>
+</html>
