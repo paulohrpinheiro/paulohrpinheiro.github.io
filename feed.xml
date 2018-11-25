@@ -8,10 +8,16 @@
     <language>pt-br</language>
 
     <item>
+      <title>DevFest Campinas 2018</title>
+      <link>https://paulohrpinheiro.xyz/texts/diversos/2018-11-25-devfest-campinas-2018.html</link>
+      <description>Sobre um grande encontro de desenvolvedores em Campinas/SP</description>
+      <pubDate>Sun, 25 Nov 2018 19:00:00 -0200</pubDate>
+    </item>
+    <item>
       <title>Teste de carga e desempenho</title>
       <link>https://paulohrpinheiro.xyz/texts/python/2018-11-22-teste-de-carga-e-desempenho.html</link>
       <description>Testando a capacidade e desempenho de uma API com o framework Locust, em Python</description>
-      <pubDate>Thu, 22 Nov 2018 22:00:00 -0200</pubDate>
+      <pubDate>Thu, 22 Nov 2018 00:00:00 +0000</pubDate>
     </item>
     <item>
       <title>Sobre a carreira de desenvolvedor de software</title>
@@ -180,12 +186,6 @@
       <link>https://paulohrpinheiro.xyz/texts/programadorbipolar/2017-01-04-nadando-contra-a-corrente.html</link>
       <description>Um pouco sobre como resolvi assumir minha anti-socialidade e não gastar tempo com certas redes sociais, além de vencer uma pesada depressão.</description>
       <pubDate>Wed, 4 Jan 2017 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Saiu a nova versão do ruby-txt2tags</title>
-      <link>https://paulohrpinheiro.xyz/texts/ruby/2016-12-24-nova-versao-do-ruby-txt2tags.html</link>
-      <description>O que há de novo na versão 0.1.0 do ruby-txt2tags?</description>
-      <pubDate>Sat, 24 Dec 2016 00:00:00 +0000</pubDate>
     </item>
 
   </channel>
