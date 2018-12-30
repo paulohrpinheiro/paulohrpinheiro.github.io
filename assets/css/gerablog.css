@@ -16,7 +16,7 @@ a:link,a:visited {
 a:hover{
     color:#00f;
     text-decoration:underline;
-    font-weight:500
+    font-weight:500;
 }
 
 a:active {
