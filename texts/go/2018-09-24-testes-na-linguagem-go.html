@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-55287192-10"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-55287192-10');
+    </script>
+
+  <title>Testes na linguagem GO</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Como fazer TDD em GOLANG!">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism.css" />
+</head>
+
+<body>
+<div id="tudo">
+<div id="conteudo">
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/go/">
+        go
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/database/">
+        database
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Testes na linguagem GO</h2>
+
+<h3>Como fazer TDD em GOLANG!</h3>
+
+<p><img src="images/gopher-gotham.png" alt="Gophers"></p>
+
+<blockquote>
+<p>Gophers em ação, no combate aos problemas!</p>
+</blockquote>
+
+<p><strong>Esse texto foi primeiro publicado na <a href="https://revista.devall.com.br/testes-na-linguagem-go/">Revista /dev/all</a>.</strong></p>
+
+<h4>Inspiração</h4>
+
+<p>Tudo começou com o projeto <a href="https://github.com/paulohrpinheiro/test-driven-learning">Test Driven Learning</a>, no qual me propus a escrever código básico em linguagens nas quais estava me aventurando, mas numa abordagem <em>TDD</em>, ou dito de maneira bem apressada, escrever primeiro o teste, e depois a solução.</p>
+
+<h4>TDD?</h4>
+
+<p>Significa, em português, “Teste depois de Deploiar” 🙂</p>
+
+<p>Não, pelo contrário, significa que os testes são escritos antes de implementar uma solução. E não todos os testes, deve-se ir com calma. Não é o foco desse texto explicar o que é <em>TDD</em>, mas do que se está falando?</p>
+
+<p>Ao atacar um problema, deve-se primeiro escrever um teste, vê-lo falhar (ainda não há solução!), e então escrever o código mais simples que o faça passar. Passou? Melhore o código e vá atacando o problema aos poucos, seguindo o ciclo. <a href="http://tdd.caelum.com.br/">Nesse texto tem uma boa explicação</a>, e essa imagem mostra muito bem a ideia:</p>
+
+<p><img src="images/ciclo-tdd.jpg" alt=""></p>
+
+<blockquote>
+<p>Ciclo de desenvolvimento TDD.</p>
+</blockquote>
+
+<h4>Um bom livro</h4>
+
+<p>Um livro muito bom, mas nem sempre é o caso de traduções brasileiras, <a href="https://novatec.com.br/livros/linguagem-de-programacao-go/">A Linguagem de Programação GO</a>, de <a href="https://github.com/adonovan">Alan Donovan</a> e <a href="https://www.cs.princeton.edu/%7Ebwk/">Brian Kernighan</a>, ficou excelente,  especialmente graças ao trabalho do conhecido, especialmente no mundo <em>Python</em>, <a href="https://twitter.com/ramalhoorg">Luciano Ramalho</a>, que atuou como revisor técnico.</p>
+
+<p>O texto é bem escrito, e tem uma pegada prática, mas sem ser um grande e chato tutorial. Dentre os bons momentos de sua leitura, está o capítulo dedicado a testes. Expressão clichê, mas é uma “leitura obrigatória”, independente de se programar em <em>GO</em> ou não.</p>
+
+<p>A linguagem Go é fortemente opinada. Por exemplo, muitas coisas que costumam dar brigas, como <em>tabs</em> ou espaços, quantidade deles, se abre chave na mesma linha, entre outras discussões, são resolvidas pelo formatador de código da linguagem <em>GO</em>. Escreva o código, rode o comando <code class="prettyprint">go fmt</code> e aceite o resultado!</p>
+
+<p>E com os testes, mesma coisa, basta seguir algumas convenções muito simples, e temos nossa suíte de testes pronta para ser executada.</p>
+
+<p>O capítulo dedicado a testes é bem mais completo, e cobre também <em>benchmarchs</em>, verificação de cobertura de teste, <em>mocks</em> e outras coisinhas.</p>
+
+<h4>Show me the code!</h4>
+
+<p>Antes de mostrar código, aqui vai o problema proposto: uma função que, dado um parâmetro do <a href="https://golang.org/pkg/builtin/#bool">tipo bool</a>, retorne a sua negação.</p>
+
+<p>Um teste em <em>GO</em>, deve seguir <a href="https://golang.org/pkg/testing/">algumas convenções</a>:</p>
+
+<ul>
+<li>Estar em um arquivo <code class="prettyprint">xxxxx_test.go</code>.</li>
+<li>Importar o <a href="https://golang.org/pkg/testing/">package testing</a>.</li>
+<li>Nomear as funções de teste com o prefixo <code class="prettyprint">Test</code>, por exemplo <code class="prettyprint">TestMyFunction</code>.</li>
+<li>Fazer as funções de teste receberem um parâmetro, nomeado por convenção apenas coma letra <code class="prettyprint">t</code>. (<code class="prettyprint">t *testing.T</code>).</li>
+</ul>
+
+<p>Vamos ao primeiro teste (este arquivo pode ser salvo como <code class="prettyprint">devall_test.go</code>):</p>
+<pre><code class="language-go">
+package main
+
+import &quot;testing&quot;
+
+func TestNegue(t *testing.T) {
+    if got := Negation(true); got != false {
+        t.Errorf(&quot;Negation(true) = true, expected: false&quot;)
+    }
+}
+
+</code></pre>
+<p>Para executar os testes, chame <code class="prettyprint">go test</code>. Como esperado, um erro pois ainda não definimos nossa função a ser testada:</p>
+<pre><code class="language-go">
+➤ go test
+# _&#x2F;home&#x2F;paulohrpinheiro&#x2F;Dropbox&#x2F;devall
+.&#x2F;devall_test.go:6:12: undefined: Negation
+FAIL    _&#x2F;home&#x2F;paulohrpinheiro&#x2F;Dropbox&#x2F;devall [build failed]
+
+</code></pre>
+<p>Vamos criar nossa nada complexa função (por exemplo, no arquivo <code class="prettyprint">devall.go</code>):</p>
+<pre><code class="language-go">
+package main
+
+func Negation(v bool) bool {
+    return !v
+}
+
+</code></pre>
+<p>Rodando os testes:</p>
+<pre><code class="language-go">
+➤ go test
+PASS
+ok      _&#x2F;home&#x2F;paulohrpinheiro&#x2F;Dropbox&#x2F;devall   0.002s
+
+</code></pre>
+<p>Mas é uma boa prática, na comunidade <code class="prettyprint">GO</code>, “juntar” os testes e executá-los em um loop, uma forma de organizar chamada de “table-driven”:</p>
+<pre><code class="language-go">
+package main
+
+import &quot;testing&quot;
+
+func TestNegation(t *testing.T) {
+    var tests = []struct {
+        input bool
+        want  bool
+    }{
+        {true, false},
+        {false, true},
+    }
+
+    for _, test := range tests {
+        if got := Negation(test.input); got != test.want {
+            t.Errorf(&quot;Negation(%t) = %t&quot;, test.input, got)
+        }
+    }
+}
+
+</code></pre>
+<p>Juntou-se todos os testes para a função em um array de estrutura contendo dois campos: <code class="prettyprint">input</code> e <code class="prettyprint">want</code>. Em input colocamos o parâmetro a ser passado, e em want o resultado esperado.</p>
+
+<p>Logo abaixo, um loop for com range pra passar por cada item e executar os testes.</p>
+
+<p>E ao executar os testes com a opção <code class="prettyprint">verbose</code> temos:</p>
+<pre><code class="language-go">
+➤ go test -v
+=== RUN   TestNegation
+--- PASS: TestNegation (0.00s)
+PASS
+ok      _&#x2F;home&#x2F;paulohrpinheiro&#x2F;Dropbox&#x2F;devall   0.002s
+
+</code></pre>
+<p>Digamos que nossa função estive com um comportamento errado, teríamos uma saída assim:</p>
+<pre><code class="language-go">
+➤ go test -v
+=== RUN   TestNegation
+--- FAIL: TestNegation (0.00s)
+    tabledriven_test.go:16: Negation(false) = false
+FAIL
+exit status 1
+FAIL    _&#x2F;home&#x2F;paulohrpinheiro&#x2F;Dropbox&#x2F;devall   0.002s
+
+</code></pre>
+<p>Há mais (não muito mais) sobre o pacote padrão para teste em <code class="prettyprint">GO</code>. Há infraestrutura para executar <code class="prettyprint">benchmaks</code>,verificar a cobertura dos testes, como executá-los em paralelo, entre outras coisas.</p>
+
+<p>Por hoje é isso!</p>
+
+  </article>
+
+<hr>
+
+<hr>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2018, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+</div>
+</div>
+</body>
+</html>

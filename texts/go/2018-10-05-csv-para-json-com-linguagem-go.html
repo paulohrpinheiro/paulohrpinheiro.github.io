@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-55287192-10"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-55287192-10');
+    </script>
+
+  <title>CSV para JSON com linguagem GO</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="No [último texto](https://paulohrpinheiro.xyz/texts/go/2018-09-24-testes-na-linguagem-go.html), escrevi sobre testes na linguagem GO, nesse texto, será apresentado um exemplo de como como converter um arquivo CSV para JSON em linguagem GO.">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism.css" />
+</head>
+
+<body>
+<div id="tudo">
+<div id="conteudo">
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/go/">
+        go
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/database/">
+        database
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>CSV para JSON com linguagem GO</h2>
+
+<h3>No <a href="https://paulohrpinheiro.xyz/texts/go/2018-09-24-testes-na-linguagem-go.html">último texto</a>, escrevi sobre testes na linguagem GO, nesse texto, será apresentado um exemplo de como como converter um arquivo CSV para JSON em linguagem GO.</h3>
+
+<p><img src="images/gopher-adventure.png" alt="Ao trabalho"></p>
+
+<blockquote>
+<p>Ao Trabalho! <a href="https://github.com/egonelbre/gophers/tree/master/vector/adventure">link original da imagem</a></p>
+</blockquote>
+
+<p><strong>Esse texto foi primeiro publicado na <a href="https://revista.devall.com.br/csv-para-json-com-linguagem-go/">Revista /dev/all</a>.</strong></p>
+
+<h4>Dados reais para testes</h4>
+
+<p>Para projetos que estão no meu <em>backlog</em> pessoal  (e que ainda não vou contar), preciso de uma certa quantidade de dados para fazer uns testes. Dessa forma, uma boa ideia é trabalhar com uma amostra dos arquivos do <a href="https://www.imdb.com/">IMDb</a>, conhecida como <a href="IMDB-5000">https://www.kaggle.com/carolzhangdc/imdb-5000</a>. Ela tem uma quantidade razoável de registros, com dados que possibilitam trabalhar bem tanto em bancos de dados relacionais como <em>NoSQL</em> (meu foco agora são os <em>NoSQL</em>).</p>
+
+<p>Assim, quando se precisa trabalhar com uma maior diversidade e quantidade de dados, um local fácil de achar coleções é o <a href="kaggle">https://www.kaggle.com/</a>, plataforma dedicada a desafios e competições no campo da ciência de dados, na qual estão disponíveis, além dessa amostra, muitos outros conjuntos.</p>
+
+<h4>Lendo o arquivo</h4>
+
+<p>Antes de mais nada, o primeiro desafio nessa jornada maior é pegar esses dados, que estão em arquivos <em>CSV</em>, e transformá-los em objetos <em>JSON</em>.</p>
+
+<p>Antes de mais nada, deve-se ler o arquivo <em>CSV</em>:</p>
+<pre><code class="language-go">
+package main
+
+import (
+    &quot;encoding&#x2F;csv&quot;
+    &quot;fmt&quot;
+    &quot;io&quot;
+    &quot;os&quot;
+)
+
+func main() {
+    f, _ := os.Open(&quot;fixture&#x2F;movie_metadata.csv&quot;)
+    r := csv.NewReader(f)
+
+    for {
+        record, err := r.Read()
+        if err == io.EOF {
+            break
+        }
+
+        fmt.Println(record[11])
+    }
+}
+
+</code></pre>
+<p>Primeiramente, o arquivo é aberto e o leitor de <em>CSV</em> é inicializado, então o arquivo é lido até o fim, imprimindo o campo correspondente ao título.</p>
+
+<h4>Módulos padrão da GOLANG</h4>
+
+<p>De acordo com o <a href="https://en.wikipedia.org/wiki/KISS_principle">KISS</a>, foram usados apenas módulos padrão:</p>
+
+<ul>
+<li><a href="https://golang.org/pkg/encoding/csv/"><code class="prettyprint">encodig/csv</code></a>: com esse módulo, lê-se conteúdo <em>CSV</em>.</li>
+<li><a href="https://golang.org/pkg/fmt/"><code class="prettyprint">fmt</code></a>: o bom e velho amigo responsável pelo <em>output</em> formatado.</li>
+<li><a href="https://golang.org/pkg/io/"><code class="prettyprint">io</code></a>: aqui se encontra a interface <code class="prettyprint">io.Reader</code>.</li>
+<li><a href="https://golang.org/pkg/os/"><code class="prettyprint">os</code></a>: nesse módulo está o necessário para lidar com o sistema operacional. É desse pacote que vem a função <code class="prettyprint">Open</code>, que implementa os métodos para a leitura do arquivo.</li>
+</ul>
+
+<p>Inicialmente, Nessa primeira versão fiz o mínimo possível, deixando de lado coisas como passagem do nome do arquivo, verificar se ele existe e verificar se a entrada lida é válida.</p>
+
+<p>A execução desse código gera uma saída que começa com:</p>
+<pre><code class="language-go">
+go run loadscv.go | head
+movie_title
+Avatar 
+Pirates of the Caribbean: At World&#x27;s End 
+Spectre 
+The Dark Knight Rises 
+Star Wars: Episode VII - The Force Awakens             
+John Carter 
+Spider-Man 3 
+Tangled 
+Avengers: Age of Ultron 
+Harry Potter and the Half-Blood Prince 
+Batman v Superman: Dawn of Justice 
+Superman Returns 
+signal: broken pipe
+
+</code></pre>
+<p>Perceberam o <em>“broken pipe”</em> na última linha? Falta um tratamento para erro na saída, mas isso é algo que irei trabalhar posteriormente.</p>
+
+<h2>Os dados</h2>
+
+<p>E o arquivo tem essa “cara”:</p>
+<pre><code class="language-go">
+➤ head -2 fixture&#x2F;movie_metadata.csv 
+color,director_name,num_critic_for_reviews,duration,director_facebook_likes,actor_3_facebook_likes,actor_2_name,actor_1_facebook_likes,gross,genres,actor_1_name,movie_title,num_voted_users,cast_total_facebook_likes,actor_3_name,facenumber_in_poster,plot_keywords,movie_imdb_link,num_user_for_reviews,language,country,content_rating,budget,title_year,actor_2_facebook_likes,imdb_score,aspect_ratio,movie_facebook_likes
+Color,James Cameron,723,178,0,855,Joel David Moore,1000,760505847,Action|Adventure|Fantasy|Sci-Fi,CCH Pounder,Avatar ,886204,4834,Wes Studi,0,avatar|future|marine|native|paraplegic,http:&#x2F;&#x2F;www.imdb.com&#x2F;title&#x2F;tt0499549&#x2F;?ref_=fn_tt_tt_1,3054,English,USA,PG-13,237000000,2009,936,7.9,1.78,33000
+
+</code></pre>
+<p>Os campos são:</p>
+<pre><code class="language-go">
+color
+director_name
+num_critic_for_reviews
+duration
+director_facebook_likes
+actor_3_facebook_likes
+actor_2_name,
+actor_1_facebook_likes
+gross
+genres
+actor_1_name
+movie_title
+num_voted_users
+cast_total_facebook_likes
+actor_3_name
+facenumber_in_poster
+plot_keywords
+movie_imdb_link
+num_user_for_reviews
+language
+country
+content_rating
+budget
+title_year
+actor_2_facebook_likes
+imdb_score
+aspect_ratio
+movie_facebook_likes
+
+</code></pre>
+<h2>CSV para JSON</h2>
+
+<p>Agora é pegar esses dados e meter em um <em>JSON</em> bonitão. O módulo, padrão para isso é o <a href="https://golang.org/pkg/encoding/json/">encoding/json</a>. Há até, no <a href="https://blog.golang.org/">blog da linguagem GO</a>, <a href="https://blog.golang.org/json-and-go">um texto de introdução ao uso de JSON</a>.</p>
+
+<p>Fazendo algo bem básico, só pra testar o novo módulo:</p>
+<pre><code class="language-go">
+package main
+
+import (
+    &quot;encoding&#x2F;csv&quot;
+    &quot;encoding&#x2F;json&quot;
+    &quot;fmt&quot;
+    &quot;io&quot;
+    &quot;os&quot;
+    &quot;strconv&quot;
+)
+
+type Movie struct {
+    Title string
+    Year int
+}
+
+func main() {
+    f, _ := os.Open(&quot;fixture&#x2F;movie_metadata.csv&quot;)
+    r := csv.NewReader(f)
+
+    for {
+        record, err := r.Read()
+        if err == io.EOF {
+            break
+        }
+
+        year, _ := strconv.Atoi(record[23])
+        movieData := Movie {record[11], year}
+        movieJson, _ := json.Marshal(movieData)
+        fmt.Println(string(movieJson))
+    }
+}
+
+</code></pre>
+<p>Executando:</p>
+<pre><code class="language-go">
+➤ go run loadscv.go|head
+{&quot;Title&quot;:&quot;movie_title&quot;,&quot;Year&quot;:0}
+{&quot;Title&quot;:&quot;Avatar &quot;,&quot;Year&quot;:2009}
+{&quot;Title&quot;:&quot;Pirates of the Caribbean: At World&#x27;s End &quot;,&quot;Year&quot;:2007}
+{&quot;Title&quot;:&quot;Spectre &quot;,&quot;Year&quot;:2015}
+{&quot;Title&quot;:&quot;The Dark Knight Rises &quot;,&quot;Year&quot;:2012}
+{&quot;Title&quot;:&quot;Star Wars: Episode VII - The Force Awakens             &quot;,&quot;Year&quot;:0}
+{&quot;Title&quot;:&quot;John Carter &quot;,&quot;Year&quot;:2012}
+{&quot;Title&quot;:&quot;Spider-Man 3 &quot;,&quot;Year&quot;:2007}
+{&quot;Title&quot;:&quot;Tangled &quot;,&quot;Year&quot;:2010}
+{&quot;Title&quot;:&quot;Avengers: Age of Ultron &quot;,&quot;Year&quot;:2015}
+signal: broken pipe
+
+</code></pre>
+<p>Ao trocar o <a href="https://golang.org/pkg/encoding/json/#Marshal">json.Marshal</a> por <a href="https://golang.org/pkg/encoding/json/#MarshalIndent">json.MarshalIndent</a>, tem-se uma saída mais amigável. Alterei, no código anteirior, o <code class="prettyprint">Marshal</code> para <code class="prettyprint">movieJson, _ := json.MarshalIndent(movieData, “”, ” “)</code>, e obtive essa saída (a primeira linha do <em>CSV</em> é formado pelos nomes dos campos):</p>
+<pre><code class="language-go">
+➤ go run loadscv.go |head -20
+{
+   &quot;Title&quot;: &quot;movie_title&quot;,
+   &quot;Year&quot;: 0,
+   &quot;Actors&quot;: [
+      {
+         &quot;Name&quot;: &quot;actor_1_name&quot;,
+         &quot;FacebookLikes&quot;: 0
+      },
+      {
+         &quot;Name&quot;: &quot;actor_2_name&quot;,
+         &quot;FacebookLikes&quot;: 0
+      },
+      {
+         &quot;Name&quot;: &quot;actor_3_name&quot;,
+         &quot;FacebookLikes&quot;: 0
+      }
+   ]
+}
+{
+   &quot;Title&quot;: &quot;Avatar &quot;,
+signal: broken pipe
+
+</code></pre>
+<h4>Alterando o comportamento</h4>
+
+<p>É possível configurar outros aspectos sa saída <em>JSON</em>, com metadados na definição do objeto. Por exemplo, se quisermos alterar o nome das chaves (os nomes são obtidos por <a href="https://golang.org/pkg/reflect/">reflexão</a>, a partir do nome definido na estrutura), dado que os nomes públicos devem começar com letra maiúscula, o que não fica legal em uma saída <em>JSON</em>, basta informar esse nome na própria estrutura:</p>
+<pre><code class="language-go">
+type Person struct {
+    Name          string `json:&quot;name&quot;`
+    FacebookLikes int    `json:&quot;facebook_likes&quot;`
+}
+
+type Movie struct {
+    Title  string   `json:&quot;title&quot;`
+    Year   int      `json:&quot;year&quot;`
+    Actors []Person `json:&quot;actors&quot;`
+}
+
+</code></pre>
+<p>Obtendo, por exemplo, essa saída (peguei apenas a segunda entrada):</p>
+<pre><code class="language-go">
+{
+   &quot;title&quot;: &quot;Avatar &quot;,
+   &quot;year&quot;: 2009,
+   &quot;actors&quot;: [
+      {
+         &quot;name&quot;: &quot;CCH Pounder&quot;,
+         &quot;facebook_likes&quot;: 1000
+      },
+      {
+         &quot;name&quot;: &quot;Joel David Moore&quot;,
+         &quot;facebook_likes&quot;: 936
+      },
+      {
+         &quot;name&quot;: &quot;Wes Studi&quot;,
+         &quot;facebook_likes&quot;: 855
+      }
+   ]
+}
+
+</code></pre>
+<p>Um outro modificador interessante é o <code class="prettyprint">omitempty</code>, que não gera saída para campos considerados nulos (zero, falso, <code class="prettyprint">nil</code>, entre outros). Usando ele para ano, deixaria a declaração para <code class="prettyprint">Year</code> assim:</p>
+<pre><code class="language-go">
+Year   int      `json:&quot;year,omitempty&quot;`
+
+</code></pre>
+<h4>Aprimorando</h4>
+
+<p>As tarefas restantes para resolver esse problema, ainda temos, em cada linha do <em>CSV</em>,  gêneros, com uma lista separada por <code class="prettyprint">|</code> contendo palavras que tipificam o filme. Esses campos podem ter tratamentos diferentes em relações à sua normalização, e são especialmente interessantes por isso.</p>
+
+<p>Como o que precisa ser feito ainda tem mais a ver com outros aspectos do <em>GO</em>, que não especificamente JSON, podem ser tratados normalmente, e para você, caro leitor, ficam como um desafio, especialmente para os que estamos iniciando nessa linguagem.</p>
+
+<h4>Outros materiais</h4>
+
+<p>Esses textos me ajudaram muito nessa empreitada:</p>
+
+<ul>
+<li><a href="https://romulojales.com/golang-trabalhando-com-json.html">GOLANG: Trabalhando com JSON</a></li>
+<li><a href="https://updatedcode.wordpress.com/2017/05/27/manipulando-arquivos-de-texto-em-go/">Manipulando Arquivos de Texto em Go</a></li>
+<li><a href="https://stackoverflow.com/questions/4278430/convert-string-to-integer-type-in-go">Convert string to integer type in Go?</a></li>
+<li><a href="https://novatec.com.br/livros/linguagem-de-programacao-go/">Livro “A Linguagem de Programação Go”</a></li>
+</ul>
+
+  </article>
+
+<hr>
+
+<hr>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2018, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+
+</div>
+</div>
+</body>
+</html>
