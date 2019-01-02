@@ -8,6 +8,12 @@
     <language>pt-br</language>
 
     <item>
+      <title>Feature toggles com django-waffle</title>
+      <link>https://paulohrpinheiro.xyz/texts/python/2019-01-02-feature-toggles-com-django-waffle.html</link>
+      <description>Feature toggles: ativando e desativando comportamentos em um sistema sem alterar o código, usando django-waffle.</description>
+      <pubDate>Wed, 2 Jan 2019 00:00:00 +0000</pubDate>
+    </item>
+    <item>
       <title>Teste de carga e desempenho</title>
       <link>https://paulohrpinheiro.xyz/texts/python/2018-11-22-teste-de-carga-e-desempenho.html</link>
       <description>Testando a capacidade e desempenho de uma API com o framework Locust, em Python</description>

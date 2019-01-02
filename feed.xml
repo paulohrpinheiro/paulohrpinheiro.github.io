@@ -8,6 +8,12 @@
     <language>pt-br</language>
 
     <item>
+      <title>Feature toggles com django-waffle</title>
+      <link>https://paulohrpinheiro.xyz/texts/python/2019-01-02-feature-toggles-com-django-waffle.html</link>
+      <description>Feature toggles: ativando e desativando comportamentos em um sistema sem alterar o código, usando django-waffle.</description>
+      <pubDate>Wed, 2 Jan 2019 15:00:00 -0200</pubDate>
+    </item>
+    <item>
       <title>DevFest Campinas 2018</title>
       <link>https://paulohrpinheiro.xyz/texts/diversos/2018-11-25-devfest-campinas-2018.html</link>
       <description>Sobre um grande encontro de desenvolvedores em Campinas/SP</description>
@@ -180,12 +186,6 @@
       <link>https://paulohrpinheiro.xyz/texts/diversos/2017-01-16-o-poker-face-nosso-de-cada-dia.html</link>
       <description>Lembrando as humilhações ao longo da carreira</description>
       <pubDate>Mon, 16 Jan 2017 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Gerablog, um modesto gerador de blog estático</title>
-      <link>https://paulohrpinheiro.xyz/texts/ruby/2017-01-15-gerablog-gerador-de-blog-estatico.html</link>
-      <description>Liberado no RubyGems o gerador de blog estático que uso para este blog: Gerablog.</description>
-      <pubDate>Sun, 15 Jan 2017 00:00:00 +0000</pubDate>
     </item>
 
   </channel>

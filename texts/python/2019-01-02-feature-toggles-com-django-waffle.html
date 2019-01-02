@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-55287192-10"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-55287192-10');
+    </script>
+
+  <title>Feature toggles com django-waffle</title>
+
+  <meta charset="utf-8"/>
+  <meta name="description" content="Feature toggles: ativando e desativando comportamentos em um sistema sem alterar o código, usando django-waffle.">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
+    href="https://paulohrpinheiro.xyz/feed.xml"
+  >
+
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
+  <link href="https://paulohrpinheiro.xyz/assets/css/prism.css" rel="stylesheet" />
+</head>
+
+<body>
+<div id="tudo">
+<div id="conteudo">
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores</h2>
+    <nav id="mainnav">
+  <ul>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/rust/">
+        rust
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/server/">
+        server
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
+        diversos
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
+        programadorbipolar
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/c/">
+        c
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/go/">
+        go
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/database/">
+        database
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
+        javascript
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/perl/">
+        perl
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/python/">
+        python
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
+        prosaeverso
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
+        ruby
+      </a>
+    </li>
+    <li>
+      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
+        haskell
+      </a>
+    </li>
+  </ul>
+</nav>
+
+  </header>
+
+  <article>
+    <h2>Feature toggles com django-waffle</h2>
+
+<h3>Feature toggles: ativando e desativando comportamentos em um sistema sem alterar o código, usando django-waffle.</h3>
+
+<p><img src="images/on-off.png" alt="OnOff"></p>
+
+<blockquote>
+<p>Feature Toggles (often also refered to as Feature Flags) are a powerful technique, allowing teams to modify system behavior without changing code. They fall into various usage categories, and it&#39;s important to take that categorization into account when implementing and managing toggles. Toggles introduce complexity. We can keep that complexity in check by using smart toggle implementation practices and appropriate tools to manage our toggle configuration, but we should also aim to constrain the number of toggles in our system. (Martin Fowler)</p>
+</blockquote>
+
+<h4>Pra que complicar?</h4>
+
+<p>Sucintamente falando, <em>feature toggles</em> são uma forma de ter código novo, comportamentos novos, em um sistema, sem que eles sejam executados. Mais que isso, que  sejam ou não executados, conforme precisemos, mas sem ter que alterar o código novamente. O mais importante: sem ter que colocar em produção ou tirar da produção, só por conta de ter comentando ou descomentando aquele <code class="prettyprint">if</code> maroto.</p>
+
+<p>Como exemplo, a minha motivação para usar essa técnica foi uma situação recorrente na <a href="https://cargobr.com">CARGOBR</a>, em que planejamos uma melhoria no sistema, que altera muitas coisas para ser completada. Como fazemos <em>deploys</em> diários, não podemos simplesmente ir incorporando em nossa branch de produção código que altera comportamentos parciais.</p>
+
+<p>Uma solução para isso é manter uma branch para essa alteração, e depois que for homologada, fazer o <em>merge</em>. O problema disso é que, inevitavelmente perderemos muito tempo lidando com resolução de conflitos, correndo o risco de ter um código final que não condiz com o que planejamos.</p>
+
+<p>As <em>migrations</em> também podem ser um problema, mas estamos no caminho de apenar fazer migrações não destrutivas, que nos poupem de grandes problemas para serem revertidas. Uma solução é adicionar campos o quanto antes em produção, e nunca excluir, ou então excluir muito tempo depois da alteração estar consolidada (muito tempo depois, em minha visão, são muitos meses).</p>
+
+<p>Toda essa complexidade é a garantia de que não passaremos apuros na implementação de novos recursos, e que cada <em>deploy</em> será muito mais seguro.</p>
+
+<p>Outro benefício é que o código já estará integrado, e com testes rodando, para as situações de ligado e desligado, o que facilita resolver efeitos colaterais de qualquer outra alteração feita durante esse tempo.</p>
+
+<h4>Como implementar?</h4>
+
+<p>Fácil! Tenha uma base de dados (algum <em>SQL</em>, <em>Redis</em> persistente, <em>MongoDB</em>). Nela, tenha uma tabela para um nome da <em>feature</em>, e uma campo para saber se está ativa ou não. No seu código, quando quiser saber se deve ou não executar determinado código, consulte essa base e siga a vida. Mas fica melhor se puser um <em>cache</em> nisso...</p>
+
+<p>Apesar de eu ser sempre tentado a construir ferramentas, não foi dessa vez, decidimos, em minha equipe, usar um módulo que existe para o <em>Django</em>, o <a href="https://github.com/django-waffle/django-waffle">Django-Waffle</a>.</p>
+
+<p>Ele é uma aplicação <em>Django</em> que deve ser instalada em sua aplicação (adicionar no <code class="prettyprint">INSTALLED_APPS</code> e rodar as migrações). Para instalar, basta adicionar o pacote &#39;django-waffle&#39; às suas dependências. Uma dica importante: ao usar sistemas com <em>Django</em> até <em>1.11</em>, instale a versão <em>0.14.0</em> (<code class="prettyprint">django-waffle==0.14.0</code>), pois depois dessa versão o suporte é só para <em>Django</em> maior que <em>1.11</em>.</p>
+
+<h4>Critérios!</h4>
+
+<p>O <code class="prettyprint">django-waffle</code> oferece três tipos de critérios.</p>
+
+<p>A mais simples é o <a href="https://waffle.readthedocs.io/en/stable/types/switch.html">switch</a>, que simplesmente declara (e verifica) se algo está ativo ou não. Em seu código pode ter algo assim:</p>
+<pre><code class="language-python">
+import waffle
+
+...
+
+
+def feature():
+    blo()
+    blu()
+
+    if waffle.switch.is_active(&#x27;name_of_my_feature&#x27;):
+        bla()
+        ble()
+        bli()
+
+
+def new_feature():
+    if wafle.switch.is_inactive(&#x27;name_of_my_new_feature&#x27;):
+        return
+
+    nonono()
+
+</code></pre>
+<p>Caso a <em>feature</em> não esteja no banco de dados, será considerada como desligada, e pode também ser incluída no banco de dados como desligada (tudo isso é configurável).</p>
+
+<p>Para gerenciar as <em>features</em> (criar, ativar, desativar), há os comandos executados a partir da linha de comando, ou mesmo pelo próprio <em>admin</em>.</p>
+
+<p>Outro critério é o <a href="https://waffle.readthedocs.io/en/stable/types/sample.html">sample</a>, que adiciona aleatoriedade. Além do nome da <em>feature</em>, deve-se informar um número. A cada consulta, o <em>waffle</em> comparará o número indicado um número aleatório, e se o aleatório for maior, a <em>feature</em> será considerada inativa.</p>
+
+<p>Por fim, o mais complexo: <a href="https://waffle.readthedocs.io/en/stable/types/flag.html">flag</a>. Além do nome, recebe um contexto de requisição (<code class="prettyprint">request</code>). Com esses dados, podemos escolher, por exemplo, grupos de usuários, idioma, percentagem de usuários ou mesmo parâmetros a partir da <em>query string</em> da <em>URL</em>.</p>
+
+<h4>Material recomendadíssimo</h4>
+
+<ul>
+<li><a href="https://www.eventials.com/Globalcode/tdc-floripa-2018-stadium-quarta-7/">Uma implementação agnóstica de sistema feita na Locaweb</a>.</li>
+<li><a href="https://waffle.readthedocs.io/en/stable/">Documentação do Django Waffle</a>.</li>
+<li><a href="https://www.martinfowler.com/articles/feature-toggles.html">Texto do Martin Fowler sobre esse assunto</a>.</li>
+</ul>
+
+  </article>
+
+
+<hr>
+<h3>Mantenha contato:</h3>
+<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
+<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
+<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
+<hr>
+
+<footer>
+  <p>Copyright &copy; 2016-2018, Paulo Henrique Rodrigues Pinheiro</p>
+  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
+  <ul>
+    <li>Static Blog Engine by
+      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
+    </li>
+    <li>Code syntax highlight by
+      <a href="http://prismjs.com/">Prism</a>
+    </li>
+  </ul>
+</footer>
+
+<script src="https://paulohrpinheiro.xyz/assets/js/prism.js"></script>
+
+</div>
+</div>
+</body>
+</html>
