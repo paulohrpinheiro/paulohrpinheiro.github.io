@@ -8,10 +8,16 @@
     <language>pt-br</language>
 
     <item>
+      <title>Sobre os processos de seleção em TI</title>
+      <link>https://paulohrpinheiro.xyz/texts/diversos/2019-01-20-sobre-os-processos-de-selecao-em-ti.html</link>
+      <description>O que se deve buscar e o que se deve esperar num processo seletivo</description>
+      <pubDate>Sun, 20 Jan 2019 16:30:00 -0200</pubDate>
+    </item>
+    <item>
       <title>Trabalhar em um lugar calmo</title>
       <link>https://paulohrpinheiro.xyz/texts/diversos/2019-01-13-trabalhar-em-um-lugar-calmo.html</link>
       <description>Sobre o livro &quot;It doesn&#039;t have to be crazy at work&quot;, de Jason Fred e David Heinemeier Hansson (DSS), falando da Basecamp.</description>
-      <pubDate>Sun, 13 Jan 2019 14:00:00 -0200</pubDate>
+      <pubDate>Sun, 13 Jan 2019 00:00:00 +0000</pubDate>
     </item>
     <item>
       <title>Feature toggles com django-waffle</title>
@@ -180,12 +186,6 @@
       <link>https://paulohrpinheiro.xyz/texts/c/2017-01-19-um-tail-f-descalcado.html</link>
       <description>Treinando com C para uma implementação pessoal do tail -f</description>
       <pubDate>Thu, 19 Jan 2017 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Lazy evaluation em python com django</title>
-      <link>https://paulohrpinheiro.xyz/texts/python/2017-01-17-lazy-evaluation-em-python-com-django.html</link>
-      <description>Uma experiência frustrada tentando usar Lazy Evaluation no Python, com o framework Django.</description>
-      <pubDate>Tue, 17 Jan 2017 00:00:00 +0000</pubDate>
     </item>
 
   </channel>
