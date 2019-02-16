@@ -2,113 +2,55 @@
 <html lang="pt-br">
 
 <head>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-55287192-10"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-55287192-10"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
 
-      gtag('config', 'UA-55287192-10');
-    </script>
+    gtag('config', 'UA-55287192-10');
+  </script>
 
   <title>Listas, referências e cópias em Python</title>
 
   <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" >
+
   <meta name="description" content="Um erro bem comum (pelo menos pra mim), lidando com listas em Python">
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, maximum-scale=1"
-  >
+  <meta name="author" content="Paulo Henrique Rodrigues Pinheiro">
 
-  <link
-    rel="alternate"
-    type="application/rss+xml"
-    title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!"
-    href="https://paulohrpinheiro.xyz/feed.xml"
-  >
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!" href="https://paulohrpinheiro.xyz/feed.xml">
 
+  <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
 
-  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/gerablog.css">
-  <link href="https://paulohrpinheiro.xyz/assets/css/prism.css" rel="stylesheet" />
+  <link rel=icon href=favicon.ico sizes="16x16" type="image/png">
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/normalize.css">
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/skeleton.css">
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/custom.css">
 </head>
 
 <body>
-<div id="tudo">
-<div id="conteudo">
+<div class="container">
   <header>
     <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
     <h2>Blog sobre programação para programadores</h2>
-    <nav id="mainnav">
-  <ul>
-    <li>
-      <a href="https://paulohrpinheiro.xyz/texts/ruby/">
-        ruby
-      </a>
-    </li>
-    <li>
-      <a href="https://paulohrpinheiro.xyz/texts/javascript/">
-        javascript
-      </a>
-    </li>
-    <li>
-      <a href="https://paulohrpinheiro.xyz/texts/rust/">
-        rust
-      </a>
-    </li>
-    <li>
-      <a href="https://paulohrpinheiro.xyz/texts/python/">
-        python
-      </a>
-    </li>
-    <li>
-      <a href="https://paulohrpinheiro.xyz/texts/diversos/">
-        diversos
-      </a>
-    </li>
-    <li>
-      <a href="https://paulohrpinheiro.xyz/texts/perl/">
-        perl
-      </a>
-    </li>
-    <li>
-      <a href="https://paulohrpinheiro.xyz/texts/go/">
-        go
-      </a>
-    </li>
-    <li>
-      <a href="https://paulohrpinheiro.xyz/texts/database/">
-        database
-      </a>
-    </li>
-    <li>
-      <a href="https://paulohrpinheiro.xyz/texts/prosaeverso/">
-        prosaeverso
-      </a>
-    </li>
-    <li>
-      <a href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">
-        programadorbipolar
-      </a>
-    </li>
-    <li>
-      <a href="https://paulohrpinheiro.xyz/texts/haskell/">
-        haskell
-      </a>
-    </li>
-    <li>
-      <a href="https://paulohrpinheiro.xyz/texts/c/">
-        c
-      </a>
-    </li>
-    <li>
-      <a href="https://paulohrpinheiro.xyz/texts/server/">
-        server
-      </a>
-    </li>
-  </ul>
-</nav>
-
+    <nav>
+      <a class="button" href="https://paulohrpinheiro.xyz/texts/ruby/">ruby</a>
+      <a class="button" href="https://paulohrpinheiro.xyz/texts/javascript/">javascript</a>
+      <a class="button" href="https://paulohrpinheiro.xyz/texts/rust/">rust</a>
+      <a class="button" href="https://paulohrpinheiro.xyz/texts/python/">python</a>
+      <a class="button" href="https://paulohrpinheiro.xyz/texts/diversos/">diversos</a>
+      <a class="button" href="https://paulohrpinheiro.xyz/texts/perl/">perl</a>
+      <a class="button" href="https://paulohrpinheiro.xyz/texts/go/">go</a>
+      <a class="button" href="https://paulohrpinheiro.xyz/texts/database/">database</a>
+      <a class="button" href="https://paulohrpinheiro.xyz/texts/prosaeverso/">prosaeverso</a>
+      <a class="button" href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">programadorbipolar</a>
+      <a class="button" href="https://paulohrpinheiro.xyz/texts/haskell/">haskell</a>
+      <a class="button" href="https://paulohrpinheiro.xyz/texts/c/">c</a>
+      <a class="button" href="https://paulohrpinheiro.xyz/texts/server/">server</a>
+    </nav>
   </header>
 
   <article>
@@ -264,29 +206,15 @@ Out[73]: 0.3437652220018208
   </article>
 
 
-<hr>
-<h3>Mantenha contato:</h3>
-<a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/icon-email.png" alt="e-email" height="48" width="48"></a>
-<a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/icon-twitter.png" alt="twitter" height="48" width="48"></a>
-<a href="https://github.com/paulohrpinheiro"><img src="/assets/images/icon-github.png" alt="github" height="48" width="48"></a>
-<hr>
+  <footer>
+    <a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed para esse blog.</a></p>
+    <hr>
+    <small>
+      <a href="https://github.com/paulohrpinheiro/gerablog">Este blog é gerido pelo GeraBlog</a> e tem o layout dado pelo <a href="http://getskeleton.com/">Skeleton</a>
+      | Copyright &copy; 2016-2019, Paulo Henrique Rodrigues Pinheiro
+    </small>
+  </footer>
 
-<footer>
-  <p>Copyright &copy; 2016-2019, Paulo Henrique Rodrigues Pinheiro</p>
-  <p><a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed for this blog</a></p>
-  <ul>
-    <li>Static Blog Engine by
-      <a href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>
-    </li>
-    <li>Code syntax highlight by
-      <a href="http://prismjs.com/">Prism</a>
-    </li>
-  </ul>
-</footer>
-
-<script src="https://paulohrpinheiro.xyz/assets/js/prism.js"></script>
-
-</div>
 </div>
 </body>
 </html>
