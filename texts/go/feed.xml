@@ -8,6 +8,12 @@
     <language>pt-br</language>
 
     <item>
+      <title>Gerando imagens em GO com biblioteca padrão</title>
+      <link>https://paulohrpinheiro.xyz/texts/go/2019-02-18-gerando-imagens-em-go-com-biblioteca-padrao.html</link>
+      <description>Como gerar arquivos com imagens PNG na linguagem GO, usando apenas a biblioteca padrão</description>
+      <pubDate>Mon, 18 Feb 2019 00:00:00 +0000</pubDate>
+    </item>
+    <item>
       <title>CSV para JSON com linguagem GO</title>
       <link>https://paulohrpinheiro.xyz/texts/go/2018-10-05-csv-para-json-com-linguagem-go.html</link>
       <description>Nesse texto será apresentado um exemplo de como como converter um arquivo CSV para JSON em linguagem GO.</description>

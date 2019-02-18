@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-55287192-10"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-55287192-10');
+  </script>
+
+  <title>Gerando imagens em GO com biblioteca padrão</title>
+
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" >
+
+  <meta name="description" content="Como gerar arquivos com imagens PNG na linguagem GO, usando apenas a biblioteca padrão">
+  <meta name="author" content="Paulo Henrique Rodrigues Pinheiro">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!" href="https://paulohrpinheiro.xyz/feed.xml">
+
+  <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
+
+  <link rel=icon href="/favicon.ico" sizes="16x16" type="image/png">
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/normalize.css">
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/skeleton.css">
+</head>
+
+<body>
+<div class="container">
+  <header>
+    <h1><a href="/">Paulo Henrique Rodrigues Pinheiro</a></h1>
+    <h2>Blog sobre programação para programadores</h2>
+  </header>
+
+
+  <nav id="mainnav">
+    <ul>
+      <a class="button" href="https://paulohrpinheiro.xyz/texts/ruby/">ruby</a>
+      <a class="button" href="https://paulohrpinheiro.xyz/texts/javascript/">javascript</a>
+      <a class="button" href="https://paulohrpinheiro.xyz/texts/rust/">rust</a>
+      <a class="button" href="https://paulohrpinheiro.xyz/texts/python/">python</a>
+      <a class="button" href="https://paulohrpinheiro.xyz/texts/diversos/">diversos</a>
+      <a class="button" href="https://paulohrpinheiro.xyz/texts/perl/">perl</a>
+      <a class="button" href="https://paulohrpinheiro.xyz/texts/go/">go</a>
+      <a class="button" href="https://paulohrpinheiro.xyz/texts/database/">database</a>
+      <a class="button" href="https://paulohrpinheiro.xyz/texts/prosaeverso/">prosaeverso</a>
+      <a class="button" href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">programadorbipolar</a>
+      <a class="button" href="https://paulohrpinheiro.xyz/texts/haskell/">haskell</a>
+      <a class="button" href="https://paulohrpinheiro.xyz/texts/c/">c</a>
+      <a class="button" href="https://paulohrpinheiro.xyz/texts/server/">server</a>
+    </ul>
+  </nav>
+
+
+  <article>
+    <h2>Gerando imagens em GO com biblioteca padrão</h2>
+
+<h3>Como gerar arquivos com imagens PNG na linguagem GO, usando apenas a biblioteca padrão</h3>
+
+<p><img src="images/gopher-portrait.jpg" alt="Gerando imagens"></p>
+
+<blockquote>
+<p>https://twitter.com/noahhlo/status/437395572081688576</p>
+</blockquote>
+
+<h4>Lá vem história</h4>
+
+<p>No começo do livro <a href="https://novatec.com.br/livros/linguagem-de-programacao-go/">A Linguagem de Programação GO, de Donovan &amp; Kernighan</a> - <a href="https://paulohrpinheiro.xyz/texts/go/2018-09-24-testes-na-linguagem-go.html">aqui falo um pouco desse livro</a>, há um interessante exercício em gerar GIFs animados, usando apenas a biblioteca padrão de GO.</p>
+
+<p>Como estava saudoso de minhas aventuras no mundo dos fractais, pensei que deveria voltar a fazer desenhos baseados em fórmulas muito simples, para cada ponto de minha tela. Precisaria de alguma biblioteca externa (e GO tem muitas), mas o intento é, além do prazer estético, fazer as coisas com o mínimo de ferramentas.</p>
+
+<p>Então, nesse texto, está o que aprendi para desenhar pontos em um arquivo PNG, com GO purinho.</p>
+
+<h4>As ferramentas</h4>
+
+<p>Há um grande pacotão, o <a href="https://golang.org/pkg/image/">image</a>, com a base que precisamos. Também há os &quot;sub pacotes&quot; <a href="https://golang.org/pkg/image/png/">image/png</a> e <a href="https://golang.org/pkg/image/color/">image/color</a>.</p>
+
+<p>Eventualmente, alguma função de <a href="https://golang.org/pkg/math/">math</a>. E o <a href="https://golang.org/pkg/os/">os</a>, para criar o arquivo.</p>
+
+<h4>O programa</h4>
+
+<p>Tem um <a href="https://gist.github.com/paulohrpinheiro/5d590602f8960057f26b70094a82d758">GIST para ele</a>, mas eis o danado:</p>
+<pre><code class="language-go">
+package main
+
+import (
+    &quot;image&quot;
+    &quot;image&#x2F;color&quot;
+    &quot;image&#x2F;png&quot;
+    &quot;math&quot;
+    &quot;os&quot;
+)
+
+const (
+    size     = 301
+    fileName = &quot;draw.png&quot;
+)
+
+var palette = []color.Color{
+    color.RGBA{0xaf, 0xaf, 0xff, 0xff},
+    color.RGBA{0xaf, 0xff, 0xaf, 0xee},
+}
+
+func main() {
+    rect := image.Rect(0, 0, size, size)
+    img := image.NewPaletted(rect, palette)
+
+    for x := 0; x &lt; size; x++ {
+        for y := 0; y &lt; size; y++ {
+            if visible(x, y) {
+                img.SetColorIndex(x, y, 1)
+            }
+        }
+    }
+
+    f, err := os.Create(fileName)
+    if err != nil {
+        panic(err)
+    }
+    defer f.Close()
+    png.Encode(f, img)
+}
+
+func visible(xint int, yint int) bool {
+    x := float64(xint)
+    y := float64(yint)
+
+    value := math.Pow(x, 9) + math.Pow(y, 9)
+    module := int64(value) % 3
+
+    if module == 0 {
+        return true
+    }
+
+    return false
+}
+
+</code></pre>
+<p>Criei algumas constantes para usar o <code class="prettyprint">const</code>. Esse <code class="prettyprint">301</code> é pros padrões não ficarem com a parte direita incompleta, apenas isso.</p>
+
+<p>Esses padrões que listarei aqui são encontrados de uma forma binária: faço alguma conta com as coordenadas, pego o módulo congruência 10 (usei 3 também) e verifico se é zero, então decido se pinto ou não o ponto. Por isso criei uma paleta de cores com... duas cores :-), o <code class="prettyprint">var palette</code>.</p>
+
+<p>O índice <code class="prettyprint">0</code> de <code class="prettyprint">palette</code> contém a cor que será usada por padrão na imagem, portanto, só precisaremos &quot;pintar&quot; um pixel, apenas se for necessário.</p>
+
+<p>No <code class="prettyprint">img.SetColorIndex</code>, o terceiro parâmetro é o índice na paleta, como só existem duas cores, e a primeira é a padrão, se for o caso, usa-se a segunda.</p>
+
+<h4>Alguns padrões</h4>
+
+<h5>mod3pow9</h5>
+
+<p>O mais &quot;disruptivo&quot;, e cheguei a ele depois de algumas tentativas</p>
+<pre><code class="language-go">
+value := math.Pow(x, 9) + math.Pow(y, 9)
+module := int64(value) % 3
+
+</code></pre>
+<p>Eu imagino que se relativizar as coordenadas, consigo uma imagem completa, mas isso é pra próxima empreitada.</p>
+
+<p><img src="images/draw-mod3pow9.png" alt="Padrão mod3pow9"></p>
+
+<h5>mod10mult</h5>
+
+<p>O primeiro que testei, muito legal, parece uma padrão pra tecidos :).</p>
+<pre><code class="language-go">
+value := x * y
+module := value % 10
+
+</code></pre>
+<p><img src="images/draw-mod10-mult.png" alt="Padrão mod10mult"></p>
+
+<h5>mod10add</h5>
+
+<p>Vendo a simples multiplicação, como seria a adição?</p>
+<pre><code class="language-go">
+value := x + y
+module := value % 10
+
+</code></pre>
+<p><img src="images/draw-mod10add.png" alt="Padrão mod10add"></p>
+
+<h5>mod10summult</h5>
+
+<p>Dos simples, o mais bonitinho. Acho que ao invés de tecido serve pra papel.</p>
+<pre><code class="language-go">
+value := x*x +y*y
+module := value % 10
+
+</code></pre>
+<p><img src="images/draw-mod10summult.png" alt="Padrao mod10summult"></p>
+
+<h4>Pro futuro</h4>
+
+<p>Tem todas as funções trigonométricas pra explorar nessa pegada. E, é claro, tem o conjunto de Mandelbrot, que foi a verdadeira motivação pra eu descobrir como gerar gráficos em GO. Tem muito coisa feita por aí, mas é tipo um desafio pessoal. Se eu não desenhei o <code class="prettyprint">TorBledNam</code> em uma dada linguagem, é porque eu não a usei de verdade.</p>
+
+  </article>
+
+
+  <hr>
+
+  <footer>
+    <h3>Mantenha contato</h3>
+    <a href="mailto:paulohrpinheiro@gmail.com"><img src="/assets/images/email-48x48.png" alt="e-email" height="48" width="48"></a>
+    <a href="https://twitter.com/PauloHRPinheiro"><img src="/assets/images/twitter-48x48.png" alt="twitter" height="48" width="48"></a>
+    <a href="https://github.com/paulohrpinheiro"><img src="/assets/images/github-48x48.png" alt="github" height="48" width="48"></a>
+    <a href="https://linkedin.com/in/paulohrpinheiro"><img src="/assets/images/linkedin-48x48.png" alt="linkedin" height="48" width="48"></a>
+
+    <br>
+    <a href="https://paulohrpinheiro.xyz/feed.xml">RSS Feed para esse blog.</a></p>
+
+    <small>
+      <a href="https://github.com/paulohrpinheiro/gerablog">Este blog é gerido pelo GeraBlog</a> e tem o layout dado pelo <a href="http://getskeleton.com/">Skeleton</a> com ícones de <a href="https://github.com/paulrobertlloyd/socialmediaicons/">Paul Robert Lloyd</a>
+      <br>Copyright &copy; 2016-2019, Paulo Henrique Rodrigues Pinheiro
+    </small>
+  </footer>
+
+</div>
+</body>
+</html>
