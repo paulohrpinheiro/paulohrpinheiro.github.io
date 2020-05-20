@@ -8,6 +8,12 @@
     <language>pt-br</language>
 
     <item>
+      <title>Pegando dados macroeconômicos com Quandl em Python</title>
+      <link>https://paulohrpinheiro.xyz/texts/python/2020-05-20-pegando-dados-macroeconomicos-com-quandl-em-python.html</link>
+      <description>Como obter dados históricos sobre indicadores de macroeconomia com a biblioteca Quandl usando Python</description>
+      <pubDate>Wed, 20 May 2020 00:00:00 +0000</pubDate>
+    </item>
+    <item>
       <title>Feature toggles com django-waffle</title>
       <link>https://paulohrpinheiro.xyz/texts/python/2019-01-02-feature-toggles-com-django-waffle.html</link>
       <description>Feature toggles: ativando e desativando comportamentos em um sistema sem alterar o código, usando django-waffle.</description>

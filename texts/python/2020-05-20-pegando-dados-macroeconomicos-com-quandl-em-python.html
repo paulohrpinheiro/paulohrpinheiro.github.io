@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-55287192-10"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-55287192-10');
+  </script>
+
+  <title>Pegando dados macroeconômicos com Quandl em Python</title>
+
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" >
+
+  <meta name="description" content="Como obter dados históricos sobre indicadores de macroeconomia com a biblioteca Quandl usando Python">
+  <meta name="author" content="Paulo Henrique Rodrigues Pinheiro">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!" href="https://paulohrpinheiro.xyz/feed.xml">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+  <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+
+  <link rel=icon href="/favicon.ico" sizes="16x16" type="image/png">
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/normalize.css">
+</head>
+
+<body>
+  <section class="section">
+    <div class="container">
+      <h1 class="title is-1">
+        Paulo Henrique Rodrigues Pinheiro
+      </h1>
+      <p class="subtitle is-3">
+        Um blog sobre programação para programadores!
+      </p>
+    </div>
+  </section>
+
+
+
+
+     <div class="container">
+        
+		<nav class="level">
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/">HOME</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/c/">c</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/diversos/">diversos</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/go/">go</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/haskell/">haskell</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/javascript/">javascript</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/perl/">perl</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">programadorbipolar</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/prosaeverso/">prosaeverso</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/python/">python</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/ruby/">ruby</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/rust/">rust</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/server/">server</a>
+			</p>
+		</nav>
+	</div>
+
+    <hr>
+
+
+  <article class="container">
+    <div class="content">
+        <h2>Pegando dados macroeconômicos com Quandl em Python</h2>
+
+<h3>Como obter dados históricos sobre indicadores de macroeconomia com a biblioteca Quandl usando Python</h3>
+
+<p><img src="images/macroeconomia.jpg" alt="Imagem pega em https://brasil.elpais.com/"></p>
+
+<h4>Macroeconomia?</h4>
+
+<p>Estou fazendo um minicurso sobre programação em <em>Python</em> para manipulação de dados macroeconômicos. O uso não trivial, para mim, da linguagem, além dessa utilização, tem sido bem interessante. Em minha arrogância de programador experiente, acabei descobrindo muita coisa que nunca vi. Tem  material bom e &quot;digrátis&quot; no site deles, e os cursos pagos são bem legais e com preços acessíveis:</p>
+
+<blockquote>
+<p><a href="https://tradingcomdados.com">Trading com Dados</a></p>
+</blockquote>
+
+<p>Feito o jabá não encomendado, continuemos.</p>
+
+<p>Dados mundiais em um só lugar, podem ser obtidos com a empresa <a href="https://quandl.com">Quandl</a>, que disponibiliza uma <em>API</em>, e blibliotecas para <em>R</em>, <em>Python</em> e <em>Excel</em>.</p>
+
+<p>Para usar, basta cadastrar-se para obter um <em>token</em> de acesso a ser usado na <em>API</em>.</p>
+
+<p>Se você já programa, siga por aqui, se não, recomendo seguir pelos tutoriais da <a href="https://tradingcomdados.com">Trading com Dados</a> primeiro. Mas se quiser seguir por aqui, e eu não tiver explicado algo bem o suficiente (100% de chances disso ocorrer), é só falar comigo.</p>
+
+<h4>Começando</h4>
+
+<p>Eles estão usando <a href="https://jupyter.org/">Jupiter Notebook</a>, mais adequado à exploração e ao objetivo do curso, mas o que me interessa aqui é o acesso aos dados.</p>
+
+<p>Então, dada uma <a href="https://docs.python.org/pt-br/3/library/venv.html">virtualenv</a> (há outras opções, eu uso algo que me permite ter versões difrentes de python, <a href="https://github.com/pyenv/pyenv">pyenv</a>), instale os pacotes necessários:</p>
+<pre><code class="language-python">
+pip install quandl matplotlib python-decouple
+
+</code></pre>
+<p>Esse comando, além de outras dependências, instalará também a <a href="https://pandas.pydata.org/">Pandas</a> e <a href="https://requests.readthedocs.io/en/master/">Requests</a>.</p>
+
+<p>Instalamos também a biblioteca <a href="https://github.com/henriquebastos/python-decouple/">python-decouple</a>, que nos permitirá gerenciar melhor o <em>token</em> de acesso à <em>API</em>.</p>
+
+<h4>Primeiro programa</h4>
+
+<p>Ao fazer o cadastro no site da <a href="https://quandl.com">Quandl</a>, em <a href="https://www.quandl.com/account/profile">Account Settings</a> há um campo <em>YOUR API KEY</em>. Copie esse valor para um arquivo chamado <em>.env</em>, dessa forma:</p>
+<pre><code class="language-python">
+QUANDL_API_KEY=COLOQUE_SUA_API_KEY_AQUI
+
+</code></pre>
+<p>E então crie esse programa no arquivo <code class="prettyprint">ipca.py</code>:</p>
+<pre><code class="language-python">
+import quandl
+
+from decouple import config
+
+
+quandl.ApiConfig.api_key = config(&#x27;QUANDL_API_KEY&#x27;) 
+
+ipca = quandl.get(&#x27;BCB&#x2F;13522&#x27;, start_date=&#x27;2010-01-01&#x27;)
+print(ipca.head())
+
+</code></pre>
+<p>Executando com <code class="prettyprint">python ipca.py</code>, tem-se essa saída:</p>
+<pre><code class="language-python">
+            Value
+Date             
+2010-01-31   4.59
+2010-02-28   4.83
+2010-03-31   5.17
+2010-04-30   5.26
+2010-05-31   5.22
+
+</code></pre>
+<p>O método <code class="prettyprint">head()</code>é da biblioteda <em>Pandas</em>, pois <em>IPCA</em> é um objeto <code class="prettyprint">DataFrame</code>. Se quiser o retorno como um objeto <code class="prettyprint">numpy</code>, basta passar a opção <code class="prettyprint">returns=&#39;numpy&#39;</code> no método <code class="prettyprint">get</code>. Mais informações e opções <a href="https://www.quandl.com/tools/python">na página de ajuda sobre Python</a>.</p>
+
+<p>Esse código, <em>BCB/13522</em>, deve ser procurado na página do <a href="https://quandl.com">Quandl</a> mesmo. Para indicadores oficiais, por exemplo, pode-se buscar por <em>BCB</em> (Banco Central do Brasil), que direcionará para uma página especial, de <a href="https://www.quandl.com/data/BCB-Central-Bank-of-Brazil-Statistical-Database">dados específicos do Banco Central do Brasil no Quandl</a>.</p>
+
+<p>Há um campo de busca dedicado a esses índices. Outros índices interessantes são (Petróleo é um índice dado pelo governo dos EEUU):</p>
+<pre><code class="language-python">
+| Indicador  | Código         |
+| :--        | :--            |
+| Taxa SELIC | BCB&#x2F;432        |
+| PIB Brasil | ODA&#x2F;BRA_NGDPD  |
+| Dólar      | BCB&#x2F;10813      |
+| Ouro       | BCB&#x2F;4          |
+| CDI        | BCB&#x2F;4392       |
+| Petróleo   | EIA&#x2F;PET_RWTC_D |
+
+</code></pre>
+<p>Por hoje é só. Próxima brincadeira, gerar gráficos de cada coisa, e gráficos de várias coisas juntas. Também umas dúvidas em relação ao uso desses dados e ao armazenamento local, coisa que irei pesquisar e compartilhar.</p>
+
+    </div>
+  </article>
+
+
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>
+                O conteúdo e opiniões publicados nesse site são de inteira responsabilidade minha, e não refletem as opiniões e nem são endossados pelo meu empregador.
+            </p>
+                Este blog é gerido pelo <a target="_blank" href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a> e tem o layout dado pelo <a target="_blank" href="https://bulma.io">Bulma</a>.
+            <p>
+                Copyright © 2016-2020, <a target="_blank" href="https://twitter.com/PauloHRPinheiro">Paulo Henrique Rodrigues Pinheiro</a>.
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>
