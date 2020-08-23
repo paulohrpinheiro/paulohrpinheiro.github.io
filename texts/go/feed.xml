@@ -8,6 +8,12 @@
     <language>pt-br</language>
 
     <item>
+      <title>Como saber se um número é par de forma complicada</title>
+      <link>https://paulohrpinheiro.xyz/texts/go/2020-08-23-como-saber-se-um-numero-e-par-de-forma-complicada.html</link>
+      <description>Uma coletânea sobre diversas formas de descobrir se um número é par ou não em Go</description>
+      <pubDate>Sun, 23 Aug 2020 00:00:00 +0000</pubDate>
+    </item>
+    <item>
       <title>Gerando imagens em GO com biblioteca padrão</title>
       <link>https://paulohrpinheiro.xyz/texts/go/2019-02-18-gerando-imagens-em-go-com-biblioteca-padrao.html</link>
       <description>Como gerar arquivos com imagens PNG na linguagem GO, usando apenas a biblioteca padrão</description>

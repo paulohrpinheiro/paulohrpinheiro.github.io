@@ -8,10 +8,16 @@
     <language>pt-br</language>
 
     <item>
+      <title>Como saber se um número é par de forma complicada</title>
+      <link>https://paulohrpinheiro.xyz/texts/go/2020-08-23-como-saber-se-um-numero-e-par-de-forma-complicada.html</link>
+      <description>Uma coletânea sobre diversas formas de descobrir se um número é par ou não em Go</description>
+      <pubDate>Sun, 23 Aug 2020 20:00:00 -0300</pubDate>
+    </item>
+    <item>
       <title>Pegando dados macroeconômicos com Quandl em Python</title>
       <link>https://paulohrpinheiro.xyz/texts/python/2020-05-20-pegando-dados-macroeconomicos-com-quandl-em-python.html</link>
       <description>Como obter dados históricos sobre indicadores de macroeconomia com a biblioteca Quandl usando Python</description>
-      <pubDate>Wed, 20 May 2020 20:00:00 -0300</pubDate>
+      <pubDate>Wed, 20 May 2020 00:00:00 +0000</pubDate>
     </item>
     <item>
       <title>Gerando imagens em GO com biblioteca padrão</title>
@@ -180,12 +186,6 @@
       <link>https://paulohrpinheiro.xyz/texts/diversos/2017-06-11-ficando-velho-carreira-em-ti-e-idade.html</link>
       <description>Sobre continuar na carreira em um cargo operacional, apesar da idade e experiência.</description>
       <pubDate>Sun, 11 Jun 2017 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Reflexões geradas pelo livro &quot;Economia do Acesso&quot;</title>
-      <link>https://paulohrpinheiro.xyz/texts/diversos/2017-03-03-reflexões-geradas-pelo-livro-economia-doa-acesso.html</link>
-      <description>Minhas impressões geradas pelo livro &quot;Economia do Acesso&quot;, de Rodrigo Dantas, editado pela Casa do Código.</description>
-      <pubDate>Fri, 3 Mar 2017 00:00:00 +0000</pubDate>
     </item>
 
   </channel>

@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-55287192-10"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-55287192-10');
+  </script>
+
+  <title>Como saber se um número é par de forma complicada</title>
+
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" >
+
+  <meta name="description" content="Uma coletânea sobre diversas formas de descobrir se um número é par ou não em Go">
+  <meta name="author" content="Paulo Henrique Rodrigues Pinheiro">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!" href="https://paulohrpinheiro.xyz/feed.xml">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+  <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+
+  <link rel=icon href="/favicon.ico" sizes="16x16" type="image/png">
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/normalize.css">
+</head>
+
+<body>
+  <section class="section">
+    <div class="container">
+      <h1 class="title is-1">
+        Paulo Henrique Rodrigues Pinheiro
+      </h1>
+      <p class="subtitle is-3">
+        Um blog sobre programação para programadores!
+      </p>
+    </div>
+  </section>
+
+
+
+
+     <div class="container">
+        
+		<nav class="level">
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/">HOME</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/c/">c</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/diversos/">diversos</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/go/">go</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/haskell/">haskell</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/javascript/">javascript</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/perl/">perl</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">programadorbipolar</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/prosaeverso/">prosaeverso</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/python/">python</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/ruby/">ruby</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/rust/">rust</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/server/">server</a>
+			</p>
+		</nav>
+	</div>
+
+    <hr>
+
+
+  <article class="container">
+    <div class="content">
+        <h2>Como saber se um número é par de forma complicada</h2>
+
+<h3>Uma coletânea sobre diversas formas de descobrir se um número é par ou não em Go</h3>
+
+<p><img src="images/even.png" alt="Definição de um número par"></p>
+
+<blockquote>
+<p>https://pt.wikipedia.org/wiki/Paridade</p>
+</blockquote>
+
+<h4>Um thread bem divertida no twitter</h4>
+
+<p>Em um <em>thread</em>, é apresentada uma situação absurda em que a função proposta para descobrir se um número é par era uma sequência de <em>ifs</em> para cada número retornando <code class="prettyprint">True</code> ou <code class="prettyprint">False</code>, e a autora, ironicamente pergunta se há um meio para fazer isso de maneira mais fácil:</p>
+
+<p>https://twitter.com/ctrlshifti/status/1288745146759000064</p>
+
+<p>Eu peguei a imagem e postei no Linkedin, perguntando &quot;Como proceder se der de cara com isso em um PR? :)&quot; e foi um baita <em>clickbait</em>. Dentro da minha bolha a galera reagiu com bom humor, mas fora teve respostas interessantes sobre como mentorizar ou orientar alguém que fizesse isso, e até mesmo rendendo uns comentários mais exaltados tipo &quot;por que expor dessa forma alguém que está começando?&quot;:</p>
+
+<p>https://www.linkedin.com/posts/paulohrpinheiro_como-proceder-se-der-de-cara-com-isso-em-activity-6694579298629685248-eXyQ</p>
+
+<p>No twitter também rolou alguns casos de <em>haters</em> com a mulher que postou isso. Alguns a ironizando por ser mulher. Outros desesperados apontando a solução óbvia em tom de lacração.</p>
+
+<p>É nítido, em tudo isso, a exasperação ou incapacidade de muitos, para entender um texto. Reflexo desse triste momento em que o mundo vive de trevas econômicas, sociais, sanitárias e culturais.</p>
+
+<h4>O aprendizado</h4>
+
+<p>Mas a galera do bem sempre se sobressai. E as alternativas para esse trivial problema demonstram uma criatividade admirável. Eu escolhi algumas delas, pois a matemática como ciência já é um interesse especial para mim, e também tive a ideia de reescrever em Go os algoritmos, linguagem que estou aprendendo. Tem muito mais coisa lá, vale o passeio pela <em>thread</em>.</p>
+
+<p>Também deixei no backlog outras sugestões para um próximo com ideias ainda mais surpreendentes.</p>
+
+<p><img src="images/vamosnessa.jpg" alt="https://los40.com.mx/los40/2017/03/30/moda/1490903640_358806.html"></p>
+
+<blockquote>
+<p>Vamos neeessa!</p>
+</blockquote>
+
+<p>Isso é pra quem tem referências :)</p>
+
+<h4>Mais uma piada antes de começar</h4>
+
+<p>O @paullouth sugeriu a seguinte solução:</p>
+<pre><code class="language-go">
+package main
+
+import &quot;fmt&quot;
+
+func isOdd(n int) bool {
+        return !isEven(n)
+}
+
+func isEven(n int) bool {
+        return !isOdd(n)
+}
+
+func main() {
+        fmt.Println(isEven(10))
+}
+
+</code></pre>
+<p>Que obviamente congelou minha modesta máquina por alguns minutos:</p>
+
+<p><img src="images/even_paulluth.png" alt="Execução com sigkill do programa proposto"></p>
+
+<h4>Não resisto, mais uma</h4>
+
+<p>O @panondo argumentou que performance é o que interessa:</p>
+<pre><code class="language-go">
+func isEven(n int) bool {
+    return true
+}
+
+</code></pre>
+<h4>Verificar o último dígito (@ctrlshifti)</h4>
+<pre><code class="language-go">
+package main
+
+import (
+ &quot;strconv&quot;
+
+ &quot;github.com&#x2F;paulohrpinheiro&#x2F;mytest&quot;
+)
+
+func isEven(n int) bool {
+ s := strconv.Itoa(n)
+ l := s[len(s)-1]
+
+ return l == &#x27;0&#x27; || l == &#x27;2&#x27; || l == &#x27;4&#x27; || l == &#x27;6&#x27; || l == &#x27;8&#x27;
+}
+
+func main() {
+ mytest.Run(1000, isEven)
+}
+
+</code></pre>
+<h4>Minha versão com expressão regular</h4>
+
+<p>Inspirado por essa versão, lembrei dessa grande bala de prata, geralmente usada pra fazer a coisa errada no lugar errado!</p>
+<pre><code class="language-go">
+package main
+
+import (
+        &quot;regexp&quot;
+        &quot;strconv&quot;
+
+        &quot;github.com&#x2F;paulohrpinheiro&#x2F;mytest&quot;
+)
+
+func isEven(n int) bool {
+        var r = regexp.MustCompile(`[02468]$`)
+        s := strconv.Itoa(n)
+
+        return r.MatchString(s)
+}
+
+func main() {
+        mytest.Run(1000, isEven)
+}
+
+</code></pre>
+<h4>Multiplicando por dez e dividindo por dois (@KaptenUppenbar)</h4>
+
+<p>Mais uma genial ideia, afinal, números pares nessa condição terão como último dígito o zero e números ímpares o cinco. Perceba-se que ele multiplicou por dez apenas adicionando um zero ao final do número.</p>
+
+<p>A ideia original for apresentada em Python:</p>
+<pre><code class="language-go">
+is_even = lambda x: str(int(int(str(x)+&#x27;0&#x27;)&#x2F;2)).endswith(&#x27;0&#x27;)
+
+</code></pre>
+<p>Em Go pode-se ter:</p>
+<pre><code class="language-go">
+package main
+
+import (
+        &quot;fmt&quot;
+        &quot;strconv&quot;
+)
+
+func isEven(n int) bool {
+        p := strconv.Itoa((n * 10) &#x2F; 2)
+
+        return p[len(p)-1] == &#x27;0&#x27;
+}
+
+func main() {
+        fmt.Printf(&quot;127 is even? %v\n&quot;, isEven(127))
+        fmt.Printf(&quot;388 is even? %v\n&quot;, isEven(388))
+        fmt.Printf(&quot;  0 is even? %v\n&quot;, isEven(0))
+        fmt.Printf(&quot;-10 is even? %v\n&quot;, isEven(-10))
+        fmt.Printf(&quot;-11 is even? %v\n&quot;, isEven(-11))
+}
+
+</code></pre>
+<p>Não usei o pacote de teste, pois ao multiplicar por 10, estamos fora dos limites do tipo numérico.</p>
+
+<p><img src="images/even_kapten.png" alt="Execução do programa em terminal"></p>
+
+<h4>Inspirado no anterior, criei esse</h4>
+
+<p>Aqui, usando a divisão inteira, se o número for par, ao dividi-lo por dois, e então multiplicá=lo por dois, deve-se ter o mesmo número:</p>
+<pre><code class="language-go">
+package main
+
+import (
+        &quot;github.com&#x2F;paulohrpinheiro&#x2F;mytest&quot;
+)
+
+func isEven(n int) bool {
+        return (n&#x2F;2)*2 == n
+}
+
+func main() {
+        mytest.Run(1000, isEven)
+}
+
+</code></pre>
+<p>Corre-se o risco de se o compilador otimizar a expressão, cairmos em uma tautologia.</p>
+
+<h4>Pegada funcional, com guardas e recursão (@arara_)</h4>
+
+<p>Esse aqui me deu uma vontade louca de voltar a estudar <em>Haskell</em>.</p>
+<pre><code class="language-go">
+package main
+
+import &quot;fmt&quot;
+
+func isEven(n int8) bool {
+ if n == 1 {
+        return false
+ }
+ if n &gt;= 2 {
+        return isEven(n - 2)
+ }
+ if n &lt;= -1 {
+        return isEven(n + 2)
+ }
+
+ &#x2F;&#x2F; n == 0
+ return true
+}
+
+func main() {
+ fmt.Printf(&quot;10 is even? %v\n&quot;, isEven(10))
+ fmt.Printf(&quot;15 is even? %v\n&quot;, isEven(15))
+}
+
+</code></pre>
+<p>Não pude usar o pacote de teste por conta dos extremos que ele usa.</p>
+
+<p>Falando em <em>Haskell</em>, perdi um tempo desenferrujando minhas desabilidades nessa linguagem e não é que saiu uma função? Peguei o máximo de um inteiro de 64 bits e chamei a função e deixei calculando. Demorando muito pra ter um resultado, mas a máquina está usável (no tempo em que estou escrevendo esse texto tem um processador torrando aqui). Recursão ali é outra conversa.</p>
+<pre><code class="language-go">
+isEven :: Int -&gt; Bool
+isEven n | n == 1    = False
+         | n &gt;= 2    = isEven (n - 2)
+         | n &lt;  0    = isEven (n + 2)
+         | otherwise = True -- n==0
+
+</code></pre>
+<h4>Testes</h4>
+
+<p>Como pode ser observado, há um <em>package</em> para testar as funções:</p>
+<pre><code class="language-go">
+package mytest
+
+import (
+        &quot;fmt&quot;
+        &quot;math&#x2F;rand&quot;
+        &quot;time&quot;
+)
+
+&#x2F;&#x2F; https:&#x2F;&#x2F;stackoverflow.com&#x2F;questions&#x2F;6878590&#x2F;the-maximum-value-for-an-int-type-in-go
+const maxUint = ^uint(0)
+const minUint = 0
+const maxInt = int(maxUint &gt;&gt; 1)
+const minInt = -maxInt - 1
+
+func Run(randoms int, isEven func(n int) bool) bool {
+        zeroTest := zero(isEven)
+        maxTest := max(isEven)
+        minTest := min(isEven)
+        positiveTest := positive(randoms, isEven)
+        negativeTest := negative(randoms, isEven)
+
+        final := zeroTest &amp;&amp; maxTest &amp;&amp; minTest &amp;&amp; positiveTest &amp;&amp; negativeTest
+        s := &quot;PASS&quot;
+
+        if !final {
+                s = &quot;NO PASS&quot;
+        }
+
+        fmt.Println(&quot;Final result: &quot;, s)
+
+        return final
+}
+
+func myIsEven(n int) bool {
+        return n%2 == 0
+}
+
+func zero(f func(n int) bool) bool {
+        if f(0) == true {
+                return true
+        }
+
+        fmt.Printf(&quot;zero FAIL! 0 is even.\n&quot;)
+        return false
+}
+
+func max(f func(n int) bool) bool {
+        if f(maxInt) == myIsEven(maxInt) {
+                return true
+        }
+
+        fmt.Printf(&quot;max FAIL! %v is even.\n&quot;, maxInt)
+        return false
+}
+
+func min(f func(n int) bool) bool {
+        if f(minInt) == myIsEven(minInt) {
+                return true
+        }
+
+        fmt.Printf(&quot;min FAIL! %v is even.\n&quot;, minInt)
+        return false
+}
+
+func positive(randoms int, f func(n int) bool) bool {
+        rand.Seed(time.Now().UnixNano())
+
+        for i := 0; i &lt; randoms; i++ {
+                r := rand.Int()
+
+                if f(r) != myIsEven(r) {
+                        fmt.Printf(&quot;random FAIL! %v is not even.\n&quot;, r)
+                        return false
+                }
+        }
+
+        return true
+}
+
+func negative(randoms int, f func(n int) bool) bool {
+        rand.Seed(time.Now().UnixNano())
+        maxRandom := maxInt - 1
+
+        for i := 0; i &lt; randoms; i++ {
+                r := rand.Intn(maxRandom) * (-1)
+
+                if f(r) != myIsEven(r) {
+                        fmt.Printf(&quot;random FAIL! %v is not even.\n&quot;, r)
+                        return false
+                }
+        }
+
+        return true
+}
+
+</code></pre>
+<p>Espero em breve publicar o restante das soluções que separei.</p>
+
+<p>Por hoje é isso, pratiquei Go me divertindo! </p>
+
+    </div>
+  </article>
+
+
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>
+                O conteúdo e opiniões publicados nesse site são de inteira responsabilidade minha, e não refletem as opiniões e nem são endossados pelo meu empregador.
+            </p>
+                Este blog é gerido pelo <a target="_blank" href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a> e tem o layout dado pelo <a target="_blank" href="https://bulma.io">Bulma</a>.
+            <p>
+                Copyright © 2016-2020, <a target="_blank" href="https://twitter.com/PauloHRPinheiro">Paulo Henrique Rodrigues Pinheiro</a>.
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>
