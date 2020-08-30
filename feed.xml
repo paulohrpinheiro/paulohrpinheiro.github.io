@@ -8,10 +8,16 @@
     <language>pt-br</language>
 
     <item>
+      <title>Como saber se um número é par de forma complicada - II</title>
+      <link>https://paulohrpinheiro.xyz/texts/go/2020-08-30-como-saber-se-um-numero-e-par-de-forma-complicada-II.html</link>
+      <description>Uma coletânea sobre diversas formas de descobrir se um número é par ou não em Go, II</description>
+      <pubDate>Sun, 30 Aug 2020 19:00:00 -0300</pubDate>
+    </item>
+    <item>
       <title>Toxidade, senioridade, cegueira.</title>
       <link>https://paulohrpinheiro.xyz/texts/diversos/2020-08-29-toxidade-senioridade-cegueira.html</link>
       <description>A mais recente polêmica no mundinho dev dentro do twitter</description>
-      <pubDate>Sat, 29 Aug 2020 17:00:00 -0300</pubDate>
+      <pubDate>Sat, 29 Aug 2020 00:00:00 +0000</pubDate>
     </item>
     <item>
       <title>Como saber se um número é par de forma complicada</title>
@@ -180,12 +186,6 @@
       <link>https://paulohrpinheiro.xyz/texts/python/2017-07-23-data-science-do-zero.html</link>
       <description>Um livro bem legal</description>
       <pubDate>Sun, 23 Jul 2017 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Caipyra 2017</title>
-      <link>https://paulohrpinheiro.xyz/texts/python/2017-06-28-caipyra2017.html</link>
-      <description>Meu primeiro evento de Python</description>
-      <pubDate>Wed, 28 Jun 2017 00:00:00 +0000</pubDate>
     </item>
 
   </channel>

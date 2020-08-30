@@ -2,12 +2,12 @@
 <html lang="pt-br">
 
 <head>
-  <title></title>
+  <title>Como saber se um número é par de forma complicada - II</title>
 
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" >
 
-  <meta name="description" content="Blog sobre programação para programadores (go)">
+  <meta name="description" content="Uma coletânea sobre diversas formas de descobrir se um número é par ou não em Go, II">
   <meta name="author" content="Paulo Henrique Rodrigues Pinheiro">
 
   <link rel="alternate" type="application/rss+xml" title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!" href="https://paulohrpinheiro.xyz/feed.xml">
@@ -33,8 +33,7 @@
   </section>
 
 
-<section class="container">
-    
+
      <div class="container">
         
 		<nav class="level">
@@ -82,52 +81,112 @@
 
     <hr>
 
-    <h3 class="title is-3">Posts mais recentes</h3>
-    <ul>
-      <li>
-        <a href="https://paulohrpinheiro.xyz/texts/go/2020-08-30-como-saber-se-um-numero-e-par-de-forma-complicada-II.html">Como saber se um número é par de forma complicada - II</a><br>
-        Uma coletânea sobre diversas formas de descobrir se um número é par ou não em Go, II
-      </li>
-      <hr>
-      <li>
-        <a href="https://paulohrpinheiro.xyz/texts/go/2020-08-23-como-saber-se-um-numero-e-par-de-forma-complicada.html">Como saber se um número é par de forma complicada</a><br>
-        Uma coletânea sobre diversas formas de descobrir se um número é par ou não em Go
-      </li>
-      <hr>
-      <li>
-        <a href="https://paulohrpinheiro.xyz/texts/go/2019-02-18-gerando-imagens-em-go-com-biblioteca-padrao.html">Gerando imagens em GO com biblioteca padrão</a><br>
-        Como gerar arquivos com imagens PNG na linguagem GO, usando apenas a biblioteca padrão
-      </li>
-      <hr>
-      <li>
-        <a href="https://paulohrpinheiro.xyz/texts/go/2018-10-05-csv-para-json-com-linguagem-go.html">CSV para JSON com linguagem GO</a><br>
-        Nesse texto será apresentado um exemplo de como como converter um arquivo CSV para JSON em linguagem GO.
-      </li>
-      <hr>
-      <li>
-        <a href="https://paulohrpinheiro.xyz/texts/go/2018-09-24-testes-na-linguagem-go.html">Testes na linguagem GO</a><br>
-        Como fazer TDD em GOLANG!
-      </li>
-      <hr>
-      <li>
-        <a href="https://paulohrpinheiro.xyz/texts/go/2018-07-02-loops-aninhados-mfbil.html">Suporte a loops aninhados em meu interpretador BrainFuck</a><br>
-        Continuando o projeto de fazer um interpretador brainfuck em GO
-      </li>
-      <hr>
-      <li>
-        <a href="https://paulohrpinheiro.xyz/texts/go/2018-05-22-adicionando-loop-ao-mfbil.html">Adicionando loop ao meu interpretador BrainFuck</a><br>
-        Continuando o projeto de fazer um interpretador brainfuck em GO
-      </li>
-      <hr>
-      <li>
-        <a href="https://paulohrpinheiro.xyz/texts/go/2017-11-02-iniciando-em-go-e-em-brainfuck.html">Iniciando em GOLANG (GO) e BrainFuck</a><br>
-        Fiz um test-drive em GO, e para isso aprendi um pouco de BrainFuck
-      </li>
-      <hr>
 
-    </ul>
+  <article class="container">
+    <div class="content">
+        <h2>Como saber se um número é par de forma complicada - II</h2>
 
-</section>
+<h3>Uma coletânea sobre diversas formas de descobrir se um número é par ou não em Go, II</h3>
+
+<p><img src="images/even.png" alt="Definição de um número par"></p>
+
+<blockquote>
+<p>https://pt.wikipedia.org/wiki/Paridade</p>
+</blockquote>
+
+<h4>Parte II, a missão</h4>
+
+<p>No <a href="https://paulohrpinheiro.xyz/texts/go/2020-08-23-como-saber-se-um-numero-e-par-de-forma-complicada.html">primeiro artigo</a>, listei alguns meios de saber se um número é par, que fogem do convencional, e sem qualquer compromisso sério. O objetivo era buscar soluções absurdas.</p>
+
+<p>Essa de hoje, é a campeã, mas eu não achei mais o autor, para dar o devido crédito.</p>
+
+<h4>Baseado na escrita do último dígito</h4>
+
+<p>Exato! Baseado em como se escreve por extenso o último dígito, decide-se se o número é par. Mas isso já foi feito. Agora, isso será decidido pela última letra da palavra em inglês que designa o número, observem a tabela a seguir:</p>
+<pre><code class="language-go">
+número    par    ímpar
+======================
+zero       o
+----------------------
+one                e
+----------------------  
+two        o
+----------------------
+three              e
+----------------------
+four       r
+----------------------
+five               e
+----------------------
+six        x
+----------------------
+seven              n
+----------------------
+eight      t
+----------------------
+nine               e
+----------------------
+
+</code></pre>
+<p>Os números pares terminam com as letras &#39;o&#39;, &#39;r&#39;, &#39;x&#39; e &#39;t&#39;. Já os ímpares finalizam com &#39;e&#39; ou &#39;n&#39;, apenas. Obviamente, por questões de  &quot;otimização&quot; :), irei montar a condição a partir dos ímpares:</p>
+<pre><code class="language-go">
+package main
+
+import (
+        &quot;strconv&quot;
+
+        &quot;github.com&#x2F;paulohrpinheiro&#x2F;mytest&quot;
+)
+
+func inFull(c byte) string {
+        switch c {
+        case &#x27;0&#x27;:
+                return &quot;zero&quot;
+        case &#x27;1&#x27;:
+                return &quot;one&quot;
+        case &#x27;2&#x27;:
+                return &quot;two&quot;
+        case &#x27;3&#x27;:
+                return &quot;three&quot;
+        case &#x27;4&#x27;:
+                return &quot;four&quot;
+        case &#x27;5&#x27;:
+                return &quot;five&quot;
+        case &#x27;6&#x27;:
+                return &quot;six&quot;
+        case &#x27;7&#x27;:
+                return &quot;serven&quot;
+        case &#x27;8&#x27;:
+                return &quot;eight&quot;
+        case &#x27;9&#x27;:
+                return &quot;nine&quot;
+        default:
+                panic(&quot;wrong value&quot;)
+        }
+}
+
+func isEven(n int) bool {
+        s := strconv.Itoa(n)
+        l := s[len(s)-1]
+        f := inFull(l)
+        last := f[len(f)-1]
+
+        return last != &#x27;e&#x27; &amp;&amp; last != &#x27;n&#x27;
+}
+
+func main() {
+        mytest.Run(1000, isEven)
+}
+
+</code></pre>
+<p>Funcionou bonitinho:</p>
+
+<p><img src="images/even_unknown.png" alt="Execução sem problemas do programa no terminal"></p>
+
+<p>Lembrando que o pacote de testes está no <a href="https://paulohrpinheiro.xyz/texts/go/2020-08-23-como-saber-se-um-numero-e-par-de-forma-complicada.html">texto anterior</a>.</p>
+
+    </div>
+  </article>
 
 
     <footer class="footer">

@@ -8,6 +8,12 @@
     <language>pt-br</language>
 
     <item>
+      <title>Como saber se um número é par de forma complicada - II</title>
+      <link>https://paulohrpinheiro.xyz/texts/go/2020-08-30-como-saber-se-um-numero-e-par-de-forma-complicada-II.html</link>
+      <description>Uma coletânea sobre diversas formas de descobrir se um número é par ou não em Go, II</description>
+      <pubDate>Sun, 30 Aug 2020 00:00:00 +0000</pubDate>
+    </item>
+    <item>
       <title>Como saber se um número é par de forma complicada</title>
       <link>https://paulohrpinheiro.xyz/texts/go/2020-08-23-como-saber-se-um-numero-e-par-de-forma-complicada.html</link>
       <description>Uma coletânea sobre diversas formas de descobrir se um número é par ou não em Go</description>
