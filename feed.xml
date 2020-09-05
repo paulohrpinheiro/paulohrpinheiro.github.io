@@ -8,10 +8,16 @@
     <language>pt-br</language>
 
     <item>
+      <title>Como saber se um número é par de forma complicada - III</title>
+      <link>https://paulohrpinheiro.xyz/texts/go/2020-09-05-como-saber-se-um-numero-e-par-de-forma-complicada-III.html</link>
+      <description>Uma coletânea sobre diversas formas de descobrir se um número é par ou não em Go, III</description>
+      <pubDate>Sat, 5 Sep 2020 17:00:00 -0300</pubDate>
+    </item>
+    <item>
       <title>Como saber se um número é par de forma complicada - II</title>
       <link>https://paulohrpinheiro.xyz/texts/go/2020-08-30-como-saber-se-um-numero-e-par-de-forma-complicada-II.html</link>
       <description>Uma coletânea sobre diversas formas de descobrir se um número é par ou não em Go, II</description>
-      <pubDate>Sun, 30 Aug 2020 19:00:00 -0300</pubDate>
+      <pubDate>Sun, 30 Aug 2020 00:00:00 +0000</pubDate>
     </item>
     <item>
       <title>Toxidade, senioridade, cegueira.</title>
@@ -180,12 +186,6 @@
       <link>https://paulohrpinheiro.xyz/texts/python/2017-08-19-listas-referencias-e-copias-em-python.html</link>
       <description>Um erro bem comum (pelo menos pra mim), lidando com listas em Python</description>
       <pubDate>Sat, 19 Aug 2017 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Data Science do Zero</title>
-      <link>https://paulohrpinheiro.xyz/texts/python/2017-07-23-data-science-do-zero.html</link>
-      <description>Um livro bem legal</description>
-      <pubDate>Sun, 23 Jul 2017 00:00:00 +0000</pubDate>
     </item>
 
   </channel>

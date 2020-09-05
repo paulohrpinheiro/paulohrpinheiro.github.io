@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Como saber se um número é par de forma complicada - III</title>
+
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" >
+
+  <meta name="description" content="Uma coletânea sobre diversas formas de descobrir se um número é par ou não em Go, III">
+  <meta name="author" content="Paulo Henrique Rodrigues Pinheiro">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!" href="https://paulohrpinheiro.xyz/feed.xml">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+  <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+
+  <link rel=icon href="/favicon.ico" sizes="16x16" type="image/png">
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/normalize.css">
+</head>
+
+<body>
+  <section class="section">
+    <div class="container">
+      <h1 class="title is-1">
+        Paulo Henrique Rodrigues Pinheiro
+      </h1>
+      <p class="subtitle is-3">
+        Um blog sobre programação para programadores!
+      </p>
+    </div>
+  </section>
+
+
+
+     <div class="container">
+        
+		<nav class="level">
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/">HOME</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/c/">c</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/diversos/">diversos</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/go/">go</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/haskell/">haskell</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/javascript/">javascript</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/perl/">perl</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">programadorbipolar</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/prosaeverso/">prosaeverso</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/python/">python</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/ruby/">ruby</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/rust/">rust</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/server/">server</a>
+			</p>
+		</nav>
+	</div>
+
+    <hr>
+
+
+  <article class="container">
+    <div class="content">
+        <h2>Como saber se um número é par de forma complicada - III</h2>
+
+<h3>Uma coletânea sobre diversas formas de descobrir se um número é par ou não em Go, III</h3>
+
+<p><img src="images/even.png" alt="Definição de um número par"></p>
+
+<blockquote>
+<p>https://pt.wikipedia.org/wiki/Paridade</p>
+</blockquote>
+
+<h4>Parte III, agora temos um problema!</h4>
+
+<p>No <a href="https://paulohrpinheiro.xyz/texts/go/2020-08-30-como-saber-se-um-numero-e-par-de-forma-complicada-II.html">artigo anterior</a>, dediquei-me apenas à solução que achei mais interessante, mais inusitada, mais criativa, vale uma conferida.</p>
+
+<p>Se não acompanhou, veja o <a href="https://paulohrpinheiro.xyz/texts/go/2020-08-23-como-saber-se-um-numero-e-par-de-forma-complicada.html">primeiro artigo</a>, com algumas formas divertidas de saber se um número é par.</p>
+
+<p>Hoje, uma proposta que funciona bem em linguagens interpretadas que cuidam dos detalhes sórdidos dos números, mas não numa linguagem em que o programador é responsável por isso.</p>
+
+<h4>Baseado no cosseno (@selfawaresoup)</h4>
+
+<p>Uma solução simples. Se <code class="prettyprint">cos(n*PI) &gt; 0</code>, o número é par. Fui todo feliz e faceiro preparar mais essa solução para o primeiro texto dessa série nesse renomado <em>blog</em>, e falhei miseravelmente!</p>
+
+<p>Para números grandes (ou muito pequenos, considerando-se os negativos), a resposta de minha função era errada. Pior, ao debugar, calculando manualmente no <a href="https://www.gnu.org/software/bc/">bc</a> o valor e comparando com o gerado pelo meu programa, nada batia. Estava eu diante de um erro do Go?</p>
+
+<p>Evidente que não! Mas demorei muito pra entender.</p>
+
+<p>Eis o original:</p>
+<pre><code class="language-go">
+package main
+
+import (
+        &quot;math&quot;
+
+        &quot;github.com&#x2F;paulohrpinheiro&#x2F;mytest&quot;
+)
+
+func isEven(n int) bool {
+        if math.Cos(float64(n)*math.Pi) &gt; 0.0 {
+                return true
+        }
+
+        return false
+}
+
+func main() {
+        mytest.Run(1000, isEven)
+}
+
+</code></pre>
+<p>E sua saída, vejam que nada deu certo:</p>
+
+<p><img src="images/even_cosFAIL.png" alt="Solução com cosseno original"></p>
+
+<h4>Memórias</h4>
+
+<p>Deixei pra lá. Publiquei as primeiras formas, a segunda, e fiquei com um <em>backlog</em> reduzido, mas não excluí essa problemática solução.</p>
+
+<p>Depois de alguns dias, voltei a esse problema. Comecei a imprimir mais coisas. Ficava olhando para aqueles números em ponto flutuante de 64 <em>bits</em> em sua representação..</p>
+
+<p>Ah! Óbvio!</p>
+
+<p>Perda de precisão, como pude esquecer disso...</p>
+
+<p>Dei uma olhadinha no padrão <a href="https://en.wikipedia.org/wiki/IEEE_754">ieee754</a> para certificar-me disso, e também no fonte da <a href="https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/ieee754/ieee754.h;h=2100bb7b08f05973cf03ed57dfa3fc8ad90ff619;hb=refs/heads/master">GLIBC</a>, pra confirmar, e são, somando, 52 bits de precisão (ajuntando os campos <code class="prettyprint">mantissa0</code> e <code class="prettyprint">mantissa1</code>).</p>
+
+<p><img src="images/ieee754.png" alt="Trecho do código fonte da glibc, do arquivo ieee754.h"></p>
+
+<h4>Aliviado</h4>
+
+<p>Com uma explicação, encontrei a paz, e a lembrança do que é aritmética em ponto flutuante. Agora sei dos limites em que posso atuar:</p>
+<pre><code class="language-go">
+package main
+
+import (
+        &quot;fmt&quot;
+        &quot;math&quot;
+
+        &quot;github.com&#x2F;paulohrpinheiro&#x2F;mytest&quot;
+)
+
+func isEven(n int) bool {
+        if math.Cos(float64(n)*math.Pi) &gt; 0.0 {
+                return true
+        }
+
+        return false
+}
+
+func printResults(t string, n []int) {
+        fmt.Println(&quot;===&gt;&quot;, t)
+
+        for _, x := range n {
+                fmt.Println(x, float64(x), &quot;is even? &quot;, isEven(x))
+        }
+
+        fmt.Println()
+}
+
+func main() {
+
+        limit := 1 &lt;&lt; 52
+        posLimit := 1 &lt;&lt; 53
+
+        printResults(&quot;Normal&quot;, []int{10, 0, -129, -43129791})
+        printResults(&quot;Limit&quot;, []int{limit, limit + 1})
+        printResults(&quot;Pos limit&quot;, []int{posLimit, posLimit + 1})
+
+        fmt.Println(&quot;===&gt; myTest:&quot;)
+        mytest.Run(1000, isEven)
+}
+
+</code></pre>
+<p><img src="images/even_cosExplained.png" alt="Verificando os limites em que a solução funciona"></p>
+
+<p>Dito tudo isso, ressalto que estou na segurança de meu <code class="prettyprint">x86_64</code>, com código nada portável, nada seguro, apenas suficiente para me tirar as terríveis dúvidas em que estava metido.</p>
+
+    </div>
+  </article>
+
+
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>
+                O conteúdo e opiniões publicados nesse site são de inteira responsabilidade minha, e não refletem as opiniões e nem são endossados pelo meu empregador.
+            </p>
+                Este blog é gerido pelo <a target="_blank" href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a> e tem o layout dado pelo <a target="_blank" href="https://bulma.io">Bulma</a>.
+            <p>
+                Copyright © 2016-2020, <a target="_blank" href="https://twitter.com/PauloHRPinheiro">Paulo Henrique Rodrigues Pinheiro</a>.
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>
