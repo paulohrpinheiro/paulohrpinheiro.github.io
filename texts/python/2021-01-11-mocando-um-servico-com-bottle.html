@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Mocando um serviço com Bottle</title>
+
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" >
+
+  <meta name="description" content="Como minha vida ficou mais fácil com o Bottle ou, uma linda história de Natal">
+  <meta name="author" content="Paulo Henrique Rodrigues Pinheiro">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!" href="https://paulohrpinheiro.xyz/feed.xml">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+  <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+
+  <link rel=icon href="/favicon.ico" sizes="16x16" type="image/png">
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/normalize.css">
+</head>
+
+<body>
+  <section class="section">
+    <div class="container">
+      <h1 class="title is-1">
+        Paulo Henrique Rodrigues Pinheiro
+      </h1>
+      <p class="subtitle is-3">
+        Um blog sobre programação para programadores!
+      </p>
+    </div>
+  </section>
+
+
+
+     <div class="container">
+        
+		<nav class="level">
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/">HOME</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/c/">c</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/diversos/">diversos</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/go/">go</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/haskell/">haskell</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/javascript/">javascript</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/perl/">perl</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">programadorbipolar</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/prosaeverso/">prosaeverso</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/python/">python</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/ruby/">ruby</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/rust/">rust</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/server/">server</a>
+			</p>
+		</nav>
+	</div>
+
+    <hr>
+
+
+  <article class="container">
+    <div class="content">
+        <h2>Mocando um serviço com Bottle</h2>
+
+<h3>Como minha vida ficou mais fácil com o Bottle ou, uma linda história de Natal</h3>
+
+<p><img src="images/bottle.png" alt="Logo do projeto Bottle"></p>
+
+<blockquote>
+<p>https://bottlepy.org</p>
+</blockquote>
+
+<h4>O problema</h4>
+
+<p>Trabalho com um complexo processo de autenticação e autorização, uma solução fornecida via <em>API</em> <em>REST</em> por outro fornecedor.</p>
+
+<p>Sempre que cada desenvolvedor precisa de um dado para teste em algum dos diversos ambientes, temos essa dependência externa na criação dos dados, já que não temos acesso para nós mesmos criarmos.</p>
+
+<p>Há algum tempo imaginei que poderíamos emular esse serviço e vim pensando em algumas possibilidades.</p>
+
+<h4>A linda história de Natal</h4>
+
+<p>Eis que chega o Natal e o cliente tem um recesso de duas semanas. Estamos com todas as entregas em dia, suporte praticamente zerado, e o Papai Noel nos presenteia com &quot;Escolham uma melhoria em qualquer sistema para trabalhar nesse período&quot;.</p>
+
+<p>Eu quase choro de emoção e aproveitando uma outra demanda que tinha acabado de entregar, defendo com uma certa veemência, sem muita esperança, a necessidade de termos um <em>mock</em> desse serviço, para poder executar melhor certos testes.</p>
+
+<p>Para minha surpresa, meu líder inclusive sugeriu que o <em>mock</em> pode ser usado não só para as tarefas básicas de desenvolvimento, mas também para desenvolvimento de experimentos para os quais o fornecedor ainda não realizou entregas mas que podemos ir adiantando nosso lado, além de nos ajudar nas rotinas de suporte.</p>
+
+<p>E assim ganhei esse presentão de Natal que foi poder me dedicar integralmente no final de ano e começo desse, a esse projeto.</p>
+
+<h4>A escolha do Bottle</h4>
+
+<p>Inicialmente pensei que seria muito fácil, tão fácil, que comecei a prototipar com o módulo <a href="https://docs.python.org/3/library/http.server.html">http.server</a> do Python. Mas logo me vi mais ocupado com problemas de <em>HTTP</em> do que com os problemas que precisa realmente resolver.</p>
+
+<p>Foi nesse ponto que comecei a pensar em algo que fosse direto e leve. De cara, descartei o <a href="https://www.djangoproject.com/">Django</a>, <em>framework</em> que usamos. Poderia ser uma boa experiência para usar a versão mais nova, mas também acredito que me focaria mais na ferramenta do que no meu problema. E assim com outras opções <em>REST</em>.</p>
+
+<p>Minha opção pessoal para esses casos sempre foi o <a href="https://cherrypy.org/">CherryPy</a>, mas resolvi dar uma mudada, lembrei que o <a href="https://bottlepy.org">Bottle</a> tinha certa equivalência e de nunca ter usado. Eis uma oportunidade!</p>
+
+<h4>Foco no problema</h4>
+
+<p>A documentação do Bottle é muito boa, e desde o começo pude concentrar no meu problema. Conforme ia implementando os <em>endpoints</em>, já conseguia refatorar o código com muita facilidade.</p>
+
+<p>E agora tenho mais uma poderosa ferramenta em meu arsenal. Essa solução que desenvolvi não é um código público, então não tenho essa experiência com ele ainda, mas ao que parece nada impede de usá-lo para pequenas soluções públicas.</p>
+
+<h4>Outras ferramentas</h4>
+
+<p>Usei também o <a href="https://pytest.org">pytest</a>, não gosto do jeitão amarrado no <a href="https://docs.python.org/3/library/unittest.html">unittest</a>, apesar de ser um módulo padrão.</p>
+
+<p>E, pela primeira vez, usei para chave/valor temporário em disco, o módulo <a href="https://docs.python.org/3/library/shelve.html">shelve</a>, muito simples de usar.</p>
+
+<p>E claro, muitas listas e muitos dicionários, como formas de declarar informações de forma simples, um dos grandes poderes do Python.</p>
+
+<h4>Show me the code!</h4>
+
+<p>Não posso, mas algumas observações.</p>
+
+<h5>Plugins</h5>
+
+<p>Pode-se escrever plugins e, digamos, alterar alguns comportamentos do Bottle.</p>
+
+<p>Por exemplo, escrevi um plugin que altera o corpo de todas as respostas para JSON, dessa forma só retorno meu dicionário ou lista.</p>
+
+<p>Esse eu mostro pois é basicamente uma adaptação da documentação:</p>
+<pre><code class="language-python">
+def return_json_response(callback):
+    def wrapper(*args, **kwargs):
+        body = callback(*args, **kwargs)
+
+        return json.dumps(body)
+    return wrapper
+
+bottle.install(return_json_response)
+
+</code></pre>
+<p>O Bottle já faz normalmente com a configuração <em>autojson</em>, mas eu estava tenho problemas com algumas listas e tive que fazer isso pra poder ir em frente</p>
+
+<p>Outro uso, um plugin que imprime a resposta na tela, e tem-se o <em>JSON</em> formatado junto com a linha de <em>LOG</em>, o que ajuda pacas nos <em>debugs</em>.</p>
+
+<h5>Subindo o server</h5>
+
+<p>A opção mais importante para o server, nessa aplicação, é o <em>reloader</em>, pois queremos alterar parâmetros de usuários e testar comportamentos:</p>
+<pre><code class="language-python">
+bottle.run(host=&#x27;localhost&#x27;, port=8080, reloader=True)
+
+</code></pre>
+<p>E, para o problema do <em>JSON</em>, a feature <em>autojson</em> foi desabilitada (deve estar antes de subir o servidor):</p>
+<pre><code class="language-python">
+app = bottle.default_app()
+app.config[&#x27;autojson&#x27;] = False
+
+</code></pre>
+<h5>Os <em>endpoints</em></h5>
+
+<p>Eles devem ser marcados com e devolver suas respostas:</p>
+<pre><code class="language-python">
+@bottle.route(&#x27;&#x2F;api&#x2F;listagem&#x27;)
+def get_listagem():
+    return listagem()
+
+</code></pre>
+<p>Caso queira retornar algum erro:</p>
+<pre><code class="language-python">
+bottle.abort(404)
+
+</code></pre>
+<p>Existem as rotas dinâmicas também:</p>
+<pre><code class="language-python">
+@bottle.route(&#x27;&#x2F;api&#x2F;usuario&#x2F;&lt;id_user&gt;&#x27;)
+def get_usuario(id_user):
+    return usuario(id_user)
+
+</code></pre>
+<p>Importante, para <code class="prettyprint">post</code> se usa <code class="prettyprint">@bottle.post</code>.</p>
+
+<p>Com o objeto <code class="prettyprint">request</code> se tem acesso aos enviados via query:</p>
+<pre><code class="language-python">
+artigo_id = request.query.get(&#x27;artigoid&#x27;)
+
+</code></pre>
+<h5>O mais importante</h5>
+
+<p>No arquivo principal, basta um</p>
+<pre><code class="language-python">
+import bottle
+
+</code></pre>
+<h4>Minha vida agora</h4>
+
+<p>Agora crio meus usuários, adiciono ou altero as informações que preciso, em minha máquina, e as tenho funcionando no exato momento da necessidade. Próximo passo é subir esse <em>mock</em> para o ambiente compartilhado de <em>dev</em>, e então para <em>stage</em>.</p>
+
+<p>Meus colegas logo estarão mais livres também, e com o projeto passando a ter a contribuição de todos, teremos um baita evolução.</p>
+
+    </div>
+  </article>
+
+
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>
+                O conteúdo e opiniões publicados nesse site são de inteira responsabilidade minha, e não refletem as opiniões e nem são endossados pelo meu empregador.
+            </p>
+                Este blog é gerido pelo <a target="_blank" href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a> e tem o layout dado pelo <a target="_blank" href="https://bulma.io">Bulma</a>.
+            <p>
+                Copyright © 2016-2021, <a target="_blank" href="https://twitter.com/PauloHRPinheiro">Paulo Henrique Rodrigues Pinheiro</a>.
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>

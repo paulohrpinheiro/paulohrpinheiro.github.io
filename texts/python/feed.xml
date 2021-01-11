@@ -8,6 +8,12 @@
     <language>pt-br</language>
 
     <item>
+      <title>Mocando um serviço com Bottle</title>
+      <link>https://paulohrpinheiro.xyz/texts/python/2021-01-11-mocando-um-servico-com-bottle.html</link>
+      <description>Como minha vida ficou mais fácil com o Bottle ou, uma linda história de Natal</description>
+      <pubDate>Mon, 11 Jan 2021 00:00:00 +0000</pubDate>
+    </item>
+    <item>
       <title>Pegando dados macroeconômicos com Quandl em Python</title>
       <link>https://paulohrpinheiro.xyz/texts/python/2020-05-20-pegando-dados-macroeconomicos-com-quandl-em-python.html</link>
       <description>Como obter dados históricos sobre indicadores de macroeconomia com a biblioteca Quandl usando Python</description>

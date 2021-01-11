@@ -8,10 +8,16 @@
     <language>pt-br</language>
 
     <item>
+      <title>Mocando um serviço com Bottle</title>
+      <link>https://paulohrpinheiro.xyz/texts/python/2021-01-11-mocando-um-servico-com-bottle.html</link>
+      <description>Como minha vida ficou mais fácil com o Bottle ou, uma linda história de Natal</description>
+      <pubDate>Mon, 11 Jan 2021 16:10:00 -0300</pubDate>
+    </item>
+    <item>
       <title>Como saber se um número é par de forma complicada - III</title>
       <link>https://paulohrpinheiro.xyz/texts/go/2020-09-05-como-saber-se-um-numero-e-par-de-forma-complicada-III.html</link>
       <description>Uma coletânea sobre diversas formas de descobrir se um número é par ou não em Go, III</description>
-      <pubDate>Sat, 5 Sep 2020 17:00:00 -0300</pubDate>
+      <pubDate>Sat, 5 Sep 2020 00:00:00 +0000</pubDate>
     </item>
     <item>
       <title>Como saber se um número é par de forma complicada - II</title>
@@ -179,12 +185,6 @@
       <title>Nova infra desse Blog</title>
       <link>https://paulohrpinheiro.xyz/texts/diversos/2017-08-19-nova-infra-do-blog.html</link>
       <description>Nesse texto explico o que mudou na infraestrutura do blog.</description>
-      <pubDate>Sat, 19 Aug 2017 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Listas, referências e cópias em Python</title>
-      <link>https://paulohrpinheiro.xyz/texts/python/2017-08-19-listas-referencias-e-copias-em-python.html</link>
-      <description>Um erro bem comum (pelo menos pra mim), lidando com listas em Python</description>
       <pubDate>Sat, 19 Aug 2017 00:00:00 +0000</pubDate>
     </item>
 
