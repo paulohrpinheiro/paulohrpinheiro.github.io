@@ -8,6 +8,12 @@
     <language>pt-br</language>
 
     <item>
+      <title>Um Interpretador Brainfuck em Linguagem V</title>
+      <link>https://paulohrpinheiro.xyz/texts/diversos/2021-04-18-brainf_ck-em-linguagem-v.html</link>
+      <description>Mais uma implementação de Brainfuck, como desculpa para aprender a linguagem V</description>
+      <pubDate>Sun, 18 Apr 2021 00:00:00 +0000</pubDate>
+    </item>
+    <item>
       <title>Toxidade, senioridade, cegueira.</title>
       <link>https://paulohrpinheiro.xyz/texts/diversos/2020-08-29-toxidade-senioridade-cegueira.html</link>
       <description>A mais recente polêmica no mundinho dev dentro do twitter</description>

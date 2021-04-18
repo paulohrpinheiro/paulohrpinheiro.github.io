@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Um Interpretador Brainfuck em Linguagem V</title>
+
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" >
+
+  <meta name="description" content="Mais uma implementação de Brainfuck, como desculpa para aprender a linguagem V">
+  <meta name="author" content="Paulo Henrique Rodrigues Pinheiro">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!" href="https://paulohrpinheiro.xyz/feed.xml">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+  <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+
+  <link rel=icon href="/favicon.ico" sizes="16x16" type="image/png">
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/normalize.css">
+</head>
+
+<body>
+  <section class="section">
+    <div class="container">
+      <h1 class="title is-1">
+        Paulo Henrique Rodrigues Pinheiro
+      </h1>
+      <p class="subtitle is-3">
+        Um blog sobre programação para programadores!
+      </p>
+    </div>
+  </section>
+
+
+
+     <div class="container">
+        
+		<nav class="level">
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/">HOME</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/c/">c</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/diversos/">diversos</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/go/">go</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/haskell/">haskell</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/javascript/">javascript</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/perl/">perl</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">programadorbipolar</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/prosaeverso/">prosaeverso</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/python/">python</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/ruby/">ruby</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/rust/">rust</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/server/">server</a>
+			</p>
+		</nav>
+	</div>
+
+    <hr>
+
+
+  <article class="container">
+    <div class="content">
+        <h2>Um Interpretador Brainfuck em Linguagem V</h2>
+
+<h3>Mais uma implementação de Brainfuck, como desculpa para aprender a linguagem V</h3>
+
+<p><img src="images/bf_vlang.png" alt="Testes"></p>
+
+<blockquote>
+<p>Testes OK!</p>
+</blockquote>
+
+<h4>Sabadão preguiçoso</h4>
+
+<p>Estava lendo a página inicial do projeto <a href="https://vlang.io">da linguagem V</a> e senti-me desafiado pela seguinte ideia:</p>
+
+<blockquote>
+<p>You can learn the entire language by going through the documentation in an hour, and in most cases there&#39;s only one way to do something. This results in simple, readable, and maintainable code. </p>
+</blockquote>
+
+<p>Fui lá eu, li a documentação, mas não do começo ao fim. Eu &quot;bati o olho&quot; e comecei com meu problema preferido e, num sábado muito preguiçoso, entre uma feijoada, soneca, interrupções de gatos e minhas filhas, idas e vindas na documentação, nos exemplos, e experimentações no interpretador e erros nos testes, fiz meu interpretador de Brainfuck, ainda que incompleto.</p>
+
+<h4>Brainfuck?</h4>
+
+<p>É uma linguagem de programação muito simples que torna as coisas muito complicadas. Por isso o seu nome. </p>
+
+<p>Opera-se sobre um bloco de memória, todas as operações sempre na posição corrente, podendo-se somar ou subtrair o valor de cada item. Pode-se avançar ou retroceder nesse bloco, imprimir o valor, receber um valor externo e armazenar.</p>
+
+<p>A linguagem tem os seguintes comandos:</p>
+<pre><code class="language-diversos">
++ soma 1 ao valor atual
+- subtrai em 1 o valor atual
+&gt; avança a posição atual no bloco de memória
+&lt; retrocede a posição atual no bloco de memória
+. imprime o valor na posição atual
+, recebe um valor e armazena na posição atual
+[ se o valor na posição atual for zero, pula a execução para o comando após a instrução ] correspondente
+] se o valor na posição atual não é zero, volta a execução para o [ correspondente
+
+</code></pre>
+<p>Foi criada por Urban Müller. Aqui um vídeo com uma palestra dele sobre a linguagem:</p>
+<pre><code class="language-diversos">
+https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=gjm9irBs96U&amp;t=8722s
+
+</code></pre>
+<p>Maiores informações e links para esse maravilhoso submundo:</p>
+<pre><code class="language-diversos">
+https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Brainfuck
+
+</code></pre>
+<p>Tenho uma antiga implementação em Go também, com uma pegada diferente:</p>
+<pre><code class="language-diversos">
+https:&#x2F;&#x2F;github.com&#x2F;paulohrpinheiro&#x2F;mfbil
+
+</code></pre>
+<h5>V Brainfuck</h5>
+
+<p>Minha implementação não está completa, pois falta o comando <code class="prettyprint">,</code> para <em>input</em> de dados, que nunca uso em meus testes com a linguagem <em>Brainfuck</em>. Mas para testar a <code class="prettyprint">V</code> penso que seja uma boa ideia implementar, e testar <a href="https://modules.vlang.io/">módulos</a>, especialmente o <a href="https://modules.vlang.io/cli.html">cli</a>.</p>
+
+<p>Aqui o código:</p>
+<pre><code class="language-diversos">
+https:&#x2F;&#x2F;github.com&#x2F;paulohrpinheiro&#x2F;vbf
+
+</code></pre>
+<h4>Linguagem V</h4>
+
+<p>Mostrou-se mesmo uma linguagem simples, de fácil aprendizado, e, conforme minha preferência (ambígua, pois programo em Python mó cota, garantindo os boletos) estava procurando uma que fosse compilada, com tipagem estática.</p>
+
+<p>O projeto é novo, a <a href="https://github.com/vlang/v/blob/master/doc/docs.md">documentação não é extensiva e completa</a>, muitas coisas se descobrem ou olhando para os <a href="https://github.com/vlang/v/tree/master/examples">muitos e diversos exemplos</a> ou testando mesmo. Tem belas promessas de rapidez e comparativos impressionantes de velocidades, mas qual linguagem nova não tem?</p>
+
+<p>Eu uso o <a href="https://github.com/asdf-vm/asdf">asdf para gerenciar linguagens e versões</a> que uso, pois assim não fico com os gerenciadores individuais de cada uma. Para a linguagem V não consegui usar, pois nem o clássico <code class="prettyprint">hello world</code> consegui compilar com a instalação dele.</p>
+
+<p>Usando as instruções do <a href="https://vlang.io">site da linguagem V</a>, compilando a partir do código fonte,  não tive problemas, e o processo é muito rápido e simples, gerando um binário para tudo.</p>
+
+<p>Como de costume, há um playground para aprendizado e testes:</p>
+<pre><code class="language-diversos">
+https:&#x2F;&#x2F;v-wasm.vercel.app&#x2F;
+
+</code></pre>
+<p>Uma ideia interessante de <code class="prettyprint">V</code> é que as variáveis são imutáveis por padrão, e os tipos podem ser inferidos na declaração, via inicialização. Os testes são fáceis de escrever, o que me fez simpatizar mais ainda com a linguagem.</p>
+
+<p>O tratamento de erros, que ainda não utilizei é algo interessante também, com <em>Options</em> e diversas formas para o tratamento e propagação de erros:</p>
+<pre><code class="language-diversos">
+https:&#x2F;&#x2F;github.com&#x2F;vlang&#x2F;v&#x2F;blob&#x2F;master&#x2F;doc&#x2F;docs.md#optionresult-types-and-error-handling
+
+</code></pre>
+<p>Mais uma vez, assunto para a próxima <em>sprint</em>.</p>
+
+<p>Concorrência e tipos genéricos estão à mão, outros assuntos importantes, além de cláusulas <code class="prettyprint">defer</code> e <code class="prettyprint">match</code>.</p>
+
+<p>Não se preocupe com o formato de seu programa, basta rodar o seguinte comando antes do <em>commit</em>:</p>
+<pre><code class="language-diversos">
+v fmt . -w
+
+</code></pre>
+<p>Falando em comandos, para gerar a saída detalhada dos testes:</p>
+<pre><code class="language-diversos">
+v -stats test .
+
+</code></pre>
+<p>E para compilar o programa:</p>
+<pre><code class="language-diversos">
+v .
+
+</code></pre>
+<p>Ou o nome completo do seu arquivo.</p>
+
+<p>Para executar o interpretador, é só invocar o compilador sem parâmetros:</p>
+<pre><code class="language-diversos">
+$ v
+Welcome to the V REPL (for help with V itself, type `exit`, then run `v help`).
+V 0.2.2 1c7fb65
+Use Ctrl-C or `exit` to exit, or `help` to see other available commands
+&gt;&gt;&gt; 
+
+</code></pre>
+<p>Seguem agora alguns pontos mais básicos da linguagem.</p>
+
+<h5>Funções</h5>
+
+<p>Pode-se fazer um programa sem a função <code class="prettyprint">main</code>, mas caso tenha-se várias funções, o ponto de entrada é ela:</p>
+<pre><code class="language-diversos">
+fn main() {
+    println(&#x27;Olá&#x27;)
+}
+
+</code></pre>
+<p>Como se pode notar, blocos são encapsulados por chaves, e <em>strings</em> por aspas simples.</p>
+
+<p>Funções com parâmetros devem declarar o tipo dos parâmetros:</p>
+<pre><code class="language-diversos">
+fn funcao(param int) {
+    println(param)
+ }
+
+</code></pre>
+<p>E também vemos uma função importante da linguagem, a <code class="prettyprint">println</code>.</p>
+
+<p>Quando retornam um valor, devem indicar o tipo usar <code class="prettyprint">return</code>:</p>
+<pre><code class="language-diversos">
+fn d(param int) int {
+    return 2*param
+}
+
+</code></pre>
+<h5>Variáveis</h5>
+
+<p>Devem ser inicializadas e declaradas, dentro de um bloco, nunca globais, e podem ter seu tipo inferido, e por padrão são imutáveis:</p>
+<pre><code class="language-diversos">
+a := 10 &#x2F;&#x2F; a é imutável, do tipo int (32 bits)
+b := &quot;algo&quot; &#x2F;&#x2F; b é imutável, do tipo string
+mut c := 10 &#x2F;&#x2F; v é mutável, do tipo int (32 bits)
+c += 10 &#x2F;&#x2F; agora c vale 20
+
+</code></pre>
+<h5>Arrays</h5>
+
+<p>Os arrays devem ser de apenas um tipo e são declarados como:</p>
+<pre><code class="language-diversos">
+memory [50]int
+
+</code></pre>
+<p>Que declara <code class="prettyprint">memory</code> como um <em>array</em> com capacidade para 50 inteiros de 32 <em>bits</em>, que são inicializados com o valor 0.</p>
+
+<p>Pode-se inicializar com outro valor:</p>
+<pre><code class="language-diversos">
+&gt;&gt;&gt; mut array := [10]int{init:5}
+&gt;&gt;&gt; array
+[5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+&gt;&gt;&gt; array[3] = 10
+&gt;&gt;&gt; [5, 5, 5, 10, 5, 5, 5, 5, 5, 5]
+&gt;&gt;&gt; array.len
+&gt;&gt;&gt; 10
+
+</code></pre>
+<p>E temos a propriedade <code class="prettyprint">len</code> que dos dá o tamanho.</p>
+
+<h5>Constantes</h5>
+
+<p>Constantes não podem ser definidas no escopo de funções, apenas no de módulo.</p>
+<pre><code class="language-diversos">
+const (
+   memory_len = 50
+)
+
+</code></pre>
+<h5>Interpolação de <em>strings</em></h5>
+
+<p>A impressão formatada pode, em grande parte, ser resolvida pela interpolação de <em>strings</em>:</p>
+<pre><code class="language-diversos">
+&gt;&gt;&gt; a := 10
+&gt;&gt;&gt; println(&#x27;O valor de variável a é: $a&#x27;)
+O valor de variável a é: 10
+&gt;&gt;&gt;
+
+</code></pre>
+<h5>Estruturas</h5>
+
+<p>Estruturas usam a palavra reservada <code class="prettyprint">struct</code> para defini-la:</p>
+<pre><code class="language-diversos">
+struct Result {
+    fix int
+mut:
+        memory [50]int
+        output string
+}
+
+</code></pre>
+<p>Nesse exemplo, <code class="prettyprint">fix</code> é imutável.</p>
+
+<h5>Loop</h5>
+
+<p>O <em>for</em> é responsável pelos <em>loops</em>, em várias formas, sendo aqui usada na forma mais simples, como condição:</p>
+<pre><code class="language-diversos">
+mut pos_program := 0
+for pos_program &lt; program.len {
+    ...
+    pos_program += 1
+}
+
+</code></pre>
+<h5>Match</h5>
+
+<p>Quer dar um <em>match</em> em <code class="prettyprint">V</code>?</p>
+<pre><code class="language-diversos">
+mut instruction := program[pos_program]
+match instruction {
+    `+` {
+        result.memory[pos_memory] += 1
+    }
+    `-` {
+
+    }
+    else {}
+}
+
+</code></pre>
+<p>O <code class="prettyprint">else</code> é obrigatório quando a lista de casos não é exaustiva.</p>
+
+    </div>
+  </article>
+
+
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>
+                O conteúdo e opiniões publicados nesse site são de inteira responsabilidade minha, e não refletem as opiniões e nem são endossados pelo meu empregador.
+            </p>
+                Este blog é gerido pelo <a target="_blank" href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a> e tem o layout dado pelo <a target="_blank" href="https://bulma.io">Bulma</a>.
+            <p>
+                Copyright © 2016-2021, <a target="_blank" href="https://twitter.com/PauloHRPinheiro">Paulo Henrique Rodrigues Pinheiro</a>.
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>
