@@ -8,10 +8,16 @@
     <language>pt-br</language>
 
     <item>
+      <title>Um Interpretador Brainfuck em Linguagem de programação V - Sprint II</title>
+      <link>https://paulohrpinheiro.xyz/texts/diversos/2021-04-25-brainf_ck-em-linguagem-de-programacao-v-sprint-ii.html</link>
+      <description>Seguindo a saga do interpretador Brainfuck em linguagem de programação V, agora na Sprint II</description>
+      <pubDate>Sun, 25 Apr 2021 18:00:00 -0300</pubDate>
+    </item>
+    <item>
       <title>Um Interpretador Brainfuck em Linguagem V</title>
       <link>https://paulohrpinheiro.xyz/texts/diversos/2021-04-18-brainf_ck-em-linguagem-v.html</link>
       <description>Mais uma implementação de Brainfuck, como desculpa para aprender a linguagem V</description>
-      <pubDate>Sun, 18 Apr 2021 21:00:00 +0300</pubDate>
+      <pubDate>Sun, 18 Apr 2021 00:00:00 +0000</pubDate>
     </item>
     <item>
       <title>Mocando um serviço com Bottle</title>
@@ -180,12 +186,6 @@
       <link>https://paulohrpinheiro.xyz/texts/go/2017-11-02-iniciando-em-go-e-em-brainfuck.html</link>
       <description>Fiz um test-drive em GO, e para isso aprendi um pouco de BrainFuck</description>
       <pubDate>Thu, 2 Nov 2017 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Intercon 2017</title>
-      <link>https://paulohrpinheiro.xyz/texts/diversos/2017-10-24-intercom-2017.html</link>
-      <description>Palestras legais que vi na Intercon 2017.</description>
-      <pubDate>Tue, 24 Oct 2017 00:00:00 +0000</pubDate>
     </item>
 
   </channel>
