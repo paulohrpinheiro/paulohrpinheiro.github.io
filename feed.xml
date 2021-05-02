@@ -8,10 +8,16 @@
     <language>pt-br</language>
 
     <item>
+      <title>Iniciando com o ORM Pony no Python</title>
+      <link>https://paulohrpinheiro.xyz/texts/python/2021-04-28-iniciando-com-o-orm-pony-no-python.html</link>
+      <description>Depois de anos só no Django, estou eu sendo iniciado na simplicidade e elegância do Pony ORM</description>
+      <pubDate>Wed, 28 Apr 2021 17:00:00 -0300</pubDate>
+    </item>
+    <item>
       <title>Um Interpretador Brainfuck em Linguagem de programação V - Sprint II</title>
       <link>https://paulohrpinheiro.xyz/texts/diversos/2021-04-25-brainf_ck-em-linguagem-de-programacao-v-sprint-ii.html</link>
       <description>Seguindo a saga do interpretador Brainfuck em linguagem de programação V, agora na Sprint II</description>
-      <pubDate>Sun, 25 Apr 2021 18:00:00 -0300</pubDate>
+      <pubDate>Sun, 25 Apr 2021 00:00:00 +0000</pubDate>
     </item>
     <item>
       <title>Um Interpretador Brainfuck em Linguagem V</title>
@@ -180,12 +186,6 @@
       <link>https://paulohrpinheiro.xyz/texts/diversos/2018-05-19-trabalhando-remotamente.html</link>
       <description>Um pouco sobre minha nova fase de homeoffice.</description>
       <pubDate>Sat, 19 May 2018 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Iniciando em GOLANG (GO) e BrainFuck</title>
-      <link>https://paulohrpinheiro.xyz/texts/go/2017-11-02-iniciando-em-go-e-em-brainfuck.html</link>
-      <description>Fiz um test-drive em GO, e para isso aprendi um pouco de BrainFuck</description>
-      <pubDate>Thu, 2 Nov 2017 00:00:00 +0000</pubDate>
     </item>
 
   </channel>

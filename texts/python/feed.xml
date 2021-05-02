@@ -8,6 +8,12 @@
     <language>pt-br</language>
 
     <item>
+      <title>Iniciando com o ORM Pony no Python</title>
+      <link>https://paulohrpinheiro.xyz/texts/python/2021-04-28-iniciando-com-o-orm-pony-no-python.html</link>
+      <description>Depois de anos só no Django, estou eu sendo iniciado na simplicidade e elegância do Pony ORM</description>
+      <pubDate>Wed, 28 Apr 2021 00:00:00 +0000</pubDate>
+    </item>
+    <item>
       <title>Mocando um serviço com Bottle</title>
       <link>https://paulohrpinheiro.xyz/texts/python/2021-01-11-mocando-um-servico-com-bottle.html</link>
       <description>Como minha vida ficou mais fácil com o Bottle ou, uma linda história de Natal</description>

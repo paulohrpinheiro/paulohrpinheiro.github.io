@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Iniciando com o ORM Pony no Python</title>
+
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" >
+
+  <meta name="description" content="Depois de anos só no Django, estou eu sendo iniciado na simplicidade e elegância do Pony ORM">
+  <meta name="author" content="Paulo Henrique Rodrigues Pinheiro">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!" href="https://paulohrpinheiro.xyz/feed.xml">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+  <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+
+  <link rel=icon href="/favicon.ico" sizes="16x16" type="image/png">
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/normalize.css">
+</head>
+
+<body>
+  <section class="section">
+    <div class="container">
+      <h1 class="title is-1">
+        Paulo Henrique Rodrigues Pinheiro
+      </h1>
+      <p class="subtitle is-3">
+        Um blog sobre programação para programadores!
+      </p>
+    </div>
+  </section>
+
+
+
+     <div class="container">
+        
+		<nav class="level">
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/">HOME</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/c/">c</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/diversos/">diversos</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/go/">go</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/haskell/">haskell</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/javascript/">javascript</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/perl/">perl</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">programadorbipolar</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/prosaeverso/">prosaeverso</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/python/">python</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/ruby/">ruby</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/rust/">rust</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/server/">server</a>
+			</p>
+		</nav>
+	</div>
+
+    <hr>
+
+
+  <article class="container">
+    <div class="content">
+        <h2>Iniciando com o ORM Pony no Python</h2>
+
+<h3>Depois de anos só no Django, estou eu sendo iniciado na simplicidade e elegância do Pony ORM</h3>
+
+<p><img src="images/pony.png" alt="Logo do projeto Pony"></p>
+
+<blockquote>
+<p><a href="https://ponyorm.org/">https://ponyorm.org</a></p>
+</blockquote>
+
+<p>Estou em meio a um choque de cultura no meu <a href="https://www.noverde.com.br">novo trampo</a> em relação à utilização de <a href="https://pt.wikipedia.org/wiki/Mapeamento_objeto-relacional">ORMs</a> para Python. Venho de uma experiência focada em  <a href="https://www.djangoproject.com/">Django</a>, e agora estou de volta à beleza de <em>queries</em> <em>SQL</em> puras e da novidade do <em>ORM</em> <a href="https://ponyorm.org/">Pony</a>.</p>
+
+<h4>Uma base para chamar de minha</h4>
+
+<p>Poderia eu construir uma base para testar aqui, mas encontrei uma base bem interessante nesse tutorial de <a href="https://sqlite.org">sqlite</a>:</p>
+
+<blockquote>
+<p><a href="https://www.sqlitetutorial.net">https://www.sqlitetutorial.net</a></p>
+</blockquote>
+
+<p>O arquivo a baixar está em:</p>
+
+<blockquote>
+<p><a href="https://www.sqlitetutorial.net/sqlite-sample-database/">https://www.sqlitetutorial.net/sqlite-sample-database/</a></p>
+</blockquote>
+
+<p>Salve o arquivo <code class="prettyprint">chinook.zip</code> em algum diretório de trabalho em sua máquina.</p>
+
+<p>Use o cliente de banco de dados de sua preferência ou cliente oficial do <code class="prettyprint">sqlite</code>, como farei aqui nos exemplos a seguir, que podem ser baixados em:</p>
+
+<blockquote>
+<p><a href="https://sqlite.org/download.html">https://sqlite.org/download.html</a></p>
+</blockquote>
+
+<p>Descompactando o arquivo baixado do tutorial temos o seguinte:</p>
+<pre><code class="language-python">
+$ unzip chinook.zip
+Archive:  chinook.zip
+  inflating: chinook.db
+
+</code></pre>
+<p>Para entrar no <em>database</em>:</p>
+<pre><code class="language-python">
+$ sqlite3 chinook.db
+SQLite version 3.27.2 2019-02-25 16:06:06
+Enter &quot;.help&quot; for usage hints.
+sqlite&gt;
+
+</code></pre>
+<p>Então se pode listar as tabelas:</p>
+<pre><code class="language-python">
+sqlite&gt; .tables
+albums          employees       invoices        playlists
+artists         genres          media_types     tracks
+customers       invoice_items   playlist_track
+
+</code></pre>
+<p>E ver a estrutura de uma tabela:</p>
+<pre><code class="language-python">
+sqlite&gt; .schema genres
+CREATE TABLE IF NOT EXISTS &quot;genres&quot;
+(
+    [GenreId] INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    [Name] NVARCHAR(120)
+);
+
+</code></pre>
+<p>E listar seu conteúdo:</p>
+<pre><code class="language-python">
+sqlite&gt; SELECT * FROM genres;
+1|Rock
+2|Jazz
+3|Metal
+4|Alternative &amp; Punk
+5|Rock And Roll
+6|Blues
+7|Latin
+8|Reggae
+9|Pop
+10|Soundtrack
+11|Bossa Nova
+12|Easy Listening
+13|Heavy Metal
+14|R&amp;B&#x2F;Soul
+15|Electronica&#x2F;Dance
+16|World
+17|Hip Hop&#x2F;Rap
+18|Science Fiction
+19|TV Shows
+20|Sci Fi &amp; Fantasy
+21|Drama
+22|Comedy
+23|Alternative
+24|Classical
+25|Opera
+
+</code></pre>
+<p>Com essas informações podemos ir para o <em>shell</em> do <em>Python</em> e com o <em>Pony</em> fazer algumas operações.</p>
+
+<h4>Preparando o terreno</h4>
+
+<p>Sigamos os <a href="https://docs.ponyorm.org/firststeps.html">primeiros passos do manual do Pony</a>:</p>
+
+<p>Admitindo que estamos em um diretório preparado para esse estudo em que foi feito o <em>download</em> e descompactação da base de dados exemplo, sugiro que seja criada uma <a href="https://docs.python.org/3/library/venv.html">virtualenv</a> para esse exercício, e em seguida já a &quot;ativamos&quot;:</p>
+<pre><code class="language-python">
+$ python -mvenv .venv
+$ . .venv&#x2F;bin&#x2F;activate
+(.venv) $
+
+</code></pre>
+<p>Sendo o <em>Pony</em> um módulo não padrão do <em>Python</em> devemos instalá-lo:</p>
+<pre><code class="language-python">
+$ pip install pony
+Collecting pony
+  Using cached pony-0.7.14.tar.gz (290 kB)
+Using legacy &#x27;setup.py install&#x27; for pony, since package &#x27;wheel&#x27; is not installed.
+Installing collected packages: pony
+    Running setup.py install for pony ... done
+Successfully installed pony-0.7.14
+WARNING: You are using pip version 20.2.3; however, version 21.1.1 is available.
+You should consider upgrading via the &#x27;&#x2F;home&#x2F;paulohrpinheiro&#x2F;repo&#x2F;pony&#x2F;.venv&#x2F;bin&#x2F;python -m pip install --upgrade pip&#x27; command.
+
+</code></pre>
+<p>Se esse <em>warning</em> lhe incomoda como a mim:</p>
+<pre><code class="language-python">
+$ pip install --upgrade pip
+Collecting pip
+  Downloading pip-21.1.1-py3-none-any.whl (1.5 MB)
+     |████████████████████████████████| 1.5 MB 2.2 MB&#x2F;s
+Installing collected packages: pip
+  Attempting uninstall: pip
+    Found existing installation: pip 20.2.3
+    Uninstalling pip-20.2.3:
+      Successfully uninstalled pip-20.2.3
+Successfully installed pip-21.1.1
+
+</code></pre>
+<p>Mas esse passo não é necessário, &quot;em verdade em verdade vos digo&quot; que executo ele de imediato toda vez que crio uma <em>virtualenv</em>, ou fico muito chateado quando esqueço disso fazer :).</p>
+
+<p>Outro módulo que me deixa feliz e confortável é o <a href="">ipython</a>, então instalemo-lo com o comando <code class="prettyprint">pip install ipython</code>, que gerará uma saída grande, a qual não colarei aqui, mas que em sua linha final será algo parecido com:</p>
+<pre><code class="language-python">
+Successfully installed backcall-0.2.0 decorator-5.0.7 ipython-7.23.0
+ipython-genutils-0.2.0 jedi-0.18.0 matplotlib-inline-0.1.2 parso-0.8.2 
+pexpect-4.8.0 pickleshare-0.7.5 prompt-toolkit-3.0.18 ptyprocess-0.7.0 
+pygments-2.8.1 traitlets-5.0.5 wcwidth-0.2.5
+
+</code></pre>
+<h4>Experimentando</h4>
+
+<p>Antes de programar qualquer coisa, acredito ser melhor criar uma certa intimidade com a biblioteca, experimentando os comandos. Ao final teremos insumo para um primeiro programa, ainda que simples, mas trazendo o instrumental usado em qualquer outro programa simples ou não.</p>
+
+<p>Vamos primeiro entrar no <em>shell</em> do <em>Python</em>, em sua versão melhorada (<em>ipython</em>) e  então importar todos os elementos do módulo <em>Pony</em> que precisamos para trabalhar:</p>
+<pre><code class="language-python">
+$ ipython
+Python 3.9.4 (default, Apr 26 2021, 20:25:48)
+Type &#x27;copyright&#x27;, &#x27;credits&#x27; or &#x27;license&#x27; for more information
+IPython 7.23.0 -- An enhanced Interactive Python. Type &#x27;?&#x27; for help.
+
+In [1]: from pony.orm import *
+
+</code></pre>
+<p>Agora vamos dar o primeiro passo para conectar ao nosso banco de dados. A classe <code class="prettyprint">Database</code> do <em>Pony</em> é quem gerencia as conexões, portanto vamos instanciá-la:</p>
+<pre><code class="language-python">
+In [2]: db = Database()
+
+</code></pre>
+<p>Feito isso, agora a ligamos concretamente a um banco físico através do método <code class="prettyprint">bind</code>:</p>
+<pre><code class="language-python">
+In [3]: db.bind(provider=&#x27;sqlite&#x27;, filename=&#x27;&#x2F;home&#x2F;paulohrpinheiro&#x2F;repo&#x2F;pony&#x2F;chinook.db&#x27;)
+
+</code></pre>
+<p>Estamos conectados ao nosso banco. Veja que o procedimento é semelhante a se o banco fosse um <em>MySQL</em> ou <em>Postgres</em>, por exemplo, como veremos em texto a ser publicado (é o próximo, palavra de lobinho). Outro detalhe é que o caminho completo do arquivo deve ser dado quando estamos em modo interativo.</p>
+
+<p>O próximo passo é declarar nossa entidade, ou melhor dizendo, fazer o mapeamento de nossas tabelas, com classes <em>Python</em> equivalentes. Nossa tabela escolhida foi a <em>genres</em>, então vamos a ela:</p>
+<pre><code class="language-python">
+In [4]: class Genres(db.Entity):
+   ...:     GenreId = PrimaryKey(int, auto=True)
+   ...:     Name = Required(str)
+   ...:
+
+</code></pre>
+<p>Uma vez declarada nossa entidade, o mapeamento deve ser feito de maneira concreta, o que é realizado pelo seguinte método:</p>
+<pre><code class="language-python">
+In [5]: db.generate_mapping()
+
+</code></pre>
+<p>Com esse <em>setup</em> podemos começar a brincar:</p>
+
+<p>Vendo o que temos na tabela:</p>
+<pre><code class="language-python">
+In [6]: Genres.select().show()
+GenreId|Name              
+-------+------------------
+1      |Rock              
+2      |Jazz              
+3      |Metal             
+4      |Alternative &amp; Punk
+5      |Rock And Roll     
+6      |Blues             
+7      |Latin             
+8      |Reggae            
+9      |Pop               
+10     |Soundtrack        
+11     |Bossa Nova        
+12     |Easy Listening    
+13     |Heavy Metal       
+14     |R&amp;B&#x2F;Soul          
+15     |Electronica&#x2F;Dance 
+16     |World             
+17     |Hip Hop&#x2F;Rap       
+18     |Science Fiction   
+19     |TV Shows          
+20     |Sci Fi &amp; Fantasy  
+21     |Drama             
+22     |Comedy            
+23     |Alternative       
+24     |Classical         
+25     |Opera  
+
+</code></pre>
+<p>Pesquisando uma <em>Prymary Key</em>:</p>
+<pre><code class="language-python">
+In [7]: Genres[2]
+Out[7]: Genres[2]
+
+</code></pre>
+<p>Um tanto inútil não? Não! Foi retornado um objeto, que entre outras coisa, tem um útil método <code class="prettyprint">to_dict</code>:</p>
+<pre><code class="language-python">
+In [8]: Genres[2].to_dict()
+Out[8]: {&#x27;GenreId&#x27;: 2, &#x27;Name&#x27;: &#x27;Jazz&#x27;}
+
+</code></pre>
+<blockquote>
+<p><strong>Dica</strong>: Permita-se explorar o terreno, vendo os métodos que existem através do comando <code class="prettyprint">dir(Genres[2])</code>.</p>
+</blockquote>
+
+<p>Ou pode-se, ainda, fazer uma busca por outra coluna, explicitamente:</p>
+<pre><code class="language-python">
+In [9]: Genres.get(Name=&#x27;Pop&#x27;).to_dict()
+Out[9]: {&#x27;GenreId&#x27;: 9, &#x27;Name&#x27;: &#x27;Pop&#x27;}
+
+</code></pre>
+<p>Pegando o objeto, pode-se acessar os atributos:</p>
+<pre><code class="language-python">
+In [10]: genre = Genres.get(GenreId=22)
+In [11]: genre.Name
+Out[11]: &#x27;Comedy&#x27;
+
+</code></pre>
+<h4>Treino é treino, jogo é jogo</h4>
+
+<p>Uma coisa é o <em>shell</em>, outra é um programa. Mas muda pouca coisa. Uma preocupação real é que quando formos fazer uma operação no banco, devemos  usar um gerenciador de contexto para ela. No python usamos, em geral, a cláusula <code class="prettyprint">with</code>. O gerenciador disponibilizado pela <em>Pony</em> é o <code class="prettyprint">db_session</code>, por exemplo:</p>
+<pre><code class="language-python">
+with db_session():
+    genre = Genres.get(GenreId=10).to_dict()
+
+</code></pre>
+<p>Juntando tudo que vimos, mais essa observação, temos esse pequeno programa esqueleto:</p>
+<pre><code class="language-python">
+from pony.orm import Database, db_session, PrimaryKey, Required
+
+
+db = Database()
+db.bind(provider=&#x27;sqlite&#x27;, filename=&#x27;chinook.db&#x27;)
+
+
+class Genres(db.Entity): 
+    GenreId = PrimaryKey(int, auto=True)
+    Name = Required(str)
+
+
+db.generate_mapping(create_tables=False)
+
+with db_session():
+    print(Genres.get(GenreId=10).to_dict())
+    print(&quot;=&quot;*80)
+    for genre in Genres.select():
+        print(genre.to_dict())
+
+</code></pre>
+<p>Que produz a seguinte saída (salvei ele como <code class="prettyprint">le.py</code>:</p>
+<pre><code class="language-python">
+$ python le.py 
+{&#x27;GenreId&#x27;: 10, &#x27;Name&#x27;: &#x27;Soundtrack&#x27;}
+================================================================================
+{&#x27;GenreId&#x27;: 1, &#x27;Name&#x27;: &#x27;Rock&#x27;}
+{&#x27;GenreId&#x27;: 2, &#x27;Name&#x27;: &#x27;Jazz&#x27;}
+{&#x27;GenreId&#x27;: 3, &#x27;Name&#x27;: &#x27;Metal&#x27;}
+{&#x27;GenreId&#x27;: 4, &#x27;Name&#x27;: &#x27;Alternative &amp; Punk&#x27;}
+{&#x27;GenreId&#x27;: 5, &#x27;Name&#x27;: &#x27;Rock And Roll&#x27;}
+{&#x27;GenreId&#x27;: 6, &#x27;Name&#x27;: &#x27;Blues&#x27;}
+{&#x27;GenreId&#x27;: 7, &#x27;Name&#x27;: &#x27;Latin&#x27;}
+{&#x27;GenreId&#x27;: 8, &#x27;Name&#x27;: &#x27;Reggae&#x27;}
+{&#x27;GenreId&#x27;: 9, &#x27;Name&#x27;: &#x27;Pop&#x27;}
+{&#x27;GenreId&#x27;: 10, &#x27;Name&#x27;: &#x27;Soundtrack&#x27;}
+{&#x27;GenreId&#x27;: 11, &#x27;Name&#x27;: &#x27;Bossa Nova&#x27;}
+{&#x27;GenreId&#x27;: 12, &#x27;Name&#x27;: &#x27;Easy Listening&#x27;}
+{&#x27;GenreId&#x27;: 13, &#x27;Name&#x27;: &#x27;Heavy Metal&#x27;}
+{&#x27;GenreId&#x27;: 14, &#x27;Name&#x27;: &#x27;R&amp;B&#x2F;Soul&#x27;}
+{&#x27;GenreId&#x27;: 15, &#x27;Name&#x27;: &#x27;Electronica&#x2F;Dance&#x27;}
+{&#x27;GenreId&#x27;: 16, &#x27;Name&#x27;: &#x27;World&#x27;}
+{&#x27;GenreId&#x27;: 17, &#x27;Name&#x27;: &#x27;Hip Hop&#x2F;Rap&#x27;}
+{&#x27;GenreId&#x27;: 18, &#x27;Name&#x27;: &#x27;Science Fiction&#x27;}
+{&#x27;GenreId&#x27;: 19, &#x27;Name&#x27;: &#x27;TV Shows&#x27;}
+{&#x27;GenreId&#x27;: 20, &#x27;Name&#x27;: &#x27;Sci Fi &amp; Fantasy&#x27;}
+{&#x27;GenreId&#x27;: 21, &#x27;Name&#x27;: &#x27;Drama&#x27;}
+{&#x27;GenreId&#x27;: 22, &#x27;Name&#x27;: &#x27;Comedy&#x27;}
+{&#x27;GenreId&#x27;: 23, &#x27;Name&#x27;: &#x27;Alternative&#x27;}
+{&#x27;GenreId&#x27;: 24, &#x27;Name&#x27;: &#x27;Classical&#x27;}
+{&#x27;GenreId&#x27;: 25, &#x27;Name&#x27;: &#x27;Opera&#x27;}
+
+</code></pre>
+<h4>Próximas <em>Sprints</em></h4>
+
+<p>Vamos configurar dois bancos Docker, um <em>MySQL</em> e outro <em>Postgres</em>, para testar as conexões e um banco que seja intercambiável entre eles e o sqlite.</p>
+
+<p>Também vamos começar a gerar situações de erro e ver o que os objetos retornam ou que exceções são geradas.</p>
+
+<p>Por fim, consultas mais complexas e demais operações que mostrem o valor do <em>Pony</em>, afinal, espero que não seja só eu a perceber que ele não é apenas mais um ORM.</p>
+
+    </div>
+  </article>
+
+
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>
+                O conteúdo e opiniões publicados nesse site são de inteira responsabilidade minha, e não refletem as opiniões e nem são endossados pelo meu empregador.
+            </p>
+                Este blog é gerido pelo <a target="_blank" href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a> e tem o layout dado pelo <a target="_blank" href="https://bulma.io">Bulma</a>.
+            <p>
+                Copyright © 2016-2021, <a target="_blank" href="https://twitter.com/PauloHRPinheiro">Paulo Henrique Rodrigues Pinheiro</a>.
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>
