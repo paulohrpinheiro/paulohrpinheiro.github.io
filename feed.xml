@@ -8,10 +8,16 @@
     <language>pt-br</language>
 
     <item>
+      <title>Iniciando com o ORM Pony no Python II - Banco de Dados com Docker</title>
+      <link>https://paulohrpinheiro.xyz/texts/python/2021-05-11-iniciando-com-o-orm-pony-no-python-ii-banco-de-dados-com-docker.html</link>
+      <description>Continuando a jornada com o ORM Pony, agora com outros Banco de Dados, em Docker</description>
+      <pubDate>Tue, 11 May 2021 23:59:59 -0300</pubDate>
+    </item>
+    <item>
       <title>Iniciando com o ORM Pony no Python</title>
       <link>https://paulohrpinheiro.xyz/texts/python/2021-04-28-iniciando-com-o-orm-pony-no-python.html</link>
       <description>Depois de anos só no Django, estou eu sendo iniciado na simplicidade e elegância do Pony ORM</description>
-      <pubDate>Wed, 28 Apr 2021 17:00:00 -0300</pubDate>
+      <pubDate>Wed, 28 Apr 2021 00:00:00 +0000</pubDate>
     </item>
     <item>
       <title>Um Interpretador Brainfuck em Linguagem de programação V - Sprint II</title>
@@ -180,12 +186,6 @@
       <link>https://paulohrpinheiro.xyz/texts/go/2018-05-22-adicionando-loop-ao-mfbil.html</link>
       <description>Continuando o projeto de fazer um interpretador brainfuck em GO</description>
       <pubDate>Tue, 22 May 2018 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Trabalhando remotamente (e em casa!)</title>
-      <link>https://paulohrpinheiro.xyz/texts/diversos/2018-05-19-trabalhando-remotamente.html</link>
-      <description>Um pouco sobre minha nova fase de homeoffice.</description>
-      <pubDate>Sat, 19 May 2018 00:00:00 +0000</pubDate>
     </item>
 
   </channel>

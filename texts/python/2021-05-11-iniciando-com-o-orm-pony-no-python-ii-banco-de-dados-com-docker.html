@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Iniciando com o ORM Pony no Python II - Banco de Dados com Docker</title>
+
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" >
+
+  <meta name="description" content="Continuando a jornada com o ORM Pony, agora com outros Banco de Dados, em Docker">
+  <meta name="author" content="Paulo Henrique Rodrigues Pinheiro">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!" href="https://paulohrpinheiro.xyz/feed.xml">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+  <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+
+  <link rel=icon href="/favicon.ico" sizes="16x16" type="image/png">
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/normalize.css">
+</head>
+
+<body>
+  <section class="section">
+    <div class="container">
+      <h1 class="title is-1">
+        Paulo Henrique Rodrigues Pinheiro
+      </h1>
+      <p class="subtitle is-3">
+        Um blog sobre programação para programadores!
+      </p>
+    </div>
+  </section>
+
+
+
+     <div class="container">
+        
+		<nav class="level">
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/">HOME</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/c/">c</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/diversos/">diversos</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/go/">go</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/haskell/">haskell</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/javascript/">javascript</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/perl/">perl</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">programadorbipolar</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/prosaeverso/">prosaeverso</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/python/">python</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/ruby/">ruby</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/rust/">rust</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/server/">server</a>
+			</p>
+		</nav>
+	</div>
+
+    <hr>
+
+
+  <article class="container">
+    <div class="content">
+        <h2>Iniciando com o ORM Pony no Python II - Banco de Dados com Docker</h2>
+
+<h3>Continuando a jornada com o ORM Pony, agora com outros Banco de Dados, em Docker</h3>
+
+<p><img src="images/pony.png" alt="Logo do projeto Pony"></p>
+
+<blockquote>
+<p><a href="https://ponyorm.org/">https://ponyorm.org</a></p>
+</blockquote>
+
+<p>No <a href="https://paulohrpinheiro.xyz/texts/python/2021-04-28-iniciando-com-o-orm-pony-no-python.html">primeiro texto desta série</a>, demos os primeiros passos com o <a href="https://ponyorm.org">ORM Pony</a>, usando o <a href="https://sqlite.org/">SQLite</a> como banco de dados.</p>
+
+<p>Nesse texto vamos declarar uma tabela e usá-la em três bancos distintos: <a href="https://www.mysql.com/">MySQL</a>, <a href="https://www.postgresql.org/">Postgres</a> e o bom e velho <a href="https://sqlite.org/">SQLite</a>, usando Docker.</p>
+
+<h4>Preparando o terreno</h4>
+
+<p>No <a href="https://www.debian.org/">Debian</a>, distribuição que uso, instale os pacotes oficiais:</p>
+<pre><code class="language-python">
+sudo apt install docker.io docker-compose
+
+</code></pre>
+<p>Caso sua distribuição não tenha algo similar, acesse <a href="https://www.docker.com/get-started">https://www.docker.com/get-started</a> para instruções sobre como fazer uma instalação com pacotes não específicos a uma distribuição.</p>
+
+<p>Outro passo é criar um diretório para trabalharmos:</p>
+<pre><code class="language-python">
+$ sudo mkdir -p &#x2F;opt&#x2F;pony
+
+</code></pre>
+<p>Também é necessário darmos permissões a nós mesmos, já que está fora de nosso <em>home</em>:</p>
+<pre><code class="language-python">
+$ sudo chown ${USER}: &#x2F;opt&#x2F;pony
+
+</code></pre>
+<p>E criar subdiretórios que armazenarão os dados de nossos bancos e código:</p>
+<pre><code class="language-python">
+$ mkdir -p &#x2F;opt&#x2F;pony&#x2F;data&#x2F;{mysql,postgresql}
+$ mkdir &#x2F;opt&#x2F;pony&#x2F;src
+
+</code></pre>
+<p>Verificar é sempre legal:</p>
+<pre><code class="language-python">
+$ tree &#x2F;opt&#x2F;pony
+&#x2F;opt&#x2F;pony
+├── data
+│   ├── mysql
+│   └── postgresql
+└── src
+
+4 directories, 0 files
+
+</code></pre>
+<p>Salve esse texto como <code class="prettyprint">/opt/pony/requirements.txt</code>:</p>
+<pre><code class="language-python">
+ipython
+pony
+PyMySQL
+
+</code></pre>
+<p>Salve esse conteúdo como <code class="prettyprint">/opt/pony/Dockerfile</code></p>
+<pre><code class="language-python">
+FROM alpine
+WORKDIR &#x2F;code
+RUN apk add --no-cache python3 py3-pip py3-psycopg2 bash sqlite postgresql-client mysql-client
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
+RUN mkdir src
+
+</code></pre>
+<p>Esse arquivo define um <em>container</em> com uma imagem <em>Linx Alpine</em>, para que trabalhemos sem instalar alterar os pacotes de nossa máquina. Optei por usar pacotes pré-compilados de <em>Python</em> para o <em>driver</em> de banco de dados <em>Postgres</em>, para facilitar a vida e não ter que instalar compilador e afins.</p>
+
+<p>Salve o seguinte conteúdo como <code class="prettyprint">/opt/pony/docker-compose.yml</code>:</p>
+<pre><code class="language-python">
+version: &quot;3&quot;
+services:
+
+    python:
+      build: .
+      volumes:
+        - &#x2F;opt&#x2F;pony&#x2F;src&#x2F;:&#x2F;code&#x2F;src
+
+    mysql:
+      image: mysql
+      command: --default-authentication-plugin=mysql_native_password
+      restart: always
+      environment:
+        MYSQL_ROOT_PASSWORD: top123
+      volumes:
+        - &#x2F;opt&#x2F;data&#x2F;mysql:&#x2F;var&#x2F;lib&#x2F;mysql&#x2F;
+
+    postgres:
+      image: postgres
+      environment:
+        POSTGRES_PASSWORD: top123
+        PGDATA: &#x2F;var&#x2F;lib&#x2F;postgresql&#x2F;data&#x2F;pgdata
+      volumes:
+        - &#x2F;opt&#x2F;data&#x2F;postgres:&#x2F;var&#x2F;lib&#x2F;postgresql&#x2F;data&#x2F;pgdata&#x2F;
+
+</code></pre>
+<p>Salve esse arquivo como <code class="prettyprint">/opt/pony/src/models.py</code>:</p>
+<pre><code class="language-python">
+from pony.orm import Database, db_session, PrimaryKey, Required
+
+
+db = Database()
+
+
+class Github(db.Entity):
+    _table_ = &quot;github&quot;
+
+    key = Required(str)
+    value = Required(str)
+
+</code></pre>
+<p>E esse como <code class="prettyprint">/opt/pony/src/bombril.py</code>:</p>
+<pre><code class="language-python">
+import csv
+import json
+import urllib.request
+
+
+def get_data():
+    with urllib.request.urlopen(&#x27;https:&#x2F;&#x2F;api.github.com&#x2F;&#x27;) as f:
+        response = f.read()
+
+    return json.loads(response)
+
+
+def save_csv(data, filenename=&#x27;github.csv&#x27;):
+    with open(filename, &#x27;w&#x27;, newline=&#x27;&#x27;) as csvfile:
+        fieldnames = [&#x27;id&#x27;, &#x27;key&#x27;, &#x27;value&#x27;]
+
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+
+        id_value = 0
+        for key, value in data.items():
+            id_value += 1
+            writer.writerow({&#x27;id&#x27;: id_value, &#x27;key&#x27;: key, &#x27;value&#x27;: value})
+
+
+def read_csv(filename=&#x27;github.csv&#x27;):
+    with open(filename, newline=&#x27;&#x27;) as csvfile:
+        reader = csv.DictReader(csvfile)
+        return list(reader)
+
+</code></pre>
+<p>Feito isso, estando no diretório <code class="prettyprint">/opt/pony</code>, podemos subir nosso laboratório de testes, executando o comando a seguir, que em sua primeira execução nos exigirá paciência e banda de Internet, para baixar tudo que é necessário:</p>
+<pre><code class="language-python">
+$ docker-compose up
+
+</code></pre>
+<p>Seu terminal será inundado com informações, aproveite para hidratar-se e caminhar um pouco. Ao final de tudo, ele estará &quot;truncado&quot;, com algo parecido a isso:</p>
+<pre><code class="language-python">
+postgres_1| 2021-05-08 20:30:50.406 UTC [1] LOG:  database system is ready to accept connections
+
+... muitas linhas entre essas mensagens
+
+mysql_1 | 2021-05-08T20:32:03.868866Z 0 [System] [MY-010931] [Server] &#x2F;usr&#x2F;sbin&#x2F;mysqld: ready for  connections. Version: &#x27;8.0.24&#x27;  socket: &#x27;&#x2F;var&#x2F;run&#x2F;mysqld&#x2F;mysqld.sock&#x27;  port: 3306  MySQL Community Server - GPL.
+
+</code></pre>
+<p>Aconselho deixar quieto esse terminal para ver os <em>logs</em>, e abrir outro para trabalhar (pode-se iniciar com <code class="prettyprint">docker-compose up -d</code> para manter o terminal livre e o processo em <em>background</em>).</p>
+
+<p>Pode-se ver o que temos rodando:</p>
+<pre><code class="language-python">
+$ docker-compose ps
+     Name                    Command               State           Ports       
+-------------------------------------------------------------------------------
+pony_mysql_1      docker-entrypoint.sh --def ...   Up       3306&#x2F;tcp, 33060&#x2F;tcp
+pony_postgres_1   docker-entrypoint.sh postgres    Up       5432&#x2F;tcp           
+pony_python_1     &#x2F;bin&#x2F;sh                          Exit 0                
+
+</code></pre>
+<p>Para criar os <em>databases</em>, nos conectaremos aos bancos de dados através do container <em>Python</em>, no qual instalamos os clientes para acesso a eles:</p>
+<pre><code class="language-python">
+$ docker-compose run python bash
+bash-5.1# psql -Upostgres -hpostgres
+Password for user postgres: 
+psql (13.2)
+Type &quot;help&quot; for help.
+
+postgres=# CREATE DATABASE github;
+CREATE DATABASE
+postgres=# \q
+
+bash-5.1# mysql -uroot -p -hmysql
+Enter password: 
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.24 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type &#x27;help;&#x27; or &#x27;\h&#x27; for help. Type &#x27;\c&#x27; to clear the current input statement.
+
+MySQL [(none)]&gt; CREATE DATASE github;
+Query OK, 1 row affected (0.301 sec)
+
+MySQL [(none)]&gt; quit
+Bye
+bash-5.1#
+
+</code></pre>
+<p>Por fim, vamos pegar alguns dados para inserir nos bancos. Vamos pegar algumas informações do <em>Github</em>, salvar em um arquivo <em>CSV</em>, e sempre que precisarmos, carregamos em memória num dicionário para usar. Ainda no container <em>Python</em> (se estiver fora, basta um <code class="prettyprint">docker-compose run python bash</code>):</p>
+<pre><code class="language-python">
+$ docker-compose run python bash
+bash-5.1# cd &#x2F;code&#x2F;src
+bash-5.1# ipython
+Python 3.8.10 (default, May  6 2021, 00:05:59) 
+Type &#x27;copyright&#x27;, &#x27;credits&#x27; or &#x27;license&#x27; for more information
+IPython 7.23.1 -- An enhanced Interactive Python. Type &#x27;?&#x27; for help.
+
+In [1]: import bombril
+
+In [2]: data = bombril.get_data()
+
+In [3]: bombril.save_csv(data)
+
+In [4]:                                                                                                                                                                   
+Do you really want to exit ([y]&#x2F;n)? y
+bash-5.1# head github.csv 
+id,key,value
+1,current_user_url,https:&#x2F;&#x2F;api.github.com&#x2F;user
+2,current_user_authorizations_html_url,https:&#x2F;&#x2F;github.com&#x2F;settings&#x2F;connections&#x2F;applications{&#x2F;client_id}
+3,authorizations_url,https:&#x2F;&#x2F;api.github.com&#x2F;authorizations
+4,code_search_url,&quot;https:&#x2F;&#x2F;api.github.com&#x2F;search&#x2F;code?q={query}{&amp;page,per_page,sort,order}&quot;
+5,commit_search_url,&quot;https:&#x2F;&#x2F;api.github.com&#x2F;search&#x2F;commits?q={query}{&amp;page,per_page,sort,order}&quot;
+6,emails_url,https:&#x2F;&#x2F;api.github.com&#x2F;user&#x2F;emails
+7,emojis_url,https:&#x2F;&#x2F;api.github.com&#x2F;emojis
+8,events_url,https:&#x2F;&#x2F;api.github.com&#x2F;events
+9,feeds_url,https:&#x2F;&#x2F;api.github.com&#x2F;feeds
+
+</code></pre>
+<p>Como queríamos. Temos nosso laboratório preparado, enfim!</p>
+
+<h4>Conectando aos bancos com <em>Pony</em></h4>
+
+<p>Agora sim, vamos usar nossos dados, criar uma descrição deles com <em>Pony</em>, e inserí-los em cada banco.</p>
+
+<p>Começando com o <code class="prettyprint">sqlite</code> (importante notar o uso do <code class="prettyprint">db_session</code> para garantir o commit dos dados):</p>
+<pre><code class="language-python">
+bash-5.1# ipython
+Python 3.8.10 (default, May  6 2021, 00:05:59)
+Type &#x27;copyright&#x27;, &#x27;credits&#x27; or &#x27;license&#x27; for more information
+IPython 7.23.1 -- An enhanced Interactive Python. Type &#x27;?&#x27; for help.
+
+In [1]: import bombril
+
+In [2]: import models
+
+In [3]: from pony.orm import db_session
+
+In [4]: data = bombril.read_csv()
+
+In [5]: db = models.db
+
+In [6]: db.bind(provider=&#x27;sqlite&#x27;, filename=&#x27;&#x2F;code&#x2F;src&#x2F;github.db&#x27;, create_db=True)
+
+In [7]: db.generate_mapping(create_tables=True)
+
+In [8]: with db_session:
+   ...:     for reg in data:
+   ...:         models.Github(**reg)
+   ...:
+
+In [9]:                                                                                                                                                                   
+Do you really want to exit ([y]&#x2F;n)?
+bash-5.1# sqlite3 github.db
+SQLite version 3.34.1 2021-01-20 14:10:07
+Enter &quot;.help&quot; for usage hints.
+sqlite&gt; SELECT * FROM github LIMIT 2;
+1|current_user_url|https:&#x2F;&#x2F;api.github.com&#x2F;user
+2|current_user_authorizations_html_url|https:&#x2F;&#x2F;github.com&#x2F;settings&#x2F;connections&#x2F;applications{&#x2F;client_id}
+
+</code></pre>
+<p>Partamos para os bancos de dados menos eficientes :)</p>
+<pre><code class="language-python">
+bash-5.1# cd &#x2F;code&#x2F;src
+bash-5.1# ipython
+Python 3.8.10 (default, May  6 2021, 00:05:59)
+Type &#x27;copyright&#x27;, &#x27;credits&#x27; or &#x27;license&#x27; for more information
+IPython 7.23.1 -- An enhanced Interactive Python. Type &#x27;?&#x27; for help.
+
+In [1]: import bombril
+
+In [2]: import models
+
+In [3]: from pony.orm import db_session
+
+In [4]: data = bombril.read_csv()
+
+In [5]: db = models.db
+
+In [6]: db.bind(provider=&#x27;mysql&#x27;, host=&#x27;mysql&#x27;, user=&#x27;root&#x27;, passwd=&#x27;top123&#x27;, db=&#x27;github&#x27;)
+
+In [7]: db.generate_mapping(create_tables=True)
+
+In [8]: with db_session:
+   ...:     for reg in data:
+   ...:         models.Github(**reg)
+   ...:
+
+In [9]: models.Github[10].to_dict()
+Out[9]:
+{&#x27;id&#x27;: 10,
+ &#x27;key&#x27;: &#x27;followers_url&#x27;,
+ &#x27;value&#x27;: &#x27;https:&#x2F;&#x2F;api.github.com&#x2F;user&#x2F;followers&#x27;}
+
+In [10]: import importlib
+
+In [11]: importlib.reload(models)
+Out[11]: &lt;module &#x27;models&#x27; from &#x27;&#x2F;code&#x2F;src&#x2F;models.py&#x27;&gt;
+
+In [12]: db = models.db
+
+In [13]: db.bind(provider=&#x27;postgres&#x27;, user=&#x27;postgres&#x27;, password=&#x27;top123&#x27;, host=&#x27;postgres&#x27;, database=&#x27;github&#x27;)
+
+In [14]: db.generate_mapping(create_tables=True)
+
+In [15]: with db_session:
+    ...:     for reg in data:
+    ...:         models.Github(**reg)
+    ...:
+
+In [16]: models.Github[10].to_dict()
+Out[16]:
+{&#x27;id&#x27;: 10,
+ &#x27;key&#x27;: &#x27;followers_url&#x27;,
+ &#x27;value&#x27;: &#x27;https:&#x2F;&#x2F;api.github.com&#x2F;user&#x2F;followers&#x27;}
+
+In [17]: quit
+
+</code></pre>
+<p>Vamos abrir outro terminal e verificar as coisas:</p>
+<pre><code class="language-python">
+bash-5.1# psql -Upostgres -hpostgres
+Password for user postgres:
+psql (13.2)
+Type &quot;help&quot; for help.
+
+postgres=# \c github
+You are now connected to database &quot;github&quot; as user &quot;postgres&quot;.
+github=# SELECT COUNT(*) FROM github;
+ count 
+-------
+    32
+(1 row)
+
+github=# SELECT * FROM github LIMIT 2;
+ id |                 key                  |                              value                               
+----+--------------------------------------+------------------------------------------------------------------
+  1 | current_user_url                     | https:&#x2F;&#x2F;api.github.com&#x2F;user
+  2 | current_user_authorizations_html_url | https:&#x2F;&#x2F;github.com&#x2F;settings&#x2F;connections&#x2F;applications{&#x2F;client_id}
+(2 rows)
+
+github=# ^D\q
+bash-5.1# mysql -uroot -p -hmysql
+Enter password: 
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MySQL connection id is 14
+Server version: 8.0.25 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type &#x27;help;&#x27; or &#x27;\h&#x27; for help. Type &#x27;\c&#x27; to clear the current input statement.
+
+MySQL [(none)]&gt; USE github;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+MySQL [github]&gt; SELECT COUNT(*) FROM github;
++----------+
+| COUNT(*) |
++----------+
+|       32 |
++----------+
+1 row in set (0.001 sec)
+
+MySQL [github]&gt; SELECT * FROM github LIMIT 2;
++----+--------------------------------------+------------------------------------------------------------------+
+| id | key                                  | value                                                            |
++----+--------------------------------------+------------------------------------------------------------------+
+|  1 | current_user_url                     | https:&#x2F;&#x2F;api.github.com&#x2F;user                                      |
+|  2 | current_user_authorizations_html_url | https:&#x2F;&#x2F;github.com&#x2F;settings&#x2F;connections&#x2F;applications{&#x2F;client_id} |
++----+--------------------------------------+------------------------------------------------------------------+
+2 rows in set (0.001 sec)
+
+MySQL [github]&gt; 
+
+</code></pre>
+<p>Como se pode perceber, com um mesmo código, fizemos a mesma coisa: inserir dados no banco, para bancos diferentes. Nem sempre isso é possível, nem sempre é desejável e confiável delegar ao ORM a decisão de como realizar essa tarefa, mas isso pode ser interessante em alguns casos, como, por exemplo, sistemas não tão complexos em que ter consultas SQL espalhadas pelo código seja uma opção.</p>
+
+<h4>Materiais consultados</h4>
+
+<p>Consultei muito material para resolver uma série de problemas que fui enfrentando no decorrer do desenvolvimento dessas ideias aqui apresentadas. E pra quem, como eu, estiver aprendendo, aconselho fortemente consultar com calma as seguintes páginas:</p>
+
+<h5>Para as imagens docker</h5>
+
+<ul>
+<li><p><a href="https://docs.docker.com/compose/">https://docs.docker.com/compose/</a></p></li>
+<li><p><a href="https://hub.docker.com/_/postgres/">https://hub.docker.com/_/postgres/</a></p></li>
+<li><p><a href="https://hub.docker.com/_/mysql/">https://hub.docker.com/_/mysql/</a></p></li>
+<li><p><a href="https://hub.docker.com/_/alpine/">https://hub.docker.com/_/alpine/</a></p></li>
+<li><p><a href="https://pkgs.alpinelinux.org/packages">https://pkgs.alpinelinux.org/packages</a></p></li>
+</ul>
+
+<h5>Para os scripts <em>Python</em></h5>
+
+<ul>
+<li><p><a href="https://docs.python.org/3/library/csv.html">https://docs.python.org/3/library/csv.html</a></p></li>
+<li><p><a href="https://docs.python.org/3/library/json.html">https://docs.python.org/3/library/json.html</a></p></li>
+<li><p><a href="https://realpython.com/lessons/reloading-module/">https://realpython.com/lessons/reloading-module/</a></p></li>
+<li><p><a href="https://docs.ponyorm.org/api_reference.html#Database.bind">https://docs.ponyorm.org/api_reference.html#Database.bind</a></p></li>
+</ul>
+
+<h4>Off-topic</h4>
+
+<p>E num movimento que eu mesmo não esperava, comecei a testar o editor <code class="prettyprint">micro</code>: leve, fácil e bonitão, no lugar do <code class="prettyprint">vim</code>. Recomendo:</p>
+
+<blockquote>
+<p><a href="https://micro-editor.github.io/">https://micro-editor.github.io/</a></p>
+</blockquote>
+
+    </div>
+  </article>
+
+
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>
+                O conteúdo e opiniões publicados nesse site são de inteira responsabilidade minha, e não refletem as opiniões e nem são endossados pelo meu empregador.
+            </p>
+                Este blog é gerido pelo <a target="_blank" href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a> e tem o layout dado pelo <a target="_blank" href="https://bulma.io">Bulma</a>.
+            <p>
+                Copyright © 2016-2021, <a target="_blank" href="https://twitter.com/PauloHRPinheiro">Paulo Henrique Rodrigues Pinheiro</a>.
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>
