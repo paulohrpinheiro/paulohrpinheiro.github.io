@@ -14,6 +14,12 @@
       <pubDate>Wed, 12 May 2021 00:00:00 +0000</pubDate>
     </item>
     <item>
+      <title>Iniciando com o ORM Pony no Python II - Banco de Dados com Docker</title>
+      <link>https://paulohrpinheiro.xyz/texts/python/2021-05-11-iniciando-com-o-orm-pony-no-python-ii-banco-de-dados-com-docker.html</link>
+      <description>Continuando a jornada com o ORM Pony, agora com outros Banco de Dados, em Docker</description>
+      <pubDate>Tue, 11 May 2021 00:00:00 +0000</pubDate>
+    </item>
+    <item>
       <title>Iniciando com o ORM Pony no Python</title>
       <link>https://paulohrpinheiro.xyz/texts/python/2021-04-28-iniciando-com-o-orm-pony-no-python.html</link>
       <description>Depois de anos só no Django, estou eu sendo iniciado na simplicidade e elegância do Pony ORM</description>

@@ -96,7 +96,7 @@
 
 <p>No <a href="https://paulohrpinheiro.xyz/texts/python/2021-04-28-iniciando-com-o-orm-pony-no-python.html">primeiro texto desta série</a>, demos os primeiros passos com o <a href="https://ponyorm.org">ORM Pony</a>, usando o <a href="https://sqlite.org/">SQLite</a> como banco de dados.</p>
 
-<p>Nesse texto vamos declarar uma tabela e usá-la em três bancos distintos: <a href="https://www.mysql.com/">MySQL</a>, <a href="https://www.postgresql.org/">Postgres</a> e o bom e velho <a href="https://sqlite.org/">SQLite</a>, usando Docker.</p>
+<p>Nesse texto vamos declarar uma tabela e usá-la em três bancos distintos: <a href="https://www.mysql.com/">MySQL</a>, <a href="https://www.postgresql.org/">Postgres</a> e o bom e velho <a href="https://sqlite.org/">SQLite</a>, usasndo docker.</p>
 
 <h4>Preparando o terreno</h4>
 
@@ -112,7 +112,7 @@ sudo apt install docker.io docker-compose
 $ sudo mkdir -p &#x2F;opt&#x2F;pony
 
 </code></pre>
-<p>Também é necessário darmos permissões a nós mesmos, já que está fora de nosso <em>home</em>:</p>
+<p>Darmos permissões para nós mesmos, já que está fora de nosso <em>home</em>:</p>
 <pre><code class="language-python">
 $ sudo chown ${USER}: &#x2F;opt&#x2F;pony
 
@@ -152,9 +152,11 @@ RUN pip install -r requirements.txt
 RUN mkdir src
 
 </code></pre>
-<p>Esse arquivo define um <em>container</em> com uma imagem <em>Linx Alpine</em>, para que trabalhemos sem instalar alterar os pacotes de nossa máquina. Optei por usar pacotes pré-compilados de <em>Python</em> para o <em>driver</em> de banco de dados <em>Postgres</em>, para facilitar a vida e não ter que instalar compilador e afins.</p>
+<p>Esse arquivo define um <em>container</em> com uma imagem <em>Python</em>, para que trabalhemos sem instalar alterar os pacotes de nossa máquina. Optei por usar pacotes pré-compilados de <em>Python</em> para os <em>drivers</em> de banco de dados, para facilitar a vida e não ter que instalar compilador e afins.</p>
 
-<p>Salve o seguinte conteúdo como <code class="prettyprint">/opt/pony/docker-compose.yml</code>:</p>
+<p>Compartilhando os fontes:</p>
+
+<p>E salve o seguinte conteúdo como <code class="prettyprint">/opt/pony/docker-compose.yml</code>:</p>
 <pre><code class="language-python">
 version: &quot;3&quot;
 services:
@@ -224,15 +226,15 @@ def save_csv(data, filenename=&#x27;github.csv&#x27;):
             writer.writerow({&#x27;id&#x27;: id_value, &#x27;key&#x27;: key, &#x27;value&#x27;: value})
 
 
-def read_csv(filename=&#x27;github.csv&#x27;):
-    with open(filename, newline=&#x27;&#x27;) as csvfile:
+def read_csv(filename=&#x27;githb.csv&#x27;):
+    with open(&#x27;github.csv&#x27;, newline=&#x27;&#x27;) as csvfile:
         reader = csv.DictReader(csvfile)
         return list(reader)
 
 </code></pre>
-<p>Feito isso, estando no diretório <code class="prettyprint">/opt/pony</code>, podemos subir nosso laboratório de testes, executando o comando a seguir, que em sua primeira execução nos exigirá paciência e banda de Internet, para baixar tudo que é necessário:</p>
+<p>Feito isso, estando no diterório <code class="prettyprint">/opt/pony</code>, podemos subir nosso laboratório de testes, executando o comando a seguir, que em sua primeira executação nos exigirá paciência e banda de Internet, para baixar tudo que é necessário:</p>
 <pre><code class="language-python">
-$ docker-compose up
+$ docker-composer up
 
 </code></pre>
 <p>Seu terminal será inundado com informações, aproveite para hidratar-se e caminhar um pouco. Ao final de tudo, ele estará &quot;truncado&quot;, com algo parecido a isso:</p>
@@ -244,7 +246,7 @@ postgres_1| 2021-05-08 20:30:50.406 UTC [1] LOG:  database system is ready to ac
 mysql_1 | 2021-05-08T20:32:03.868866Z 0 [System] [MY-010931] [Server] &#x2F;usr&#x2F;sbin&#x2F;mysqld: ready for  connections. Version: &#x27;8.0.24&#x27;  socket: &#x27;&#x2F;var&#x2F;run&#x2F;mysqld&#x2F;mysqld.sock&#x27;  port: 3306  MySQL Community Server - GPL.
 
 </code></pre>
-<p>Aconselho deixar quieto esse terminal para ver os <em>logs</em>, e abrir outro para trabalhar (pode-se iniciar com <code class="prettyprint">docker-compose up -d</code> para manter o terminal livre e o processo em <em>background</em>).</p>
+<p>Aconselho deixar quieto esse terminal para ver os logs, e abrir outro para trabalhar (pode-se iniciar com <code class="prettyprint">docker-compose up -d</code> para manter o terminal livre e o processo em <em>background</em>).</p>
 
 <p>Pode-se ver o que temos rodando:</p>
 <pre><code class="language-python">
@@ -286,7 +288,7 @@ Bye
 bash-5.1#
 
 </code></pre>
-<p>Por fim, vamos pegar alguns dados para inserir nos bancos. Vamos pegar algumas informações do <em>Github</em>, salvar em um arquivo <em>CSV</em>, e sempre que precisarmos, carregamos em memória num dicionário para usar. Ainda no container <em>Python</em> (se estiver fora, basta um <code class="prettyprint">docker-compose run python bash</code>):</p>
+<p>Por fim, vamos pegar alguns dados para inserir nos bancos. Vamos pegar algumas informações do <em>Github</em>, salvar em um arquivo <em>CSV</em>, e sempre que precisarmos, carregamos em memória num dicionário para usar. Ainda no container <em>Python</em> (se estiber fora, basta um <code class="prettyprint">docker-compose run python bash</code>):</p>
 <pre><code class="language-python">
 $ docker-compose run python bash
 bash-5.1# cd &#x2F;code&#x2F;src
@@ -322,7 +324,7 @@ id,key,value
 
 <p>Agora sim, vamos usar nossos dados, criar uma descrição deles com <em>Pony</em>, e inserí-los em cada banco.</p>
 
-<p>Começando com o <code class="prettyprint">sqlite</code> (importante notar o uso do <code class="prettyprint">db_session</code> para garantir o commit dos dados):</p>
+<p>Começando com o <code class="prettyprint">sqlite</code> (importnte notar o so do <code class="prettyprint">db_session</code> para garantir o commit dos dados):</p>
 <pre><code class="language-python">
 bash-5.1# ipython
 Python 3.8.10 (default, May  6 2021, 00:05:59)
@@ -391,29 +393,37 @@ Out[9]:
  &#x27;key&#x27;: &#x27;followers_url&#x27;,
  &#x27;value&#x27;: &#x27;https:&#x2F;&#x2F;api.github.com&#x2F;user&#x2F;followers&#x27;}
 
-In [10]: import importlib
+In [10]: import iportlib
+---------------------------------------------------------------------------
+ModuleNotFoundError                       Traceback (most recent call last)
+&lt;ipython-input-10-4e5d0833eb20&gt; in &lt;module&gt;
+----&gt; 1 import iportlib
 
-In [11]: importlib.reload(models)
-Out[11]: &lt;module &#x27;models&#x27; from &#x27;&#x2F;code&#x2F;src&#x2F;models.py&#x27;&gt;
+ModuleNotFoundError: No module named &#x27;iportlib&#x27;
 
-In [12]: db = models.db
+In [11]: import importlib
 
-In [13]: db.bind(provider=&#x27;postgres&#x27;, user=&#x27;postgres&#x27;, password=&#x27;top123&#x27;, host=&#x27;postgres&#x27;, database=&#x27;github&#x27;)
+In [12]: importlib.reload(models)
+Out[12]: &lt;module &#x27;models&#x27; from &#x27;&#x2F;code&#x2F;src&#x2F;models.py&#x27;&gt;
 
-In [14]: db.generate_mapping(create_tables=True)
+In [13]: db = models.db
 
-In [15]: with db_session:
+In [14]: db.bind(provider=&#x27;postgres&#x27;, user=&#x27;postgres&#x27;, password=&#x27;top123&#x27;, host=&#x27;postgres&#x27;, database=&#x27;github&#x27;)
+
+In [15]: db.generate_mapping(create_tables=True)
+
+In [16]: with db_session:
     ...:     for reg in data:
     ...:         models.Github(**reg)
     ...:
 
-In [16]: models.Github[10].to_dict()
-Out[16]:
+In [17]: models.Github[10].to_dict()
+Out[17]:
 {&#x27;id&#x27;: 10,
  &#x27;key&#x27;: &#x27;followers_url&#x27;,
  &#x27;value&#x27;: &#x27;https:&#x2F;&#x2F;api.github.com&#x2F;user&#x2F;followers&#x27;}
 
-In [17]: quit
+In [18]: quit
 
 </code></pre>
 <p>Vamos abrir outro terminal e verificar as coisas:</p>
@@ -474,11 +484,11 @@ MySQL [github]&gt; SELECT * FROM github LIMIT 2;
 MySQL [github]&gt; 
 
 </code></pre>
-<p>Como se pode perceber, com um mesmo código, fizemos a mesma coisa: inserir dados no banco, para bancos diferentes. Nem sempre isso é possível, nem sempre é desejável e confiável delegar ao ORM a decisão de como realizar essa tarefa, mas isso pode ser interessante em alguns casos, como, por exemplo, sistemas não tão complexos em que ter consultas SQL espalhadas pelo código seja uma opção.</p>
+<p>Como se pode perceber, com um mesmo código, fizemos a mesma coisa: inserir dados no banco, para bancos diferentes. Nems sempre isso é possível, nem sempre é desejável e confiável delegar ao ORM a decisão de como realizar essa tarefa, mas isso pode ser interessante em alguns casos, como, por exemplo, sistemas não tão complexos em que ter consultas SQLs espalhadas pelo código seja uma opção.</p>
 
 <h4>Materiais consultados</h4>
 
-<p>Consultei muito material para resolver uma série de problemas que fui enfrentando no decorrer do desenvolvimento dessas ideias aqui apresentadas. E pra quem, como eu, estiver aprendendo, aconselho fortemente consultar com calma as seguintes páginas:</p>
+<p>Consultei muito material para resolver umasérie de problemas que fui enfrentando no decorrer do desenvolvimento dessas ideias aqui apresentadas. E pra quem, como eu, estiver aprendendo, aconselhor fortemente consultar com calma as seguintes páginas:</p>
 
 <h5>Para as imagens docker</h5>
 
