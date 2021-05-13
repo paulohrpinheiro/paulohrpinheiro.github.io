@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Decifrando o Zen do Python</title>
+
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" >
+
+  <meta name="description" content="Eis que buscando algum conjunto de dados dentro do Python, deparei-me com a verdade sobre o Zen do Python">
+  <meta name="author" content="Paulo Henrique Rodrigues Pinheiro">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!" href="https://paulohrpinheiro.xyz/feed.xml">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+  <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+
+  <link rel=icon href="/favicon.ico" sizes="16x16" type="image/png">
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/normalize.css">
+</head>
+
+<body>
+  <section class="section">
+    <div class="container">
+      <h1 class="title is-1">
+        Paulo Henrique Rodrigues Pinheiro
+      </h1>
+      <p class="subtitle is-3">
+        Um blog sobre programação para programadores!
+      </p>
+    </div>
+  </section>
+
+
+
+     <div class="container">
+        
+		<nav class="level">
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/">HOME</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/c/">c</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/diversos/">diversos</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/go/">go</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/haskell/">haskell</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/javascript/">javascript</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/perl/">perl</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">programadorbipolar</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/prosaeverso/">prosaeverso</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/python/">python</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/ruby/">ruby</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/rust/">rust</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/server/">server</a>
+			</p>
+		</nav>
+	</div>
+
+    <hr>
+
+
+  <article class="container">
+    <div class="content">
+        <h2>Decifrando o Zen do Python</h2>
+
+<h3>Eis que buscando algum conjunto de dados dentro do Python, deparei-me com a verdade sobre o Zen do Python</h3>
+
+<p><img src="images/zen.png" alt="Logo do projeto Pony"></p>
+
+<blockquote>
+<p><a href="https://www.python.org/dev/peps/pep-0020/">https://www.python.org/dev/peps/pep-0020/</a></p>
+</blockquote>
+
+<p>Eu queria montar um arquivo <em>CSV</em> com dados interessantes de dentro do próprio <em>Python</em>, e fui fuçando algumas coisas, até que, por acaso, mandei um <code class="prettyprint">import this</code> no console para ver se rolava criar um arquivo a partir do texto gerado por ele:</p>
+<pre><code class="language-python">
+&gt;&gt;&gt; import this
+The Zen of Python, by Tim Peters
+
+Beautiful is better than ugly.
+Explicit is better than implicit.
+Simple is better than complex.
+Complex is better than complicated.
+Flat is better than nested.
+Sparse is better than dense.
+Readability counts.
+Special cases aren&#x27;t special enough to break the rules.
+Although practicality beats purity.
+Errors should never pass silently.
+Unless explicitly silenced.
+In the face of ambiguity, refuse the temptation to guess.
+There should be one-- and preferably only one --obvious way to do it.
+Although that way may not be obvious at first unless you&#x27;re Dutch.
+Now is better than never.
+Although never is often better than *right* now.
+If the implementation is hard to explain, it&#x27;s a bad idea.
+If the implementation is easy to explain, it may be a good idea.
+Namespaces are one honking great idea -- let&#x27;s do more of those!
+
+</code></pre>
+<p>Mas como estava nessa <em>vibe</em> de curiosidade, pensei comigo: &quot;como isso funciona, de onde vem esse texto&quot;?</p>
+
+<p>Um pouquinho de introspecção resolve muita coisa:</p>
+<pre><code class="language-python">
+&gt;&gt;&gt; this = __import__(&quot;this&quot;)
+&gt;&gt;&gt; dir(this)
+[&#x27;__builtins__&#x27;, &#x27;__cached__&#x27;, &#x27;__doc__&#x27;, &#x27;__file__&#x27;, &#x27;__loader__&#x27;, &#x27;__name__&#x27;, &#x27;__package__&#x27;, &#x27;__spec__&#x27;, &#x27;c&#x27;, &#x27;d&#x27;, &#x27;i&#x27;, &#x27;s&#x27;]
+
+</code></pre>
+<p>Aquelas letras são suspeitas...</p>
+<pre><code class="language-python">
+&gt;&gt;&gt; this.c
+97
+&gt;&gt;&gt; this.d
+{&#x27;A&#x27;: &#x27;N&#x27;, &#x27;B&#x27;: &#x27;O&#x27;, &#x27;C&#x27;: &#x27;P&#x27;, &#x27;D&#x27;: &#x27;Q&#x27;, &#x27;E&#x27;: &#x27;R&#x27;, &#x27;F&#x27;: &#x27;S&#x27;, &#x27;G&#x27;: &#x27;T&#x27;, &#x27;H&#x27;: &#x27;U&#x27;, &#x27;I&#x27;: &#x27;V&#x27;, &#x27;J&#x27;: &#x27;W&#x27;, &#x27;K&#x27;: &#x27;X&#x27;, &#x27;L&#x27;: &#x27;Y&#x27;, &#x27;M&#x27;: &#x27;Z&#x27;, &#x27;N&#x27;: &#x27;A&#x27;, &#x27;O&#x27;: &#x27;B&#x27;, &#x27;P&#x27;: &#x27;C&#x27;, &#x27;Q&#x27;: &#x27;D&#x27;, &#x27;R&#x27;: &#x27;E&#x27;, &#x27;S&#x27;: &#x27;F&#x27;, &#x27;T&#x27;: &#x27;G&#x27;, &#x27;U&#x27;: &#x27;H&#x27;, &#x27;V&#x27;: &#x27;I&#x27;, &#x27;W&#x27;: &#x27;J&#x27;, &#x27;X&#x27;: &#x27;K&#x27;, &#x27;Y&#x27;: &#x27;L&#x27;, &#x27;Z&#x27;: &#x27;M&#x27;, &#x27;a&#x27;: &#x27;n&#x27;, &#x27;b&#x27;: &#x27;o&#x27;, &#x27;c&#x27;: &#x27;p&#x27;, &#x27;d&#x27;: &#x27;q&#x27;, &#x27;e&#x27;: &#x27;r&#x27;, &#x27;f&#x27;: &#x27;s&#x27;, &#x27;g&#x27;: &#x27;t&#x27;, &#x27;h&#x27;: &#x27;u&#x27;, &#x27;i&#x27;: &#x27;v&#x27;, &#x27;j&#x27;: &#x27;w&#x27;, &#x27;k&#x27;: &#x27;x&#x27;, &#x27;l&#x27;: &#x27;y&#x27;, &#x27;m&#x27;: &#x27;z&#x27;, &#x27;n&#x27;: &#x27;a&#x27;, &#x27;o&#x27;: &#x27;b&#x27;, &#x27;p&#x27;: &#x27;c&#x27;, &#x27;q&#x27;: &#x27;d&#x27;, &#x27;r&#x27;: &#x27;e&#x27;, &#x27;s&#x27;: &#x27;f&#x27;, &#x27;t&#x27;: &#x27;g&#x27;, &#x27;u&#x27;: &#x27;h&#x27;, &#x27;v&#x27;: &#x27;i&#x27;, &#x27;w&#x27;: &#x27;j&#x27;, &#x27;x&#x27;: &#x27;k&#x27;, &#x27;y&#x27;: &#x27;l&#x27;, &#x27;z&#x27;: &#x27;m&#x27;}
+&gt;&gt;&gt; this.i
+25
+&gt;&gt;&gt; this.s
+&quot;Gur Mra bs Clguba, ol Gvz Crgref\n\nOrnhgvshy vf orggre guna htyl.\nRkcyvpvg vf orggre guna vzcyvpvg.\nFvzcyr vf orggre guna pbzcyrk.\nPbzcyrk vf orggre guna pbzcyvpngrq.\nSyng vf orggre guna arfgrq.\nFcnefr vf orggre guna qrafr.\nErnqnovyvgl pbhagf.\nFcrpvny pnfrf nera&#x27;g fcrpvny rabhtu gb oernx gur ehyrf.\nNygubhtu cenpgvpnyvgl orngf chevgl.\nReebef fubhyq arire cnff fvyragyl.\nHayrff rkcyvpvgyl fvyraprq.\nVa gur snpr bs nzovthvgl, ershfr gur grzcgngvba gb thrff.\nGurer fubhyq or bar-- naq cersrenoyl bayl bar --boivbhf jnl gb qb vg.\nNygubhtu gung jnl znl abg or boivbhf ng svefg hayrff lbh&#x27;er Qhgpu.\nAbj vf orggre guna arire.\nNygubhtu arire vf bsgra orggre guna *evtug* abj.\nVs gur vzcyrzragngvba vf uneq gb rkcynva, vg&#x27;f n onq vqrn.\nVs gur vzcyrzragngvba vf rnfl gb rkcynva, vg znl or n tbbq vqrn.\nAnzrfcnprf ner bar ubaxvat terng vqrn -- yrg&#x27;f qb zber bs gubfr!&quot;
+
+</code></pre>
+<p>Perceba que o <code class="prettyprint">this.s</code> tem várias quebras de linha (<code class="prettyprint">\n</code>), e no começo duas (<code class="prettyprint">\n\n</code>). três letras, três letras, duas letras, seis letras e uma vírgula, como no título do Zen. E do dicionário pode-se ver que é uma cifra, pois o <code class="prettyprint">Gur</code> transforma-se em:</p>
+<pre><code class="language-python">
+&gt;&gt;&gt; this.d[&#x27;G&#x27;]
+&#x27;T&#x27;
+&gt;&gt;&gt; this.d[&#x27;u&#x27;]
+&#x27;h&#x27;
+&gt;&gt;&gt; this.d[&#x27;r&#x27;]
+&#x27;e&#x27;
+
+</code></pre>
+<p>Uma primeira ideia (não foi de primeira, é claro que errei) para decifrar isso é com:</p>
+<pre><code class="language-python">
+&gt;&gt;&gt; print(&#x27;&#x27;.join([this.d.get(x,x) for x in this.s]))
+The Zen of Python, by Tim Peters
+
+Beautiful is better than ugly.
+Explicit is better than implicit.
+Simple is better than complex.
+Complex is better than complicated.
+Flat is better than nested.
+Sparse is better than dense.
+Readability counts.
+Special cases aren&#x27;t special enough to break the rules.
+Although practicality beats purity.
+Errors should never pass silently.
+Unless explicitly silenced.
+In the face of ambiguity, refuse the temptation to guess.
+There should be one-- and preferably only one --obvious way to do it.
+Although that way may not be obvious at first unless you&#x27;re Dutch.
+Now is better than never.
+Although never is often better than *right* now.
+If the implementation is hard to explain, it&#x27;s a bad idea.
+If the implementation is easy to explain, it may be a good idea.
+Namespaces are one honking great idea -- let&#x27;s do more of those!
+
+</code></pre>
+<p>Mas qual a magia de, ao importar o módulo, ele imprimir algo na tela? A mais simples possível! E aqui apresento o código fonte do módulo <code class="prettyprint">this</code>, que se encontra no arquivo <code class="prettyprint">cpython/Lib/this.py</code> no código fonte do <em>Python</em>, nesse caso, na tag <code class="prettyprint">v3.10.0b1</code>:</p>
+<pre><code class="language-python">
+s = &quot;&quot;&quot;Gur Mra bs Clguba, ol Gvz Crgref
+
+Ornhgvshy vf orggre guna htyl.
+Rkcyvpvg vf orggre guna vzcyvpvg.
+Fvzcyr vf orggre guna pbzcyrk.
+Pbzcyrk vf orggre guna pbzcyvpngrq.
+Syng vf orggre guna arfgrq.
+Fcnefr vf orggre guna qrafr.
+Ernqnovyvgl pbhagf.
+Fcrpvny pnfrf nera&#x27;g fcrpvny rabhtu gb oernx gur ehyrf.
+Nygubhtu cenpgvpnyvgl orngf chevgl.
+Reebef fubhyq arire cnff fvyragyl.
+Hayrff rkcyvpvgyl fvyraprq.
+Va gur snpr bs nzovthvgl, ershfr gur grzcgngvba gb thrff.
+Gurer fubhyq or bar-- naq cersrenoyl bayl bar --boivbhf jnl gb qb vg.
+Nygubhtu gung jnl znl abg or boivbhf ng svefg hayrff lbh&#x27;er Qhgpu.
+Abj vf orggre guna arire.
+Nygubhtu arire vf bsgra orggre guna *evtug* abj.
+Vs gur vzcyrzragngvba vf uneq gb rkcynva, vg&#x27;f n onq vqrn.
+Vs gur vzcyrzragngvba vf rnfl gb rkcynva, vg znl or n tbbq vqrn.
+Anzrfcnprf ner bar ubaxvat terng vqrn -- yrg&#x27;f qb zber bs gubfr!&quot;&quot;&quot;
+
+d = {}
+for c in (65, 97):
+    for i in range(26):
+        d[chr(i+c)] = chr((i+13) % 26 + c)
+
+print(&quot;&quot;.join([d.get(c, c) for c in s]))
+
+</code></pre>
+<p>O que explica aquelas variáveis com nome de uma letra só.</p>
+
+<p>Aqui o link direto para a versão na <em>branch</em> main:</p>
+
+<blockquote>
+<p><a href="https://github.com/python/cpython/blob/main/Lib/this.py">https://github.com/python/cpython/blob/main/Lib/this.py</a></p>
+</blockquote>
+
+<p>E leiam os comentários :)</p>
+
+<blockquote>
+<p><a href="https://github.com/python/cpython/commit/63cd9bf4887cd4603ead4db29c772fa370e68a25#diff-814e9669372fdecba7f7f746ae15c44bb49feb15d9f2baac46cb9bb983e67210">https://github.com/python/cpython/commit/63cd9bf4887cd4603ead4db29c772fa370e68a25#diff-814e9669372fdecba7f7f746ae15c44bb49feb15d9f2baac46cb9bb983e67210</a></p>
+</blockquote>
+
+    </div>
+  </article>
+
+
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>
+                O conteúdo e opiniões publicados nesse site são de inteira responsabilidade minha, e não refletem as opiniões e nem são endossados pelo meu empregador.
+            </p>
+                Este blog é gerido pelo <a target="_blank" href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a> e tem o layout dado pelo <a target="_blank" href="https://bulma.io">Bulma</a>.
+            <p>
+                Copyright © 2016-2021, <a target="_blank" href="https://twitter.com/PauloHRPinheiro">Paulo Henrique Rodrigues Pinheiro</a>.
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>

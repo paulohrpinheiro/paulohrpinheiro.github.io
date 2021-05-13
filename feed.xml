@@ -8,10 +8,10 @@
     <language>pt-br</language>
 
     <item>
-      <title>Iniciando com o ORM Pony no Python II - Banco de Dados com Docker</title>
-      <link>https://paulohrpinheiro.xyz/texts/python/2021-05-11-iniciando-com-o-orm-pony-no-python-ii-banco-de-dados-com-docker.html</link>
-      <description>Continuando a jornada com o ORM Pony, agora com outros Banco de Dados, em Docker</description>
-      <pubDate>Tue, 11 May 2021 23:59:59 -0300</pubDate>
+      <title>Decifrando o Zen do Python</title>
+      <link>https://paulohrpinheiro.xyz/texts/python/2021-05-12-decifrando-o-zen-do-python.html</link>
+      <description>Eis que buscando algum conjunto de dados dentro do Python, deparei-me com a verdade sobre o Zen do Python</description>
+      <pubDate>Wed, 12 May 2021 00:00:00 +0000</pubDate>
     </item>
     <item>
       <title>Iniciando com o ORM Pony no Python</title>
