@@ -8,6 +8,12 @@
     <language>pt-br</language>
 
     <item>
+      <title>Iniciando com o ORM Pony no Python III - Erros e Exceções</title>
+      <link>https://paulohrpinheiro.xyz/texts/python/2021-05-16-iniciando-com-o-orm-pony-no-python-iii-erros-e-excecoes.html</link>
+      <description>Seguindo o trilha com o ORM Pony, neste terceiro texto, agora começaremos a gerar situações de erro e ver o que os objetos retornam ou que exceções são geradas.</description>
+      <pubDate>Sun, 16 May 2021 20:00:00 -0300</pubDate>
+    </item>
+    <item>
       <title>Decifrando o Zen do Python</title>
       <link>https://paulohrpinheiro.xyz/texts/python/2021-05-12-decifrando-o-zen-do-python.html</link>
       <description>Eis que buscando algum conjunto de dados dentro do Python, deparei-me com a verdade sobre o Zen do Python</description>
@@ -180,12 +186,6 @@
       <link>https://paulohrpinheiro.xyz/texts/javascript/2018-06-09-hospedagem-javascript-amazon.html</link>
       <description>Como hospedar uma aplicação React (javascript em geral) na Amazon, sem se preocupar com servidores.</description>
       <pubDate>Sat, 9 Jun 2018 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Copiando arquivos em linguagem C</title>
-      <link>https://paulohrpinheiro.xyz/texts/c/2018-06-03-copiando-arquivos-em-linguagem-c.html</link>
-      <description>Analisa-se algumas formas de copiar um arquivo na linguagem C, com mmap, read/write e sendfile, buscando uma abordagem &quot;zero-copy&quot;</description>
-      <pubDate>Sun, 3 Jun 2018 00:00:00 +0000</pubDate>
     </item>
 
   </channel>
