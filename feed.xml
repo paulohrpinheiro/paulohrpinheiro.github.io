@@ -8,10 +8,16 @@
     <language>pt-br</language>
 
     <item>
+      <title>Ambiente para aprendizado</title>
+      <link>https://paulohrpinheiro.xyz/texts/v/2021-11-18-ambiente-para-aprendizado.html</link>
+      <description>Escolhendo, e provavelmente configurando, um ambiente para aprendizado da linguagem V</description>
+      <pubDate>Thu, 18 Nov 2021 18:00:00 -0300</pubDate>
+    </item>
+    <item>
       <title>Livro Engenharia de Software Moderna, de Marco Tulio Valente</title>
       <link>https://paulohrpinheiro.xyz/texts/diversos/2021-08-09-livro-engenharia-de-software-moderna-de-marco-tulio-valente.html</link>
       <description>Impressões sobre o livro do professor Marco Tulio Valente, Engenharia de Software Moderna - Princípios e práticas para desenvolvimento de software com produtividade</description>
-      <pubDate>Mon, 9 Aug 2021 17:00:00 -0300</pubDate>
+      <pubDate>Mon, 9 Aug 2021 00:00:00 +0000</pubDate>
     </item>
     <item>
       <title>Iniciando com o ORM Pony no Python III - Erros e Exceções</title>
@@ -168,24 +174,6 @@
       <link>https://paulohrpinheiro.xyz/texts/python/2018-07-28-data-science-do-zero-conexoes-com-nossas-conexoes.html</link>
       <description>Agora implementamos a busca por pessoas que possuam conexões com nossas conexões</description>
       <pubDate>Sat, 28 Jul 2018 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>O prazer da leitura de livros impressos</title>
-      <link>https://paulohrpinheiro.xyz/texts/diversos/2018-07-27-o-prazer-de-ler-livros-impressos.html</link>
-      <description>Leituras novas que me lembraram antigas</description>
-      <pubDate>Fri, 27 Jul 2018 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Mockando o que tá meio mockado</title>
-      <link>https://paulohrpinheiro.xyz/texts/python/2018-07-09-mockando-o-que-tah-meio-mockado.html</link>
-      <description>Um mock especial para Python unittest</description>
-      <pubDate>Mon, 9 Jul 2018 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Suporte a loops aninhados em meu interpretador BrainFuck</title>
-      <link>https://paulohrpinheiro.xyz/texts/go/2018-07-02-loops-aninhados-mfbil.html</link>
-      <description>Continuando o projeto de fazer um interpretador brainfuck em GO</description>
-      <pubDate>Mon, 2 Jul 2018 00:00:00 +0000</pubDate>
     </item>
 
   </channel>

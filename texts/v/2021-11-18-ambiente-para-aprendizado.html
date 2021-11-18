@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Ambiente para aprendizado</title>
+
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" >
+
+  <meta name="description" content="Escolhendo, e provavelmente configurando, um ambiente para aprendizado da linguagem V">
+  <meta name="author" content="Paulo Henrique Rodrigues Pinheiro">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!" href="https://paulohrpinheiro.xyz/feed.xml">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+  <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+
+  <link rel=icon href="/favicon.ico" sizes="16x16" type="image/png">
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/normalize.css">
+</head>
+
+<body>
+  <section class="section">
+    <div class="container">
+      <h1 class="title is-1">
+        Paulo Henrique Rodrigues Pinheiro
+      </h1>
+      <p class="subtitle is-3">
+        Um blog sobre programação para programadores!
+      </p>
+    </div>
+  </section>
+
+
+
+     <div class="container">
+        
+		<nav class="level">
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/">HOME</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/c/">c</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/diversos/">diversos</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/go/">go</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/haskell/">haskell</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/javascript/">javascript</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/perl/">perl</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">programadorbipolar</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/prosaeverso/">prosaeverso</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/python/">python</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/ruby/">ruby</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/rust/">rust</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/server/">server</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/v/">v</a>
+			</p>
+		</nav>
+	</div>
+
+    <hr>
+
+
+  <article class="container">
+    <div class="content">
+        <h2>Ambiente para aprendizado</h2>
+
+<h3>Escolhendo, e provavelmente configurando, um ambiente para aprendizado da linguagem V</h3>
+
+<p><img src="images/veasel.png" alt="veasel"></p>
+
+<h4>Escolhendo um lugar para aprender</h4>
+
+<p>Anteriormente, nesse blog, experimentei a linguagem, de forma afoita, escrevendo um interpretador de <em>Brainfuck</em>:</p>
+
+<p><a href="https://paulohrpinheiro.xyz/texts/diversos/2021-04-18-brainf_ck-em-linguagem-v.html">https://paulohrpinheiro.xyz/texts/diversos/2021-04-18-brainf_ck-em-linguagem-v.html</a></p>
+
+<p>e</p>
+
+<p><a href="https://paulohrpinheiro.xyz/texts/diversos/2021-04-25-brainf_ck-em-linguagem-de-programacao-v-sprint-ii.html">https://paulohrpinheiro.xyz/texts/diversos/2021-04-25-brainf_ck-em-linguagem-de-programacao-v-sprint-ii.html</a></p>
+
+<p>Mas agora quero ir aos detalhes da linguagem.</p>
+
+<p>Tenho um <em>backlog</em> com textos sobre a linguagem <em>V</em>, e quero deixar já resolvida a questão de como brincar na linguagem. Então aqui seguem alguns métodos para poder lidar com essa questão.</p>
+
+<h4>O Playground online</h4>
+
+<p>O mais fácil, é o <em>playgraound online</em>. basta acessar o endereço disponibilizado pelo <em>site</em> oficial da linguagem:</p>
+
+<p><a href="https://play.vlang.io">https://play.vlang.io</a></p>
+
+<p>Porém, há um preço a se pagar: não estaremos em um <em>shell</em> (REPL - <strong>R</strong>ead, <strong>E</strong>val, <strong>P</strong>rint, <strong>L</strong>oop). O que for digitado lá será compilado e não simplesmente avaliado e executado, portando, não teremos o benefício de uma resposta das expressões digitadas. Sempre se deve usar a função <em>println()</em>, como nesse exemplo:</p>
+
+<p><img src="images/playground.png" alt="playground"></p>
+
+<h4>Baixar o compilador compilado</h4>
+
+<p>Forcei a barra no termo &quot;compilador&quot;. Quando se compila <em>V</em>, gera-se um binário apenas, como se pode imaginar, <code class="prettyprint">v</code>, que tem múltiplas funções, dentre elas, de compilador e interpretador.</p>
+
+<p>Pode-se baixar um pacote de:</p>
+
+<p><a href="https://vlang.io/">https://vlang.io/</a></p>
+
+<p>E descompactar em <code class="prettyprint">/usr/local</code>, por exemplo:</p>
+<pre><code class="language-v">
+$ cd &#x2F;usr&#x2F;local
+$ sudo unzip ~&#x2F;Downloads&#x2F;v_linux.zip
+
+</code></pre>
+<p>E ajustar a variável de ambiente <code class="prettyprint">PATH</code> (acrescentar no arquivo <code class="prettyprint">~/.bashrc</code>):</p>
+<pre><code class="language-v">
+export PATH=&#x2F;usr&#x2F;local&#x2F;v:$PATH
+
+</code></pre>
+<p>Para ver se está tudo está funcionando:</p>
+<pre><code class="language-v">
+$ v version
+V 0.2.4 08667c5
+
+</code></pre>
+<h4>Compilar o compilador localmente</h4>
+
+<p>Pode-se baixar o código-fonte e compilar localmente. Basta ter os pacotes de compilação instalados em sua máquina.</p>
+
+<p>Instruções para cada plataforma estão em:</p>
+
+<p><a href="https://github.com/vlang/v/blob/master/doc/docs.md#install-from-source">https://github.com/vlang/v/blob/master/doc/docs.md#install-from-source</a></p>
+
+<p>No meu caso, um <em>Fedora GNU/Linux</em>, bastaram os comandos:</p>
+<pre><code class="language-v">
+git clone https:&#x2F;&#x2F;github.com&#x2F;vlang&#x2F;v
+cd v
+make
+
+</code></pre>
+<p>Uma vez compilado, minha sugestão é adicionar o binário compilado ao <code class="prettyprint">PATH</code> do seu ambiente. No meu caso, adicionei ao meu <code class="prettyprint">.bashrc</code> a seguinte linha:</p>
+<pre><code class="language-v">
+export PATH=~&#x2F;repo&#x2F;v:$PATH
+
+</code></pre>
+<p>Em que <code class="prettyprint">~/repo/v</code> é a localização do clone que fiz do repositório da linguagem em minha máquina.</p>
+
+<p>Para saber se está tudo certo, além do comando <code class="prettyprint">export</code> acima:</p>
+<pre><code class="language-v">
+$ v version
+V 0.2.4 3bb1c3f
+
+</code></pre>
+<p>Entremos no interpretador:</p>
+<pre><code class="language-v">
+$ v
+Welcome to the V REPL (for help with V itself, type  exit , then run  v help ).
+  NB: the REPL is highly experimental. For best V experience, use a text editor,
+  save your code in a  main.v  file and execute:  v run main.v 
+V 0.2.4 3bb1c3f
+Use Ctrl-C or  exit  to exit, or  help  to see other available commands
+&gt;&gt;&gt;
+
+</code></pre>
+<p>E vamos para um teste:</p>
+<pre><code class="language-v">
+&gt;&gt;&gt; println(&#x27;Hello, world!&#x27;.len)
+13
+&gt;&gt;&gt; &#x27;Hello, world!&#x27;.len
+13
+&gt;&gt;&gt;
+
+</code></pre>
+<p>Como se pode ver, não é necessária a função <code class="prettyprint">println()</code>.</p>
+
+<h4>Uma imagem docker</h4>
+
+<p>Por fim, a solução da moda. Pode-se baixar uma imagem <code class="prettyprint">docker</code>, contendo o compilador, e usá-la localmente. Aqui está o endereço:</p>
+
+<p><a href="https://hub.docker.com/r/thevlang/vlang/">https://hub.docker.com/r/thevlang/vlang/</a></p>
+
+<p>e o projeto:</p>
+
+<p><a href="https://github.com/vlang/docker">https://github.com/vlang/docker</a></p>
+
+<p>Vamos pegar a imagem com um pull:</p>
+<pre><code class="language-v">
+$ docker pull thevlang&#x2F;vlang
+Using default tag: latest
+latest: Pulling from thevlang&#x2F;vlang
+345e3491a907: Pull complete 
+57671312ef6f: Pull complete 
+5e9250ddb7d0: Pull complete 
+6121d3482abd: Pull complete 
+da03d038916f: Pull complete 
+d1636663eb2b: Pull complete 
+49a3d9c244d1: Pull complete 
+7f8f45f28e82: Pull complete 
+Digest: sha256:f2f2f6a23f9524d0e388919b6508407b20ef10c4f4755b370c478c718f62eac6
+Status: Downloaded newer image for thevlang&#x2F;vlang:latest
+docker.io&#x2F;thevlang&#x2F;vlang:latest
+
+</code></pre>
+<p>Depois disso, pelo menos em meu caso, estou apenas com essa imagem:</p>
+<pre><code class="language-v">
+$ docker images
+REPOSITORY       TAG       IMAGE ID       CREATED        SIZE
+thevlang&#x2F;vlang   latest    45c37aed7297   13 hours ago   784MB
+
+</code></pre>
+<p>Por fim, executemos essa imagem:</p>
+<pre><code class="language-v">
+$ docker run -it --name v-container thevlang&#x2F;vlang &#x2F;bin&#x2F;bash
+root@8dc316e20594:&#x2F;opt&#x2F;vlang#  
+
+</code></pre>
+<p>E o interpretador:</p>
+<pre><code class="language-v">
+root@8dc316e20594:&#x2F;opt&#x2F;vlang# v
+Welcome to the V REPL (for help with V itself, type  exit , then run  v help ).
+  NB: the REPL is highly experimental. For best V experience, use a text editor,
+  save your code in a  main.v  file and execute:  v run main.v 
+V 0.2.4 3b61289
+Use Ctrl-C or  exit  to exit, or  help  to see other available commands
+&gt;&gt;&gt; &quot;agora no docker&quot;[6..]
+no docker
+&gt;&gt;&gt; 
+
+</code></pre>
+<p>Caso a imagem já esteja em execução, ou queira abrir outro terminal, pode-se executar o seguinte comando:</p>
+<pre><code class="language-v">
+docker attach v-container &#x2F;opt&#x2F;vlang&#x2F;v
+
+</code></pre>
+<p>E já cai no <em>shell</em> da linguagem <em>V</em>.</p>
+
+<p>Caso queira apagar a imagem, primeiro pare a execução:</p>
+<pre><code class="language-v">
+docker rm v-container
+
+</code></pre>
+<p>e então procure o identificador da imagem (nesse caso <strong>45c37aed7297</strong>):</p>
+<pre><code class="language-v">
+$ docker images
+REPOSITORY       TAG       IMAGE ID       CREATED        SIZE
+thevlang&#x2F;vlang   latest    45c37aed7297   14 hours ago   784MB
+
+</code></pre>
+<p>para então apagá-la:</p>
+<pre><code class="language-v">
+$ docker rmi 45c37aed7297
+Untagged: thevlang&#x2F;vlang:latest
+Untagged: thevlang&#x2F;    vlang@sha256:f2f2f6a23f9524d0e388919b6508407b20ef10c4f4755b370c478c718f62eac6
+Deleted: sha256:45c37aed729760e4f85ec576b08b7126e7868430cb651a8b63c8362ad3e2167f
+Deleted: sha256:eb12223919334d84fa2e07389bff2d48f3418ab39e283a055c6909dfde66f33c
+Deleted: sha256:b60d87225dc013986774d523eedb1798195d5bdb218075070af9090bb03be82b
+Deleted: sha256:6e84df1918f1cfe7916c5fb3689f56f460f949dae370785946be2c101f717cd2
+Deleted: sha256:4e9a4223881bd83bdb4b859ae1626482f605c2170c3305bb47185dec67d488cb
+Deleted: sha256:f6b7a0804d2d66f8e7ff53d011906c2e8c3c178f0498cfea0d9f9619abaecbd9
+Deleted: sha256:3dd8c8d4fd5b59d543c8f75a67cdfaab30aef5a6d99aea3fe74d8cc69d4e7bf2
+Deleted: sha256:8d8dceacec7085abcab1f93ac1128765bc6cf0caac334c821e01546bd96eb741
+Deleted: sha256:ccdbb80308cc5ef43b605ac28fac29c6a597f89f5a169bbedbb8dec29c987439
+
+</code></pre>
+<h4>O método que eu gostaria</h4>
+
+<p>Eu uso o <a href="https://asdf-vm.com/">asdf</a> para instalar linguagens e suas diversas versões, mas não consegui fazer isso para a linguagem <em>V</em>, por conta de um erro de compilação.</p>
+
+<p>O processo é, primeiro instala-se o <em>plugin</em> da linguagem:</p>
+<pre><code class="language-v">
+asdf plugin-add v
+
+</code></pre>
+<p>Depois instala-se a linguagem, na versão desejada:</p>
+<pre><code class="language-v">
+asdf install v latest
+
+</code></pre>
+<p>E indica-se que desejamos usar essa versão globalmente:</p>
+<pre><code class="language-v">
+asdf global v latest 
+
+</code></pre>
+<p>Mas pode ser que apenas &quot;na minha máquina não funciona&quot;. Qualquer novidade, atualizações aqui e em minhas contas nas redes.</p>
+
+    </div>
+  </article>
+
+
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>
+                O conteúdo e opiniões publicados nesse site são de inteira responsabilidade minha, e não refletem as opiniões e nem são endossados pelo meu empregador.
+            </p>
+                Este blog é gerido pelo <a target="_blank" href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a> e tem o layout dado pelo <a target="_blank" href="https://bulma.io">Bulma</a>.
+            <p>
+                Copyright © 2016-2021, <a target="_blank" href="https://twitter.com/PauloHRPinheiro">Paulo Henrique Rodrigues Pinheiro</a>.
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>

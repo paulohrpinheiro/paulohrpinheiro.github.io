@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+
+<rss version="2.0">
+  <channel>
+    <title>Paulo Henrique Rodrigues Pinheiro</title>
+    <link>https://paulohrpinheiro.xyz</link>
+    <description>Blog sobre programação para programadores</description>
+    <language>pt-br</language>
+
+    <item>
+      <title>Ambiente para aprendizado</title>
+      <link>https://paulohrpinheiro.xyz/texts/v/2021-11-18-ambiente-para-aprendizado.html</link>
+      <description>Escolhendo, e provavelmente configurando, um ambiente para aprendizado da linguagem V</description>
+      <pubDate>Thu, 18 Nov 2021 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Um Interpretador Brainfuck em Linguagem de programação V - Sprint II</title>
+      <link>https://paulohrpinheiro.xyz/texts/v/2021-04-25-brainf_ck-em-linguagem-de-programacao-v-sprint-ii.html</link>
+      <description>Seguindo a saga do interpretador Brainfuck em linguagem de programação V, agora na Sprint II</description>
+      <pubDate>Sun, 25 Apr 2021 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Um Interpretador Brainfuck em Linguagem V</title>
+      <link>https://paulohrpinheiro.xyz/texts/v/2021-04-18-brainf_ck-em-linguagem-v.html</link>
+      <description>Mais uma implementação de Brainfuck, como desculpa para aprender a linguagem V</description>
+      <pubDate>Sun, 18 Apr 2021 00:00:00 +0000</pubDate>
+    </item>
+
+  </channel>
+</rss>
