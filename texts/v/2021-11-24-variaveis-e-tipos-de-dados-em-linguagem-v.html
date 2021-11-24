@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Variáveis e tipos de dados em linguagem V</title>
+
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" >
+
+  <meta name="description" content="Dando uma passada pelas variáveis e tipos de dados de dados da linguagem V">
+  <meta name="author" content="Paulo Henrique Rodrigues Pinheiro">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores e sysadmins!" href="https://paulohrpinheiro.xyz/feed.xml">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+  <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+
+  <link rel=icon href="/favicon.ico" sizes="16x16" type="image/png">
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/normalize.css">
+</head>
+
+<body>
+  <section class="section">
+    <div class="container">
+      <h1 class="title is-1">
+        Paulo Henrique Rodrigues Pinheiro
+      </h1>
+      <p class="subtitle is-3">
+        Um blog sobre programação para programadores!
+      </p>
+    </div>
+  </section>
+
+
+
+     <div class="container">
+        
+		<nav class="level">
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/">HOME</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/c/">c</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/diversos/">diversos</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/go/">go</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/haskell/">haskell</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/javascript/">javascript</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/perl/">perl</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">programadorbipolar</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/prosaeverso/">prosaeverso</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/python/">python</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/ruby/">ruby</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/rust/">rust</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/server/">server</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/v/">v</a>
+			</p>
+		</nav>
+	</div>
+
+    <hr>
+
+
+  <article class="container">
+    <div class="content">
+        <h2>Variáveis e tipos de dados em linguagem V</h2>
+
+<h3>Dando uma passada pelas variáveis e tipos de dados de dados da linguagem V</h3>
+
+<p><img src="images/tipos.png" alt="Tipos primitivos"></p>
+
+<blockquote>
+<p>https://github.com/vlang/v/blob/master/doc/docs.md#v-types</p>
+</blockquote>
+
+<p>Já temos <a href="https://paulohrpinheiro.xyz/texts/diversos/2021-04-18-brainf_ck-em-linguagem-v.html">um primeiro programa em <code class="prettyprint">V</code></a> e <a href="https://paulohrpinheiro.xyz/texts/v/2021-11-18-ambiente-para-aprendizado.html">como fazer testes e experimentos</a>, agora vamos começar a esmiuçar a linguagem.</p>
+
+<h4>Estaticamente tipada e imutável</h4>
+
+<p><em>V</em> é estaticamente tipada, ou seja, uma variável deve ter um tipo declarado e isso não mudará, além disso, imutável. Quando for necessário que uma variável tenha seu valor alterado, deve-se declarar essa intenção com o modificador <code class="prettyprint">mut</code>:</p>
+<pre><code class="language-v">
+mut a := 10
+
+</code></pre>
+<p>Ponto importante: em <code class="prettyprint">V</code>, variáveis sempre tem um valor inicial explícito.</p>
+
+<p>Além disso, como se percebe acima, <em>V</em> é capaz de inferir o tipo das variáveis na declaração. Nesse caso, <code class="prettyprint">int</code>: um tipo de 32 <code class="prettyprint">bits</code> com sinal, que é o tipo padrão para inteiros. Para ponto flutuante o tipo padrão é <code class="prettyprint">f64</code>.</p>
+
+<p>Outro ponto a perceber é que <code class="prettyprint">:=</code> é um operador de declaração e inicialização. Para atribuição apenas, depois de declarada a variável, usa-se <code class="prettyprint">=</code>. Para comparação de igualdade, <code class="prettyprint">==</code>.</p>
+
+<p>Testemos no interpretador (ver o <a href="https://paulohrpinheiro.xyz/texts/v/2021-11-18-ambiente-para-aprendizado.html">texto anterior</a>).</p>
+
+<p>Aqui a variável <code class="prettyprint">a</code> é imutável:</p>
+<pre><code class="language-v">
+&gt;&gt;&gt; a := 1
+&gt;&gt;&gt; a = a + 1
+error: `a` is immutable, declare it with `mut` to make it mutable
+    6 | 
+    7 | a := 1
+    8 | a = a + 1
+      | ^
+
+</code></pre>
+<p>E aqui <code class="prettyprint">b</code> é mutável:</p>
+<pre><code class="language-v">
+&gt;&gt;&gt; mut b := 2
+&gt;&gt;&gt; b = b + 1
+&gt;&gt;&gt; b
+3
+
+</code></pre>
+<h4>Tipos inteiros</h4>
+
+<p>Os tipos inteiros com sinal são:</p>
+
+<ul>
+<li>i8</li>
+<li>i16</li>
+<li>int</li>
+<li>i64</li>
+</ul>
+
+<p>e sem sinal:</p>
+
+<ul>
+<li>byte</li>
+<li>u16</li>
+<li>u32</li>
+<li>u64</li>
+</ul>
+
+<p>E, planejados, teremos:</p>
+
+<ul>
+<li>i128</li>
+<li>u128</li>
+</ul>
+
+<p>Para forçar um tipo específico na declaração, pode-se fazer dessa maneira:</p>
+<pre><code class="language-v">
+c := i16(10)
+
+</code></pre>
+<p>Em <em>V</em> o tipo <code class="prettyprint">int</code> sempre será um inteiro com sinal de 32 <code class="prettyprint">bits</code>, independente da plataforma utilizada.</p>
+
+<p>Para facilitar a leitura, pode-se adicionar o caracter <code class="prettyprint">_</code> entre qualquer dígito de um número, como, por exemplo:</p>
+<pre><code class="language-v">
+&gt;&gt;&gt; d := 1_000_000
+&gt;&gt;&gt; d
+1000000
+
+</code></pre>
+<p>Os números não precisam ser informados em decimal apenas, também é possível explicitá-los em binário (prefixo <code class="prettyprint">0b</code>), octal (prefixo <code class="prettyprint">0o</code>), e hexadecimal (prefixo <code class="prettyprint">0x</code>):</p>
+<pre><code class="language-v">
+&gt;&gt;&gt; mut e := 0x010111
+&gt;&gt;&gt; e
+65809
+&gt;&gt;&gt; e = 0o724
+&gt;&gt;&gt; e
+468
+&gt;&gt;&gt; e = 0xff
+&gt;&gt;&gt; 255
+
+</code></pre>
+<h4>Ponto flutuante</h4>
+
+<p>Como anteriormente dito, o tipo padrão para um número em ponto flutuante é o <code class="prettyprint">f64</code>:</p>
+<pre><code class="language-v">
+f := 10.3
+
+</code></pre>
+<p>Ou, se necessário, forçando o tipo:</p>
+<pre><code class="language-v">
+g := f32(11.4)
+
+</code></pre>
+<p>Sempre lembrando que, caso necessário, uma variável seja mutável, só adicionar o modificador <code class="prettyprint">mut</code>:</p>
+<pre><code class="language-v">
+mut h := 9.81
+
+</code></pre>
+<h4>Lógico</h4>
+
+<p>Há o tipo para operações lógicas, <code class="prettyprint">bool</code>, que pode ter os valores <code class="prettyprint">true</code> ou <code class="prettyprint">false</code>:</p>
+<pre><code class="language-v">
+&gt;&gt;&gt; mut i := false
+&gt;&gt;&gt; i = !i
+&gt;&gt;&gt; i
+true
+
+</code></pre>
+<h4>Runas</h4>
+
+<p>Sempre tenho que dar um jeito de citar o livro a seguir, então aqui vai: para os que, como eu, sempre tem que recapitular sobre Unicode, UTF-8 e runas, recomendo a breve e clara explicação dada na já clássica obra <a href="https://novatec.com.br/livros/linguagem-de-programacao-go/"><code class="prettyprint">A linguagem de Programação GO</code> de Donovan &amp; Kerhighan, aqui no Brasil publicada pela Novatec</a>, pp. 104-8.</p>
+
+<p>Feito isso (eu fiz isso quando, novamente, deparei-me com o assunto), vamos ao tipo <code class="prettyprint">rune</code> em <em>V</em>.</p>
+
+<p>Pode-se digitar o código, especificando-se tipo:</p>
+<pre><code class="language-v">
+&gt;&gt;&gt; j := rune(0x1F408)
+&gt;&gt;&gt; j
+🐈
+
+</code></pre>
+<p>Ou então, passar a runa explicitamente, usando-se aspas invertidas, como em:</p>
+<pre><code class="language-v">
+k := `🦛`
+
+</code></pre>
+<p>Em <em>V</em>, o tipo <code class="prettyprint">rune</code> sempre será um <em>alias</em> para <code class="prettyprint">u32</code>.</p>
+
+<h4>Strings</h4>
+
+<p>A linguagem <em>V</em> reconhece a declaração de variáveis do tipo <code class="prettyprint">string</code> pelo uso aspas simples ou duplas, como em:</p>
+<pre><code class="language-v">
+&gt;&gt;&gt; l := &#x27;éle&#x27;
+&gt;&gt;&gt; m := &quot;ême&quot;
+&gt;&gt;&gt; l
+éle
+&gt;&gt;&gt; m
+ême
+
+</code></pre>
+<p>Fato importante, é que uma <em>string</em> é um <em>array</em> de <em>bytes</em>. Portante, se tivermos um <em>emoji</em> (runa) no meio, serão quatro bytes, ou fazendo as contas, três bytes a mais, por exemplo:</p>
+<pre><code class="language-v">
+&gt;&gt;&gt; n := &#x27;prato de 🍝&#x27;
+&gt;&gt;&gt; n.len
+13
+&gt;&gt;&gt; arr := n.bytes()
+&gt;&gt;&gt; arr.len
+13
+&gt;&gt;&gt; n_runes := n.runes()
+&gt;&gt;&gt; n_runes.len
+10
+
+</code></pre>
+<p>Como dito, são usados 13 <em>bytes</em>, para 10 runas ou, apedrejem-me, caracteres.</p>
+
+<p>Elementos de uma string podem ser facilmente acessados via <em>slices</em>:</p>
+<pre><code class="language-v">
+&gt;&gt;&gt; o := &#x27;paralelepípedo&#x27;
+&gt;&gt;&gt; o[0..4]
+para
+&gt;&gt;&gt; o[0]
+112
+
+</code></pre>
+<p>Opa, e esse <code class="prettyprint">112</code> aí? Lembremos que uma <em>string</em> em <em>V</em> é um <em>array</em> de <em>bytes</em>, portanto de valores inteiros. Para saber qual o &quot;caractere&quot; da posição 0, pode-se fazer:</p>
+<pre><code class="language-v">
+&gt;&gt;&gt; o[0].ascii_str()
+p
+
+</code></pre>
+<p>Mas cuidado! Como mostrado anteriormente, pode-se ter uma runa no meio do caminho.</p>
+
+<h4>Outros tipos</h4>
+
+<p>Temos ainda outros tipos para operações mais complexas, como interface com bibliotecas <em>C</em>:</p>
+
+<ul>
+<li><code class="prettyprint">voidptr</code></li>
+</ul>
+
+<p>E tipos dependentes de plataforma, que comportam a quantidade de <em>bytes</em> necessárias para a referenciar uma alocação de memória:</p>
+
+<ul>
+<li><code class="prettyprint">isize</code></li>
+<li><code class="prettyprint">usize</code></li>
+</ul>
+
+<p>e tratamento em interfaces:</p>
+
+<ul>
+<li><code class="prettyprint">any</code></li>
+</ul>
+
+<h4>Planning</h4>
+
+<p>O plano agora é passar para listas e mapas e ir aprofundando cada tipo quando começarmos com a estrutura dos programas em <code class="prettyprint">V</code>.</p>
+
+    </div>
+  </article>
+
+
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>
+                O conteúdo e opiniões publicados nesse site são de inteira responsabilidade minha, e não refletem as opiniões e nem são endossados pelo meu empregador.
+            </p>
+                Este blog é gerido pelo <a target="_blank" href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a> e tem o layout dado pelo <a target="_blank" href="https://bulma.io">Bulma</a>.
+            <p>
+                Copyright © 2016-2021, <a target="_blank" href="https://twitter.com/PauloHRPinheiro">Paulo Henrique Rodrigues Pinheiro</a>.
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>
