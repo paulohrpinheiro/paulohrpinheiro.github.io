@@ -8,10 +8,22 @@
     <language>pt-br</language>
 
     <item>
+      <title>O capitão carniceiro</title>
+      <link>https://paulohrpinheiro.xyz/texts/paremias/2022-03-12-o-capitao-carniceiro.html</link>
+      <description></description>
+      <pubDate>Sat, 12 Mar 2022 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>O massacre dos inocentes</title>
+      <link>https://paulohrpinheiro.xyz/texts/paremias/2021-12-18-o-massacre-dos-inocentes.html</link>
+      <description></description>
+      <pubDate>Sat, 18 Dec 2021 00:00:00 +0000</pubDate>
+    </item>
+    <item>
       <title>Variáveis e tipos de dados em linguagem V</title>
       <link>https://paulohrpinheiro.xyz/texts/v/2021-11-24-variaveis-e-tipos-de-dados-em-linguagem-v.html</link>
       <description>Dando uma passada pelas variáveis e tipos de dados de dados da linguagem V</description>
-      <pubDate>Wed, 24 Nov 2021 09:00:00 -0300</pubDate>
+      <pubDate>Wed, 24 Nov 2021 00:00:00 +0000</pubDate>
     </item>
     <item>
       <title>Ambiente para aprendizado</title>
@@ -24,6 +36,12 @@
       <link>https://paulohrpinheiro.xyz/texts/diversos/2021-08-09-livro-engenharia-de-software-moderna-de-marco-tulio-valente.html</link>
       <description>Impressões sobre o livro do professor Marco Tulio Valente, Engenharia de Software Moderna - Princípios e práticas para desenvolvimento de software com produtividade</description>
       <pubDate>Mon, 9 Aug 2021 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>O Messias invertido</title>
+      <link>https://paulohrpinheiro.xyz/texts/paremias/2021-07-04-o-messias-invertido.html</link>
+      <description></description>
+      <pubDate>Sun, 4 Jul 2021 00:00:00 +0000</pubDate>
     </item>
     <item>
       <title>Iniciando com o ORM Pony no Python III - Erros e Exceções</title>
@@ -51,9 +69,21 @@
     </item>
     <item>
       <title>Um Interpretador Brainfuck em Linguagem de programação V - Sprint II</title>
+      <link>https://paulohrpinheiro.xyz/texts/v/2021-04-25-brainf_ck-em-linguagem-de-programacao-v-sprint-ii.html</link>
+      <description>Seguindo a saga do interpretador Brainfuck em linguagem de programação V, agora na Sprint II</description>
+      <pubDate>Sun, 25 Apr 2021 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Um Interpretador Brainfuck em Linguagem de programação V - Sprint II</title>
       <link>https://paulohrpinheiro.xyz/texts/diversos/2021-04-25-brainf_ck-em-linguagem-de-programacao-v-sprint-ii.html</link>
       <description>Seguindo a saga do interpretador Brainfuck em linguagem de programação V, agora na Sprint II</description>
       <pubDate>Sun, 25 Apr 2021 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Um Interpretador Brainfuck em Linguagem V</title>
+      <link>https://paulohrpinheiro.xyz/texts/v/2021-04-18-brainf_ck-em-linguagem-v.html</link>
+      <description>Mais uma implementação de Brainfuck, como desculpa para aprender a linguagem V</description>
+      <pubDate>Sun, 18 Apr 2021 00:00:00 +0000</pubDate>
     </item>
     <item>
       <title>Um Interpretador Brainfuck em Linguagem V</title>
@@ -104,6 +134,12 @@
       <pubDate>Mon, 18 Feb 2019 00:00:00 +0000</pubDate>
     </item>
     <item>
+      <title>O fascismo está aí, por enquanto</title>
+      <link>https://paulohrpinheiro.xyz/texts/paremias/2019-02-06-o-fascismo-esta-ai-por-enquanto.html</link>
+      <description></description>
+      <pubDate>Wed, 6 Feb 2019 00:00:00 +0000</pubDate>
+    </item>
+    <item>
       <title>Sobre os processos de seleção em TI</title>
       <link>https://paulohrpinheiro.xyz/texts/diversos/2019-01-20-sobre-os-processos-de-selecao-em-ti.html</link>
       <description>O que se deve buscar e o que se deve esperar num processo seletivo</description>
@@ -150,30 +186,6 @@
       <link>https://paulohrpinheiro.xyz/texts/diversos/2018-08-31-sobre-a-carreira-de-desenvolvedor-de-software.html</link>
       <description>Algumas questões que me vieram à cabeça escutando uma palestra sobre carreira</description>
       <pubDate>Fri, 31 Aug 2018 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Usando Python no Google Cloud Functions, rumo ao serverless</title>
-      <link>https://paulohrpinheiro.xyz/texts/python/2018-08-26-google-cloud-functions-com-python.html</link>
-      <description>Um breve teste de conceito para ver &quot;qualé&quot; do Google Cloud Functions e dessa ideia de serverless</description>
-      <pubDate>Sun, 26 Aug 2018 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Liberada nova versão do GeraBlog (0.2.0)</title>
-      <link>https://paulohrpinheiro.xyz/texts/ruby/2018-08-25-nova-versao-do-gerablog.html</link>
-      <description></description>
-      <pubDate>Sat, 25 Aug 2018 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Sobre o livro &quot;Orientação a Objetos e SOLID para Ninjas&quot;</title>
-      <link>https://paulohrpinheiro.xyz/texts/diversos/2018-08-13-livro-orientacao-a-objetos-e-solid-para-ninjas-projetando-classes-flexiveis.html</link>
-      <description>Uma primeira impressão sobre a obra de Maurício Aniche, &quot;Orientação a Objetos e SOLID para Ninjas - projetando classes flexíveis&quot;</description>
-      <pubDate>Mon, 13 Aug 2018 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Quase um deploy contínuo!</title>
-      <link>https://paulohrpinheiro.xyz/texts/javascript/2018-08-03-quase-um-deploy-continuo.html</link>
-      <description>Ainda não é um deploy contínuo (mas falta um pouquinho): usando os triggers do pipeline no Bitbucket.</description>
-      <pubDate>Fri, 3 Aug 2018 00:00:00 +0000</pubDate>
     </item>
 
   </channel>
