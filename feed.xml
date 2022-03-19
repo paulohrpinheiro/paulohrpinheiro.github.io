@@ -8,6 +8,12 @@
     <language>pt-br</language>
 
     <item>
+      <title>A Guetização da Burguesia</title>
+      <link>https://paulohrpinheiro.xyz/texts/paremias/2022-03-18-a-guetizacao-da-burguesia.html</link>
+      <description></description>
+      <pubDate>Fri, 18 Mar 2022 00:00:00 +0000</pubDate>
+    </item>
+    <item>
       <title>Gostosa</title>
       <link>https://paulohrpinheiro.xyz/texts/paremias/2022-03-13-gostosa.html</link>
       <description></description>
@@ -180,12 +186,6 @@
       <link>https://paulohrpinheiro.xyz/texts/go/2018-10-05-csv-para-json-com-linguagem-go.html</link>
       <description>Nesse texto será apresentado um exemplo de como como converter um arquivo CSV para JSON em linguagem GO.</description>
       <pubDate>Fri, 5 Oct 2018 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Testes na linguagem GO</title>
-      <link>https://paulohrpinheiro.xyz/texts/go/2018-09-24-testes-na-linguagem-go.html</link>
-      <description>Como fazer TDD em GOLANG!</description>
-      <pubDate>Mon, 24 Sep 2018 00:00:00 +0000</pubDate>
     </item>
 
   </channel>
