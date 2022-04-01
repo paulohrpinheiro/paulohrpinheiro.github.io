@@ -8,6 +8,12 @@
     <language>pt-br</language>
 
     <item>
+      <title>Primeiro de Abril</title>
+      <link>https://paulohrpinheiro.xyz/texts/paremias/2022-04-01-primeiro-de-abril.html</link>
+      <description></description>
+      <pubDate>Fri, 1 Apr 2022 00:00:00 +0000</pubDate>
+    </item>
+    <item>
       <title>Um século</title>
       <link>https://paulohrpinheiro.xyz/texts/paremias/2022-03-25-um-seculo.html</link>
       <description></description>
@@ -180,12 +186,6 @@
       <link>https://paulohrpinheiro.xyz/texts/python/2019-01-02-feature-toggles-com-django-waffle.html</link>
       <description>Feature toggles: ativando e desativando comportamentos em um sistema sem alterar o código, usando django-waffle.</description>
       <pubDate>Wed, 2 Jan 2019 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>DevFest Campinas 2018</title>
-      <link>https://paulohrpinheiro.xyz/texts/diversos/2018-11-25-devfest-campinas-2018.html</link>
-      <description>Sobre um grande encontro de desenvolvedores em Campinas/SP</description>
-      <pubDate>Sun, 25 Nov 2018 00:00:00 +0000</pubDate>
     </item>
 
   </channel>
