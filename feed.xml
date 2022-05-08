@@ -8,6 +8,12 @@
     <language>pt-br</language>
 
     <item>
+      <title>Todo dia saem de suas casas um otário e um malandro...</title>
+      <link>https://paulohrpinheiro.xyz/texts/paremias/2022-05-08-todo-dia-saem-de-casa-um-otario-e-um-malandro.html</link>
+      <description></description>
+      <pubDate>Sun, 8 May 2022 00:00:00 +0000</pubDate>
+    </item>
+    <item>
       <title>Gramsci</title>
       <link>https://paulohrpinheiro.xyz/texts/paremias/2022-04-27-gramsci.html</link>
       <description></description>
@@ -180,12 +186,6 @@
       <link>https://paulohrpinheiro.xyz/texts/go/2019-02-18-gerando-imagens-em-go-com-biblioteca-padrao.html</link>
       <description>Como gerar arquivos com imagens PNG na linguagem GO, usando apenas a biblioteca padrão</description>
       <pubDate>Mon, 18 Feb 2019 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>O fascismo está aí, por enquanto</title>
-      <link>https://paulohrpinheiro.xyz/texts/paremias/2019-02-06-o-fascismo-esta-ai-por-enquanto.html</link>
-      <description></description>
-      <pubDate>Wed, 6 Feb 2019 00:00:00 +0000</pubDate>
     </item>
 
   </channel>
