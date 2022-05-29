@@ -8,6 +8,12 @@
     <language>pt-br</language>
 
     <item>
+      <title>Pensando prisões e prisioneiros</title>
+      <link>https://paulohrpinheiro.xyz/texts/paremias/2022-05-29-pensando-prisoes-e-prisioneiros.html</link>
+      <description>Efeitos da leitura do livro &quot;Estarão as Prisões Obsoletas?&quot;, de Angela Davis.</description>
+      <pubDate>Sun, 29 May 2022 00:00:00 +0000</pubDate>
+    </item>
+    <item>
       <title>Todo dia saem de suas casas um otário e um malandro...</title>
       <link>https://paulohrpinheiro.xyz/texts/paremias/2022-05-08-todo-dia-saem-de-casa-um-otario-e-um-malandro.html</link>
       <description></description>
@@ -180,12 +186,6 @@
       <link>https://paulohrpinheiro.xyz/texts/python/2020-05-20-pegando-dados-macroeconomicos-com-quandl-em-python.html</link>
       <description>Como obter dados históricos sobre indicadores de macroeconomia com a biblioteca Quandl usando Python</description>
       <pubDate>Wed, 20 May 2020 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Gerando imagens em GO com biblioteca padrão</title>
-      <link>https://paulohrpinheiro.xyz/texts/go/2019-02-18-gerando-imagens-em-go-com-biblioteca-padrao.html</link>
-      <description>Como gerar arquivos com imagens PNG na linguagem GO, usando apenas a biblioteca padrão</description>
-      <pubDate>Mon, 18 Feb 2019 00:00:00 +0000</pubDate>
     </item>
 
   </channel>
