@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Debugando em Python</title>
+
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" >
+
+  <meta name="description" content="Iniciando a usar o módulo pdb do Python para debugar com maestria, na linha de comando">
+  <meta name="author" content="Paulo Henrique Rodrigues Pinheiro">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores!" href="https://paulohrpinheiro.xyz/feed.xml">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+  <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+
+  <link rel=icon href="/favicon.ico" sizes="16x16" type="image/png">
+
+  <link rel="stylesheet" href="https://paulohrpinheiro.xyz/assets/css/normalize.css">
+</head>
+
+<body>
+  <section class="section">
+    <div class="container">
+      <h1 class="title is-1">
+        Paulo Henrique Rodrigues Pinheiro
+      </h1>
+      <p class="subtitle is-3">
+        Um blog sobre programação para programadores!
+      </p>
+    </div>
+  </section>
+
+
+
+     <div class="container">
+        
+		<nav class="level">
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/">HOME</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/c/">c</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/diversos/">diversos</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/go/">go</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/haskell/">haskell</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/javascript/">javascript</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/paremias/">paremias</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/perl/">perl</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">programadorbipolar</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/prosaeverso/">prosaeverso</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/python/">python</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/ruby/">ruby</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/rust/">rust</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/server/">server</a>
+			</p>
+			<p class="level-item has-text-centered">
+				<a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/v/">v</a>
+			</p>
+		</nav>
+	</div>
+
+    <hr>
+
+
+  <article class="container">
+    <div class="content">
+        <h2>Debugando em Python</h2>
+
+<h3>Iniciando a usar o módulo pdb do Python para debugar com maestria, na linha de comando</h3>
+
+<p><img src="images/debug.jpg" alt="Bug"></p>
+
+<p>Sou do time que aprendeu a usar <code class="prettyprint">print()</code> para debugar. Isso não é um grande problema, mas tenho que admitir que usar uma ferramenta para <em>debug</em> é muito mais eficiente. Enfim, para um dado problema, use a ferramenta mais adequada.</p>
+
+<p>Mas o uso de um <em>debugger</em> (esse é o nome) vai além da caça de erros. Serve para experimentação, testes e até mesmo aprendizagem de novas bibliotecas.
+Antes de tudo, o básico de como usar.</p>
+
+<p>Em seu programa, você pode escolher pontos de parada, em que deseja explorar o que está em memória e chamar funções. Esses pontos de parada são isso mesmo que o nome diz: quando você executa seu programa, ao encontrar um ponto de parada, a execução é interrompida e está disponibilizado todo o estado atual de execução, além de um <em>prompt</em> do <em>Python</em>, para executar os comandos que bem desejar, e com o extra de certos comandos específicos a esse processo.</p>
+
+<p>Aqui temos um pequeno, pequeno mesmo, programa com ponto de parada (note-se que <em>pdb</em> significa <em>Python Debugger</em>):</p>
+<pre><code class="language-python">
+$ cat example1.py
+breakpoint()
+$ python example1.py
+--Return--
+&#x2F;home&#x2F;phrp&#x2F;repo&#x2F;debugger&#x2F;example1.py(1)&lt;module&gt;()-&gt;None
+-&gt; breakpoint()
+(Pdb) l
+1 -&gt;    breakpoint()
+[EOF]
+(Pdb) c
+
+</code></pre>
+<p>Nesse primeiro exemplo, temos uma simples instrução, que diz ao <em>Python</em> que chegando nesse ponto o programa deve suspender a execução, disponibilizando um <em>prompt</em> para que comandos sejam digitados e executados.</p>
+
+<p>O primeiro comando (&quot;l&quot; de <em>list</em>), lista as onze linhas adjacentes à em que estamos.</p>
+
+<p>O próximo comando (“c“, de continue, ou cont), segue o fluxo de execução. Como não se tem mais nenhum comando, encerra-se a execução.</p>
+
+<h4>Olhe as variáveis, siga em frente</h4>
+
+<p><img src="images/carreta-furacao.jpg" alt="Personagens da Carreta Furacão"></p>
+
+<blockquote>
+<p>“siga em frente, olhe para os lados” - péssimo conselho!</p>
+</blockquote>
+
+<p>Além desses comandos, pode-se digitar o nome de variáveis para verificar seu valor (<code class="prettyprint">print</code> não é necessário,e temos os comandos “p” e “pp“ (<em>pretty print</em>), criar novas variáveis, importar módulos, enfim, qualquer coisa que se faça num programa, contando com todo o contexto da execução naquele ponto.</p>
+
+<p>Vamos inspecionar uma variável agora:</p>
+<pre><code class="language-python">
+$ python example2.py
+&#x2F;home&#x2F;phrp&#x2F;repo&#x2F;debugger&#x2F;example2.py(2)&lt;module&gt;()
+-&gt; name = &quot;Lambda &quot;
+(Pdb) l
+1   breakpoint()
+2 -&gt;    name = &quot;Lambda &quot;
+3   print(name * 3)
+[EOF]
+(Pdb) name
+*** NameError: name &#x27;name&#x27; is not defined
+(Pdb) n
+&#x2F;home&#x2F;phrp&#x2F;repo&#x2F;debugger&#x2F;example2.py(3)&lt;module&gt;()
+-&gt; print(name * 3)
+(Pdb) name
+&#x27;Lambda &#x27;
+(Pdb) c
+
+</code></pre>
+<h4>Lambda Lambda Lambda</h4>
+
+<p>Aqui, usamos o comando &quot;l&quot; para listar o código mais próximo (onze linhas no máximo), depois instruímos o debugar a mostrar o valor em <em>name</em>. Como essa variável ainda não tinha sido definida, ocorreu uma exceção. Em seguida, instruímos que a próxima linha seja executada (<code class="prettyprint">2 -&gt;    name = &quot;Lambda &quot;</code>), então novamente pedimos o valor da variável, agora definida, então indicamos a continuação do fluxo com o comando &quot;c&quot;, que por fim imprimiu o valor da variável três vezes, como indicado no programa.</p>
+
+<h4>Aprofundando no código</h4>
+
+<p>Além do comando &quot;n&quot; (<em>next</em>) há o comando &quot;s&quot; (<em>step</em>) similar a ele, mas ao invés de apenas executar o próximo comando, se possível, ele entra na função chamada e para na primeira oportunidade. Uma forma de ir se aprofundando no código:</p>
+<pre><code class="language-python">
+$ python example3.py
+&#x2F;home&#x2F;phrp&#x2F;repo&#x2F;debugger&#x2F;example3.py(2)&lt;module&gt;()
+-&gt; import this
+(Pdb) l
+1   breakpoint()
+2 -&gt;    import this
+[EOF]
+(Pdb) s
+--Call--
+&lt;frozen importlib._bootstrap&gt;(1167)_find_and_load()
+(Pdb) r
+The Zen of Python, by Tim Peters
+Beautiful is better than ugly.
+Explicit is better than implicit.
+Simple is better than complex.
+Complex is better than complicated.
+Flat is better than nested.
+Sparse is better than dense.
+Readability counts.
+Special cases aren&#x27;t special enough to break the rules.
+Although practicality beats purity.
+Errors should never pass silently.
+Unless explicitly silenced.
+In the face of ambiguity, refuse the temptation to guess.
+There should be one-- and preferably only one --obvious way to do it.
+Although that way may not be obvious at first unless you&#x27;re Dutch.
+Now is better than never.
+Although never is often better than right now.
+If the implementation is hard to explain, it&#x27;s a bad idea.
+If the implementation is easy to explain, it may be a good idea.
+Namespaces are one honking great idea -- let&#x27;s do more of those!
+--Return--
+&lt;frozen importlib._bootstrap&gt;(1175)_find_and_load()-&gt;&lt;module &#x27;this...3.11&#x2F;this.py&#x27;&gt;
+(Pdb) c
+
+</code></pre>
+<p>Aqui também, primeiro listamos o programa (comando “l”), e então instruímos o <em>debugger</em> a “entrar” no próxima linha e para o quanto antes (comando “s”, de step). Entramos com o comando “r” (<em>return</em>), que executa as linhas dentro da função corrente. Saindo da função que implementa o <code class="prettyprint">import this</code>, é apresentado um resultado, e então finalizamos com o comando &quot;c&quot; (continue), pois não há mais comandos a executar. Para mais informações sobre o <code class="prettyprint">import this</code>, <a href="https://paulohrpinheiro.xyz/texts/python/2021-05-12-decifrando-o-zen-do-python.html">veja esse texto</a>.</p>
+
+<h4>Argumentos</h4>
+
+<p>Vamos a mais um comando, “a”, de <em>args</em>, que mostra quais argumentos foram passados para a função em que estivermos.</p>
+<pre><code class="language-python">
+$ python example4.py
+&#x2F;home&#x2F;phrp&#x2F;repo&#x2F;debugger&#x2F;example4.py(7)&lt;module&gt;()
+-&gt; definition = make_dict(&#x27;empresa&#x27;, &#x27;Musa&#x27;)
+(Pdb) l
+2    new_dict = {x: y}
+3    return new_dict
+4   
+5   
+6   breakpoint()
+7 -&gt;    definition = make_dict(&#x27;empresa&#x27;, &#x27;Musa&#x27;)
+8   print(definition)
+[EOF]
+(Pdb) s
+--Call--
+&#x2F;home&#x2F;phrp&#x2F;repo&#x2F;debugger&#x2F;example4.py(1)make_dict()
+-&gt; def make_dict(x, y):
+(Pdb) a
+x = &#x27;empresa&#x27;
+y = &#x27;Musa&#x27;
+(Pdb) r
+--Return--
+&#x2F;home&#x2F;phrp&#x2F;repo&#x2F;debugger&#x2F;example4.py(3)make_dict()-&gt;{&#x27;empresa&#x27;: &#x27;Musa&#x27;}
+-&gt; return new_dict
+(Pdb) n
+&#x2F;home&#x2F;phrp&#x2F;repo&#x2F;debugger&#x2F;example4.py(8)&lt;module&gt;()
+-&gt; print(definition)
+(Pdb) definition
+{&#x27;empresa&#x27;: &#x27;Musa&#x27;}
+(Pdb) c
+{&#x27;empresa&#x27;: &#x27;Musa&#x27;}
+
+</code></pre>
+<h4>Parando nas paradas</h4>
+
+<p>Algumas vezes queremos paradas rápidas, para inspeções surpresa :). Podemos definir vários pontos de parada, e apenas interromper o fluxo neles.</p>
+<pre><code class="language-python">
+$ python example5.py
+&#x2F;home&#x2F;phrp&#x2F;repo&#x2F;debugger&#x2F;example5.py(3)one()
+-&gt; print(&#x27;one&#x27;)
+(Pdb) l
+1   def one():
+2    breakpoint()
+3 -&gt;     print(&#x27;one&#x27;)
+4   
+5   
+6   def two():
+7    print(&#x27;two&#x27;)
+8   
+9   
+10  def three():
+11   breakpoint()
+(Pdb) l 1,20
+1   def one():
+2    breakpoint()
+3 -&gt;     print(&#x27;one&#x27;)
+4   
+5   
+6   def two():
+7    print(&#x27;two&#x27;)
+8   
+9   
+10  def three():
+11   breakpoint()
+12   print(&#x27;three&#x27;)
+13  
+14  
+15  one()
+16  two()
+17  three()
+[EOF]
+(Pdb) c
+one
+two
+&#x2F;home&#x2F;phrp&#x2F;repo&#x2F;debugger&#x2F;example5.py(12)three()
+-&gt; print(&#x27;three&#x27;)
+(Pdb) c
+three
+
+</code></pre>
+<p>Nesse exemplo, primeiro listamos o código, mas como o comando lista apenas onze linhas de código, indicamos o que listar com o comando <code class="prettyprint">l 1,20</code>, mostrando código entre as linhas indicadas. Ao parar na função <code class="prettyprint">one()</code>, indicamos para o <em>debugger</em> ir até o próximo ponto de parada, que está na função <code class="prettyprint">three()</code>, e com mais um comando &quot;c&quot;, o programa encerra por não ter mais instruções.</p>
+
+<h4>Concluindo</h4>
+
+<p>Há mais opções e possibilidades no comado <em>pdb</em> do <em>Python</em>, que em sua base, são as mesmas de um <em>debugger</em> em <em>C</em>. Ter um conhecimento dessa ferramenta, e de técnicas básicas de <em>debug</em>, podem acelerar investigações, e torná-las algo não monótono também. E outro coisa que gostaria de reforçar, é que essa ferramenta se presta também a conhecer novas bibliotecas em um contexto mais rico de execução de um sistema existente, por exemplo. Defina um conveniente <code class="prettyprint">breakpoint()</code> e então importe módulos, instancie classes e use os dados do contexto de sua aplicação.</p>
+
+    </div>
+  </article>
+
+
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>
+                O conteúdo e opiniões publicados nesse site são de inteira responsabilidade minha, e não refletem as opiniões e nem são endossados pelo meu empregador.
+            </p>
+                Este blog é gerido pelo <a target="_blank" href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a> e tem o layout dado pelo <a target="_blank" href="https://bulma.io">Bulma</a>.
+            <p>
+                Copyright © 2016-2022, <a target="_blank" href="https://twitter.com/PauloHRPinheiro">Paulo Henrique Rodrigues Pinheiro</a>.
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>

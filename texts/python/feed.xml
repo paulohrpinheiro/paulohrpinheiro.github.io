@@ -8,6 +8,12 @@
     <language>pt-br</language>
 
     <item>
+      <title>Debugando em Python</title>
+      <link>https://paulohrpinheiro.xyz/texts/python/2022-12-17-debugando-em-python.html</link>
+      <description>Iniciando a usar o módulo pdb do Python para debugar com maestria, na linha de comando</description>
+      <pubDate>Sat, 17 Dec 2022 00:00:00 +0000</pubDate>
+    </item>
+    <item>
       <title>Iniciando com o ORM Pony no Python III - Erros e Exceções</title>
       <link>https://paulohrpinheiro.xyz/texts/python/2021-05-16-iniciando-com-o-orm-pony-no-python-iii-erros-e-excecoes.html</link>
       <description>Seguindo o trilha com o ORM Pony, neste terceiro texto, agora começaremos a gerar situações de erro e ver o que os objetos retornam ou que exceções são geradas.</description>
