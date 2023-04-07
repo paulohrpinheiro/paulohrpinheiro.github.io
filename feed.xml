@@ -8,6 +8,12 @@
     <language>pt-br</language>
 
     <item>
+      <title>Competência Capitalista</title>
+      <link>https://paulohrpinheiro.xyz/texts/paremias/2023-04-06-competencia-capitalista.html</link>
+      <description>Desabafo escrito lá pelo ano 2000 e pouco com, talvez, um certo exagero, sobre alguns dias ruins...</description>
+      <pubDate>Thu, 6 Apr 2023 00:00:00 +0000</pubDate>
+    </item>
+    <item>
       <title>Debugando em Python</title>
       <link>https://paulohrpinheiro.xyz/texts/python/2022-12-17-debugando-em-python.html</link>
       <description>Iniciando a usar o módulo pdb do Python para debugar com maestria, na linha de comando</description>
@@ -180,12 +186,6 @@
       <link>https://paulohrpinheiro.xyz/texts/diversos/2020-08-29-toxidade-senioridade-cegueira.html</link>
       <description>A mais recente polêmica no mundinho dev dentro do twitter</description>
       <pubDate>Sat, 29 Aug 2020 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Como saber se um número é par de forma complicada</title>
-      <link>https://paulohrpinheiro.xyz/texts/go/2020-08-23-como-saber-se-um-numero-e-par-de-forma-complicada.html</link>
-      <description>Uma coletânea sobre diversas formas de descobrir se um número é par ou não em Go</description>
-      <pubDate>Sun, 23 Aug 2020 00:00:00 +0000</pubDate>
     </item>
 
   </channel>
