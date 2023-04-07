@@ -1,0 +1,56 @@
+body {
+    font-family: Arial, sans-serif;
+    color: #444;
+}
+
+code {
+    font-family: Deja Vu Sans Mono, monospace;
+}
+
+h1 h2 h3 h4 h5 h6 {
+    color: #ff0000!important;
+}
+
+pre {
+    background: #f4f4f4;
+    border: 1px solid #ddd;
+    border-left: 3px solid #11f;
+    color: #666;
+    page-break-inside: avoid;
+    font-size: 12px;
+    line-height: 1.6;
+    margin-bottom: 1.6em;
+    max-width: 100%;
+    overflow: auto;
+    padding: 1em 1.5em;
+    display: block;
+    word-wrap: break-word;
+}
+
+@media (min-width: 800px) {
+    body {
+        display: inline-block;
+        position: relative;
+        margin: 1px 200px 1px 200px;
+        color: #444;
+    }
+}
+
+footer {
+  text-align: center;
+  padding: 3px;
+  color: #111;
+}
+
+a {
+  text-decoration: inherit;
+}
+
+.menu-horizontal ul {
+	display: flex;
+}
+
+.menu-horizontal ul li {
+	list-style-type: none;
+    padding-right: 14px;
+}
