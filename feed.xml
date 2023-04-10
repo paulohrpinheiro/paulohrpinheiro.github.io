@@ -8,6 +8,12 @@
     <language>pt-br</language>
 
     <item>
+      <title>Refatorando MFBIL - interpretador de BF</title>
+      <link>https://paulohrpinheiro.xyz/texts/go/2023-04-09-refatorando-mfbil-interpretador-bf.html</link>
+      <description>Continuando o projeto de fazer um interpretador brainfuck em GO</description>
+      <pubDate>Sun, 9 Apr 2023 00:00:00 +0000</pubDate>
+    </item>
+    <item>
       <title>Competência Capitalista</title>
       <link>https://paulohrpinheiro.xyz/texts/paremias/2023-04-06-competencia-capitalista.html</link>
       <description>Desabafo escrito lá pelo ano 2000 e pouco com, talvez, um certo exagero, sobre alguns dias ruins...</description>
@@ -180,12 +186,6 @@
       <link>https://paulohrpinheiro.xyz/texts/go/2020-08-30-como-saber-se-um-numero-e-par-de-forma-complicada-II.html</link>
       <description>Uma coletânea sobre diversas formas de descobrir se um número é par ou não em Go, II</description>
       <pubDate>Sun, 30 Aug 2020 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Toxidade, senioridade, cegueira.</title>
-      <link>https://paulohrpinheiro.xyz/texts/diversos/2020-08-29-toxidade-senioridade-cegueira.html</link>
-      <description>A mais recente polêmica no mundinho dev dentro do twitter</description>
-      <pubDate>Sat, 29 Aug 2020 00:00:00 +0000</pubDate>
     </item>
 
   </channel>
