@@ -8,6 +8,12 @@
     <language>pt-br</language>
 
     <item>
+      <title>SQLite sem like, mas dando match</title>
+      <link>https://paulohrpinheiro.xyz/texts/diversos/2023-06-17-sqlite-sem-like.html</link>
+      <description>Usando full text search (FTS5) no sqlite3, ao invés de like</description>
+      <pubDate>Sat, 17 Jun 2023 00:00:00 +0000</pubDate>
+    </item>
+    <item>
       <title>Refatorando MFBIL - interpretador de BF</title>
       <link>https://paulohrpinheiro.xyz/texts/go/2023-04-09-refatorando-mfbil-interpretador-bf.html</link>
       <description>Continuando o projeto de fazer um interpretador brainfuck em GO</description>
@@ -180,12 +186,6 @@
       <link>https://paulohrpinheiro.xyz/texts/go/2020-09-05-como-saber-se-um-numero-e-par-de-forma-complicada-III.html</link>
       <description>Uma coletânea sobre diversas formas de descobrir se um número é par ou não em Go, III</description>
       <pubDate>Sat, 5 Sep 2020 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Como saber se um número é par de forma complicada - II</title>
-      <link>https://paulohrpinheiro.xyz/texts/go/2020-08-30-como-saber-se-um-numero-e-par-de-forma-complicada-II.html</link>
-      <description>Uma coletânea sobre diversas formas de descobrir se um número é par ou não em Go, II</description>
-      <pubDate>Sun, 30 Aug 2020 00:00:00 +0000</pubDate>
     </item>
 
   </channel>
