@@ -8,6 +8,12 @@
     <language>pt-br</language>
 
     <item>
+      <title>Começando com generics em Go</title>
+      <link>https://paulohrpinheiro.xyz/texts/go/2023-12-22-comecando-com-generics-em-go.html</link>
+      <description>Um pequeno experimento com linguagem Go (Golang), para testar generics</description>
+      <pubDate>Fri, 22 Dec 2023 00:00:00 +0000</pubDate>
+    </item>
+    <item>
       <title>SQLite sem like, mas dando match</title>
       <link>https://paulohrpinheiro.xyz/texts/diversos/2023-06-17-sqlite-sem-like.html</link>
       <description>Usando full text search (FTS5) no sqlite3, ao invés de like</description>
@@ -180,12 +186,6 @@
       <link>https://paulohrpinheiro.xyz/texts/python/2021-01-11-mocando-um-servico-com-bottle.html</link>
       <description>Como minha vida ficou mais fácil com o Bottle ou, uma linda história de Natal</description>
       <pubDate>Mon, 11 Jan 2021 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Como saber se um número é par de forma complicada - III</title>
-      <link>https://paulohrpinheiro.xyz/texts/go/2020-09-05-como-saber-se-um-numero-e-par-de-forma-complicada-III.html</link>
-      <description>Uma coletânea sobre diversas formas de descobrir se um número é par ou não em Go, III</description>
-      <pubDate>Sat, 5 Sep 2020 00:00:00 +0000</pubDate>
     </item>
 
   </channel>

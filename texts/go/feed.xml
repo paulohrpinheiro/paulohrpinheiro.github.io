@@ -8,6 +8,12 @@
     <language>pt-br</language>
 
     <item>
+      <title>Começando com generics em Go</title>
+      <link>https://paulohrpinheiro.xyz/texts/go/2023-12-22-comecando-com-generics-em-go.html</link>
+      <description>Um pequeno experimento com linguagem Go (Golang), para testar generics</description>
+      <pubDate>Fri, 22 Dec 2023 00:00:00 +0000</pubDate>
+    </item>
+    <item>
       <title>Refatorando MFBIL - interpretador de BF</title>
       <link>https://paulohrpinheiro.xyz/texts/go/2023-04-09-refatorando-mfbil-interpretador-bf.html</link>
       <description>Continuando o projeto de fazer um interpretador brainfuck em GO</description>
