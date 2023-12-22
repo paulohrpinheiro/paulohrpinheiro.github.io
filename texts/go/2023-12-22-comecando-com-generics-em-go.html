@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Começando com generics em Go</title>
+
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" >
+
+  <meta name="description" content="Um pequeno experimento com linguagem Go (Golang), para testar generics">
+  <meta name="author" content="Paulo Henrique Rodrigues Pinheiro">
+
+  <meta property="og:type" content="website">
+
+  <!-- mastodon -->
+  <link href="https://ursal.zone/@paulohrpinheiro" rel="me">
+
+  <!-- open graph -->
+  <meta property="og:url" content="https://paulohrpinheiro.xyz/texts/go/2023-12-22-comecando-com-generics-em-go.html">
+  <meta property="og:title" content="Começando com generics em Go">
+  <meta property="og:description" content="Um pequeno experimento com linguagem Go (Golang), para testar generics">
+  <meta property="og:image" content="/assets/images/webpreview.png?raw=true">
+
+  <!-- twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://paulohrpinheiro.xyz/texts/go/2023-12-22-comecando-com-generics-em-go.html">
+  <meta property="twitter:title" content="Começando com generics em Go">
+  <meta property="twitter:description" content="Um pequeno experimento com linguagem Go (Golang), para testar generics">
+  <meta property="twitter:image" content="/assets/images/webpreview.png?raw=true">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores!" href="https://paulohrpinheiro.xyz/feed.xml">
+
+  <link rel="icon" href="/favicon.ico" sizes="16x16" type="image/png">
+
+  <link rel="stylesheet" href="/assets/css/style.css">
+
+<body>
+  <section class="section">
+      <h1>Paulo Henrique Rodrigues Pinheiro</h1>
+      <h2>Um blog sobre programação para programadores!</h2>
+  </section>
+
+
+
+     <div class="container">
+        
+		<nav class="level">
+		    <a class="link is-info content" href="https://paulohrpinheiro.xyz/">HOME</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/c/">c</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/diversos/">diversos</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/go/">go</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/haskell/">haskell</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/javascript/">javascript</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/paremias/">paremias</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/perl/">perl</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">programadorbipolar</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/prosaeverso/">prosaeverso</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/python/">python</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/ruby/">ruby</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/rust/">rust</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/server/">server</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/v/">v</a>
+		</nav>
+	</div>
+
+    <hr>
+
+
+  <article class="container">
+    <div class="content">
+        <h2>Começando com generics em Go</h2>
+
+<h3>Um pequeno experimento com linguagem Go (Golang), para testar generics</h3>
+
+<p><img src="images/go-generics.jpg" alt="Imagem criada no Bing Image Creator com o prompt &quot;imagem de marmota gorda de óculos programadora com camiseta da linguagem go&quot;"></p>
+
+<h4>Motivação</h4>
+
+<p>Estava estudando algoritmos de ordenação, e implementando em <em>Go</em>. Achei chato fazer um código que só trabalhasse com inteiros, lembrando que <em>Golang</em> tem <em>generics</em>.A partir disso, muitas leituras, tentativas, até o fracasso. Implementar no algoritmo foi fácil, o problema quase incontornável foi nos testes, já que insisti em seguir o &quot;table driven tests&quot;, para variados tipos em uma só função de teste.</p>
+
+<p>Retomando o desafio, pensei em uma forma mais simples de testar a mesma estrutura, para não ficar perdendo tempo com erros e detalhes diferentes do novo objetivo de aprender generics.</p>
+
+<p>Aqui segue o resultado desse experimento.</p>
+
+<h4>A tarefa</h4>
+
+<p>Nessa <em>subtask</em>, defini que trabalharia em uma função mais simples, que mantivesse o espírito do problema, mas que me permitisse estudar principalmente a forma de testar.</p>
+
+<p>Resolvi implementar o que chamo &quot;método de ordenação if&quot;. Dados dois números, a função deve retorná-los ordenados (<code class="prettyprint">ifsort.go</code>):</p>
+<pre><code class="language-go">
+package ifsort
+
+import &quot;golang.org&#x2F;x&#x2F;exp&#x2F;constraints&quot;
+
+func Sort[T constraints.Ordered](a, b T) (T, T) {
+    if a &gt; b {
+        return b, a
+    }
+
+    return a, b
+}
+
+</code></pre>
+<p>Poderíamos ter várias funções, cada qual com um tipo diferente, mas o corpo da função seria o mesmo. Essa é a uma das belezas dos generis: reutilização de código, evitando que depois do &quot;copia e cola&quot;, algo fique diferente em alguma dessas funções clonadas.</p>
+
+<p>Poderia, por exemplo, usar as primitivas da linguagem para definir um tipo interface, como em:</p>
+<pre><code class="language-go">
+type MyGenericType interface {
+    int | float64 | string
+}
+
+</code></pre>
+<p>Mas já que temos algo pronto :), bora lá, está completo e com mais possibilidades. O <code class="prettyprint">Ordered</code> é definido como:</p>
+<pre><code class="language-go">
+type Ordered interface {
+    Integer | Float | ~string
+}
+
+</code></pre>
+<p>Note que <em>Integer</em> e <em>Float</em> expandem para todas suas variantes. E o operador <code class="prettyprint">~</code> usado no tipo <code class="prettyprint">string</code>, significa que construções como <code class="prettyprint">MyStringType</code> serão contempladas. O operador <code class="prettyprint">|</code> indica a união de todas essas possibilidades.</p>
+
+<p>O mais importante, com esse tipo: garantimos que nossa função só trabalha com tipos que possam ser comparados; nesse caso concreto, precisamos garantir que tenham implementado o operador <code class="prettyprint">&gt;</code>.</p>
+
+<p>O pacote <code class="prettyprint">constraints</code> nos traz vários tipos, que garantem certas propriedades:</p>
+
+<blockquote>
+<p>https://pkg.go.dev/golang.org/x/exp/constraints#section-documentation</p>
+</blockquote>
+
+<p>Uma boa introdução sobre <code class="prettyprint">generics</code> pode ser encontrada no próprio site da linguagem:</p>
+
+<blockquote>
+<p>https://go.dev/blog/intro-generics</p>
+</blockquote>
+
+<h4>Testando</h4>
+
+<p>Óbvio que numa situação real, não precisamos testar cada tipo para cobrir o espectro do generics que estivermos usando. Mas, como se tratava de um experimento, prefiro sempre escrever testes do que criar uma função <code class="prettyprint">main</code> e ficar alterando e testando manualmente.</p>
+
+<p>Eis o arquivo de teste (<code class="prettyprint">ifsort_test.go</code>):</p>
+<pre><code class="language-go">
+package ifsort
+
+import (
+    &quot;testing&quot;
+
+    &quot;github.com&#x2F;stretchr&#x2F;testify&#x2F;assert&quot;
+    &quot;golang.org&#x2F;x&#x2F;exp&#x2F;constraints&quot;
+)
+
+func runAssertEqual[T constraints.Ordered](t *testing.T, input []T, output []T) {
+    a, b := Sort(input[0], input[1])
+    assert.Equal(t, a, output[0])
+    assert.Equal(t, b, output[1])
+}
+
+type TestIntType struct {
+    input  []int
+    output []int
+}
+
+func TestBubbleInt(t *testing.T) {
+    for _, test := range []TestIntType{
+        {[]int{1, 2}, []int{1, 2}},
+        {[]int{50, -101}, []int{-101, 50}},
+    } {
+        runAssertEqual(t, test.input, test.output)
+    }
+}
+
+func TestBubbleFloat64(t *testing.T) {
+    runAssertEqual(t, []float64{22.2, 11.1}, []float64{11.1, 22.2})
+}
+
+func TestBubbleString(t *testing.T) {
+    runAssertEqual(t, []string{&quot;z&quot;, &quot;a&quot;}, []string{&quot;a&quot;, &quot;z&quot;})
+}
+
+</code></pre>
+<p>Não é uma prática recomendada, reutilização de código em um teste, e nem eu gosto muito disso, mas para o objetivo aqui, tratava-se de mais uma oportunidade para brincar com <code class="prettyprint">generics</code>:</p>
+<pre><code class="language-go">
+func runAssertEqual[T constraints.Ordered](t *testing.T, input []T, output []T) {
+    a, b := Sort(input[0], input[1])
+    assert.Equal(t, a, output[0])
+    assert.Equal(t, b, output[1])
+}
+
+</code></pre>
+<p>Mais uma vez, independente do tipo, chamamos a função de ordenação, e então verificamos o resultado. E para facilitar a leitura do código, usa-se o pacote <code class="prettyprint">testify</code>:</p>
+
+<blockquote>
+<p>https://github.com/stretchr/testify</p>
+</blockquote>
+
+<p>Usando essa abordagem, facilita-se a execução dos testes específicos. Tarefa para o fim de ano, voltar ao problema original dos algoritmos de ordenação, que requerem uma abordagem levemente diferente, por conta dos <em>slices</em>, que serão usados, no lugar de parâmetros individuais.</p>
+
+    </div>
+  </article>
+
+
+    <footer>
+        <div>
+            <p>
+                O conteúdo e opiniões publicados nesse site são de inteira responsabilidade minha, e não refletem as opiniões e nem são endossados pelo meu empregador.
+            </p>
+                Este blog é gerido pelo <a target="_blank" href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>.
+            <address>
+                Copyright © 2016-2024, <a target="_blank" href="https://bolha.us/@paulohrpinheiro" rel="me">Paulo Henrique Rodrigues Pinheiro</a>.
+            </address>
+        </div>
+    </footer>
+
+</body>
+</html>
