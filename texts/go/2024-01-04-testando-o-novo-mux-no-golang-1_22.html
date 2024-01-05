@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Testando o novo mux no GO 1.22</title>
+
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" >
+
+  <meta name="description" content="Testando o mux http server em Go (Golang) no que será a versão 1.22 (1.22rc1)">
+  <meta name="author" content="Paulo Henrique Rodrigues Pinheiro">
+
+  <meta property="og:type" content="website">
+
+  <!-- mastodon -->
+  <link href="https://ursal.zone/@paulohrpinheiro" rel="me">
+
+  <!-- open graph -->
+  <meta property="og:url" content="https://paulohrpinheiro.xyz/texts/go/2024-01-04-testando-o-novo-mux-no-golang-1_22.html">
+  <meta property="og:title" content="Testando o novo mux no GO 1.22">
+  <meta property="og:description" content="Testando o mux http server em Go (Golang) no que será a versão 1.22 (1.22rc1)">
+  <meta property="og:image" content="/assets/images/webpreview.png?raw=true">
+
+  <!-- twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://paulohrpinheiro.xyz/texts/go/2024-01-04-testando-o-novo-mux-no-golang-1_22.html">
+  <meta property="twitter:title" content="Testando o novo mux no GO 1.22">
+  <meta property="twitter:description" content="Testando o mux http server em Go (Golang) no que será a versão 1.22 (1.22rc1)">
+  <meta property="twitter:image" content="/assets/images/webpreview.png?raw=true">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores!" href="https://paulohrpinheiro.xyz/feed.xml">
+
+  <link rel="icon" href="/favicon.ico" sizes="16x16" type="image/png">
+
+  <link rel="stylesheet" href="/assets/css/style.css">
+
+<body>
+  <section class="section">
+      <h1>Paulo Henrique Rodrigues Pinheiro</h1>
+      <h2>Um blog sobre programação para programadores!</h2>
+  </section>
+
+
+
+     <div class="container">
+        
+		<nav class="level">
+		    <a class="link is-info content" href="https://paulohrpinheiro.xyz/">HOME</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/c/">c</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/diversos/">diversos</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/go/">go</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/haskell/">haskell</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/javascript/">javascript</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/paremias/">paremias</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/perl/">perl</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">programadorbipolar</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/prosaeverso/">prosaeverso</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/python/">python</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/ruby/">ruby</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/rust/">rust</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/server/">server</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/v/">v</a>
+		</nav>
+	</div>
+
+    <hr>
+
+
+  <article class="container">
+    <div class="content">
+        <h2>Testando o novo mux no GO 1.22</h2>
+
+<h3>Testando o mux http server em Go (Golang) no que será a versão 1.22 (1.22rc1)</h3>
+
+<p><img src="images/httpmux.jpg" alt="Imagem criada no Bing Image Creator com o prompt golang mux http server estilo goya"></p>
+
+<h4>Motivação</h4>
+
+<p>O fato da linguagem <em>Go</em> me lembrar muito da linguagem <em>C</em> a tornou muito confortável para mim. Em todo o tempo em que estudo a linguagem por hobby, uma coisa me incomoda: o uso de bibliotecas de terceiros para tarefas triviais.</p>
+
+<p>A filosofia de <em>Go</em> vai de encontro ao meu pensamento: quanto menos bibliotecas de terceiros eu usar, melhor. Por segurança, por comodidade, por menos coisas para me preocupar, por querer uma linguagem com o máximo de &quot;baterias inclusas&quot;.</p>
+
+<p>Então sempre me deu preguiça construir <em>APIs</em> em <em>Go</em>, pois o mais fácil é utilizar algum <em>muxer</em> não incluso. Isso para mim é uma tarefa básica, portanto a linguagem deveria implementar da melhor maneira. Assim, cá estou eu feliz com as promessas da versão <em>1.22</em>.</p>
+
+<h4>Infraestrutura</h4>
+
+<p>É preciso ter o compilador na versão correta: <em>1.22rc1</em>.</p>
+
+<p>Uso o <a href="https://asdf-vm.com/">asdf</a> para gerenciar as linguagens de programação que utilizo. Com ele, basta instalar indicando a versão desejada:</p>
+<pre><code class="language-go">
+asdf install golang 1.22rc1
+asdf global golang 1.22rc1
+asdf reshim golang
+
+</code></pre>
+<p>Lembrando que se não quiser tornar essa versão a utilizada globalmente, basta entrar na pasta que queira restringir a versão e executar o seguinte comando:</p>
+<pre><code class="language-go">
+asdf local golang 1.22rc1
+
+</code></pre>
+<p>A forma normalmente indicada para versões não definitivas, é utilizar o <a href="https://pkg.go.dev/golang.org/dl/gotip">gotip</a>:</p>
+<pre><code class="language-go">
+go install golang.org&#x2F;dl&#x2F;gotip@latest
+gotip download
+
+</code></pre>
+<p>Se utilizar o <em>gotip</em>, em todas as situações em que dever usar o comando <em>go</em>, substitua por <em>gotip</em>, mantendo os parâmetros.</p>
+
+<h4>Minhas fontes</h4>
+
+<p>Comecei lendo o artigo de Eli Bendersky sobre isso:</p>
+
+<blockquote>
+<p>https://eli.thegreenplace.net/2023/better-http-server-routing-in-go-122/</p>
+</blockquote>
+
+<p>E, conforme lá indicado, dei uma olhada na documentação da linguagem:</p>
+
+<blockquote>
+<p>https://pkg.go.dev/net/http@go1.22rc1#hdr-Patterns</p>
+</blockquote>
+
+<h4>O programa</h4>
+
+<p>Adaptado das fontes acima, eis:</p>
+<pre><code class="language-go">
+package main
+
+import (
+  &quot;fmt&quot;
+  &quot;net&#x2F;http&quot;
+)
+
+func main() {
+  mux := http.NewServeMux()
+  mux.HandleFunc(&quot;GET &#x2F;path&#x2F;&quot;, func(w http.ResponseWriter, r *http.Request) {
+    fmt.Fprint(w, &quot;got path\n&quot;)
+  })
+
+  mux.HandleFunc(&quot;GET &#x2F;gospel&#x2F;{version}&#x2F;{testament}&#x2F;{book}&#x2F;{chapter}&#x2F;&quot;, func(w http.ResponseWriter, r *http.Request) {
+    version := r.PathValue(&quot;version&quot;)
+    testament := r.PathValue(&quot;testament&quot;)
+    book := r.PathValue(&quot;book&quot;)
+    chapter := r.PathValue(&quot;chapter&quot;)
+
+    fmt.Fprintf(w, &quot;handling gospel with version=%v, testament=%v, book=%v, chapter=%v\n&quot;, version, testament, book, chapter)
+  })
+
+  http.ListenAndServe(&quot;127.0.0.1:8090&quot;, mux)
+}
+
+</code></pre>
+<p>Perceba-se que ao utilizar <code class="prettyprint">{book}</code> na configuração do endpoint, pode-se acessar a variável na posição com <code class="prettyprint">book := r.PathValue(&quot;book&quot;)</code>. Além de se poder indicar qual o verbo utilizado (nesse caso <code class="prettyprint">GET</code>). Caso se queira vários métodos para uma <em>URL</em>, basta omitir o verbo.</p>
+
+<p>Para executar, as possibilidades, conforme se instalou a nova versão de <em>Go</em>. Pelo asdf, ou instalação direta:</p>
+<pre><code class="language-go">
+go run server.go
+
+</code></pre>
+<p>Ou pelo <em>gotip</em>:</p>
+<pre><code class="language-go">
+gotip run server.go
+
+</code></pre>
+<p>Executei o programa tanto em um <em>Debian</em>, como em um <em>Fedora</em>. No <em>Fedora</em> rolou de boas, mas no Debian simplesmenente não foi:</p>
+<pre><code class="language-go">
+$ curl localhost:8090&#x2F;gospel&#x2F;almeida&#x2F;new&#x2F;marcos&#x2F;3&#x2F;
+404 page not found
+
+</code></pre>
+<p>E para o outro endpoint:</p>
+<pre><code class="language-go">
+$ curl localhost:8090&#x2F;path&#x2F;
+404 page not found
+
+</code></pre>
+<p>Lendo os documentos acima indicados com mais atenção, descobri um parâmetro que habilita ou desabilita essa feature. COofigurando uma variável de ambiente no terminal em que o servidor é executado, tudo funciona:</p>
+<pre><code class="language-go">
+$ export GODEBUG=httpmuxgo121=0
+$ go run http_server.go
+
+</code></pre>
+<p>OU então, passando a variável na linha de execução:</p>
+<pre><code class="language-go">
+$ curl localhost:8090&#x2F;path&#x2F;
+got path
+
+</code></pre>
+<p>E o outro endpoint:</p>
+<pre><code class="language-go">
+$ curl localhost:8090&#x2F;gospel&#x2F;almeida&#x2F;new&#x2F;marcos&#x2F;3&#x2F;
+handling gospel with version=almeida, testament=new, book=marcos, chapter=3
+
+</code></pre>
+    </div>
+  </article>
+
+
+    <footer>
+        <div>
+            <p>
+                O conteúdo e opiniões publicados nesse site são de inteira responsabilidade minha, e não refletem as opiniões e nem são endossados pelo meu empregador.
+            </p>
+                Este blog é gerido pelo <a target="_blank" href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>.
+            <address>
+                Copyright © 2016-2024, <a target="_blank" href="https://bolha.us/@paulohrpinheiro" rel="me">Paulo Henrique Rodrigues Pinheiro</a>.
+            </address>
+        </div>
+    </footer>
+
+</body>
+</html>

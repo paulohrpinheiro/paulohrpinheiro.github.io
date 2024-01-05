@@ -8,6 +8,12 @@
     <language>pt-br</language>
 
     <item>
+      <title>Testando o novo mux no GO 1.22</title>
+      <link>https://paulohrpinheiro.xyz/texts/go/2024-01-04-testando-o-novo-mux-no-golang-1_22.html</link>
+      <description>Testando o mux http server em Go (Golang) no que será a versão 1.22 (1.22rc1)</description>
+      <pubDate>Thu, 4 Jan 2024 00:00:00 +0000</pubDate>
+    </item>
+    <item>
       <title>Começando com generics em Go</title>
       <link>https://paulohrpinheiro.xyz/texts/go/2023-12-22-comecando-com-generics-em-go.html</link>
       <description>Um pequeno experimento com linguagem Go (Golang), para testar generics</description>
