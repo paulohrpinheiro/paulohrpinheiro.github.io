@@ -8,6 +8,12 @@
     <language>pt-br</language>
 
     <item>
+      <title>Arte generativa com fórmula simples em Go</title>
+      <link>https://paulohrpinheiro.xyz/texts/go/2024-01-08-arte-generativa-formula-simples.html</link>
+      <description>Gerando imagens legais, ou arte generativa com uma fórmula simples em Go (Golang)</description>
+      <pubDate>Mon, 8 Jan 2024 00:00:00 +0000</pubDate>
+    </item>
+    <item>
       <title>Testando o novo mux no GO 1.22</title>
       <link>https://paulohrpinheiro.xyz/texts/go/2024-01-04-testando-o-novo-mux-no-golang-1_22.html</link>
       <description>Testando o mux http server em Go (Golang) no que será a versão 1.22 (1.22rc1)</description>
@@ -178,12 +184,6 @@
     <item>
       <title>Um Interpretador Brainfuck em Linguagem V</title>
       <link>https://paulohrpinheiro.xyz/texts/v/2021-04-18-brainf_ck-em-linguagem-v.html</link>
-      <description>Mais uma implementação de Brainfuck, como desculpa para aprender a linguagem V</description>
-      <pubDate>Sun, 18 Apr 2021 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Um Interpretador Brainfuck em Linguagem V</title>
-      <link>https://paulohrpinheiro.xyz/texts/diversos/2021-04-18-brainf_ck-em-linguagem-v.html</link>
       <description>Mais uma implementação de Brainfuck, como desculpa para aprender a linguagem V</description>
       <pubDate>Sun, 18 Apr 2021 00:00:00 +0000</pubDate>
     </item>
