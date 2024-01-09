@@ -92,6 +92,10 @@ C + C * X * Y
 <p>Em que <code class="prettyprint">C</code> é uma constante qualquer, e o par <code class="prettyprint">X</code>, <code class="prettyprint">Y</code>, coordenadas da imagem gerada em um tamanho predeterminado (em geral 1000 pontos) a partir da origem <code class="prettyprint">(0,0)</code>. Mas o interessante é colorir essas imagens, para isso é usado resultado dessa conta módulo <code class="prettyprint">M</code>, em que M é o máximo de cores que se deseja usar.</p>
 
 <h4>O programa</h4>
+
+<blockquote>
+<p>PS: usei range no loop for, coisa que só está disponível na versão 1.22rc1, futuramente 1.22!</p>
+</blockquote>
 <pre><code class="language-go">
 package main
 
