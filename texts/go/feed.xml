@@ -8,6 +8,12 @@
     <language>pt-br</language>
 
     <item>
+      <title>Refatoração do repositório genart</title>
+      <link>https://paulohrpinheiro.xyz/texts/go/2024-02-04-refatoracao-do-repositorio-genart.html</link>
+      <description>Gerando imagens legais, ou arte generativa com uma fórmula simples em Go (Golang) - a refatoração</description>
+      <pubDate>Sun, 4 Feb 2024 00:00:00 +0000</pubDate>
+    </item>
+    <item>
       <title>Arte generativa com fórmula simples em Go</title>
       <link>https://paulohrpinheiro.xyz/texts/go/2024-01-08-arte-generativa-formula-simples.html</link>
       <description>Gerando imagens legais, ou arte generativa com uma fórmula simples em Go (Golang)</description>

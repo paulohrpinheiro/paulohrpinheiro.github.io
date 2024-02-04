@@ -8,6 +8,12 @@
     <language>pt-br</language>
 
     <item>
+      <title>Refatoração do repositório genart</title>
+      <link>https://paulohrpinheiro.xyz/texts/go/2024-02-04-refatoracao-do-repositorio-genart.html</link>
+      <description>Gerando imagens legais, ou arte generativa com uma fórmula simples em Go (Golang) - a refatoração</description>
+      <pubDate>Sun, 4 Feb 2024 00:00:00 +0000</pubDate>
+    </item>
+    <item>
       <title>Arte generativa com fórmula simples em Go</title>
       <link>https://paulohrpinheiro.xyz/texts/go/2024-01-08-arte-generativa-formula-simples.html</link>
       <description>Gerando imagens legais, ou arte generativa com uma fórmula simples em Go (Golang)</description>
@@ -180,12 +186,6 @@
       <link>https://paulohrpinheiro.xyz/texts/diversos/2021-04-25-brainf_ck-em-linguagem-de-programacao-v-sprint-ii.html</link>
       <description>Seguindo a saga do interpretador Brainfuck em linguagem de programação V, agora na Sprint II</description>
       <pubDate>Sun, 25 Apr 2021 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Um Interpretador Brainfuck em Linguagem V</title>
-      <link>https://paulohrpinheiro.xyz/texts/v/2021-04-18-brainf_ck-em-linguagem-v.html</link>
-      <description>Mais uma implementação de Brainfuck, como desculpa para aprender a linguagem V</description>
-      <pubDate>Sun, 18 Apr 2021 00:00:00 +0000</pubDate>
     </item>
 
   </channel>

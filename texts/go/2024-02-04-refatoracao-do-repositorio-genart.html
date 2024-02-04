@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Refatoração do repositório genart</title>
+
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" >
+
+  <meta name="description" content="Gerando imagens legais, ou arte generativa com uma fórmula simples em Go (Golang) - a refatoração">
+  <meta name="author" content="Paulo Henrique Rodrigues Pinheiro">
+
+  <meta property="og:type" content="website">
+
+  <!-- mastodon -->
+  <link href="https://ursal.zone/@paulohrpinheiro" rel="me">
+
+  <!-- open graph -->
+  <meta property="og:url" content="https://paulohrpinheiro.xyz/texts/go/2024-02-04-refatoracao-do-repositorio-genart.html">
+  <meta property="og:title" content="Refatoração do repositório genart">
+  <meta property="og:description" content="Gerando imagens legais, ou arte generativa com uma fórmula simples em Go (Golang) - a refatoração">
+  <meta property="og:image" content="/assets/images/webpreview.png?raw=true">
+
+  <!-- twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://paulohrpinheiro.xyz/texts/go/2024-02-04-refatoracao-do-repositorio-genart.html">
+  <meta property="twitter:title" content="Refatoração do repositório genart">
+  <meta property="twitter:description" content="Gerando imagens legais, ou arte generativa com uma fórmula simples em Go (Golang) - a refatoração">
+  <meta property="twitter:image" content="/assets/images/webpreview.png?raw=true">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for Paulo Henrique Rodrigues Pinheiro - Programação para programadores!" href="https://paulohrpinheiro.xyz/feed.xml">
+
+  <link rel="icon" href="/favicon.ico" sizes="16x16" type="image/png">
+
+  <link rel="stylesheet" href="/assets/css/style.css">
+
+<body>
+  <section class="section">
+      <h1>Paulo Henrique Rodrigues Pinheiro</h1>
+      <h2>Um blog sobre programação para programadores!</h2>
+  </section>
+
+
+
+     <div class="container">
+        
+		<nav class="level">
+		    <a class="link is-info content" href="https://paulohrpinheiro.xyz/">HOME</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/c/">c</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/diversos/">diversos</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/go/">go</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/haskell/">haskell</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/javascript/">javascript</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/paremias/">paremias</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/perl/">perl</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/programadorbipolar/">programadorbipolar</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/prosaeverso/">prosaeverso</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/python/">python</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/ruby/">ruby</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/rust/">rust</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/server/">server</a>
+			| <a class="link is-info content" href="https://paulohrpinheiro.xyz/texts/v/">v</a>
+		</nav>
+	</div>
+
+    <hr>
+
+
+  <article class="container">
+    <div class="content">
+        <h2>Refatoração do repositório genart</h2>
+
+<h3>Gerando imagens legais, ou arte generativa com uma fórmula simples em Go (Golang) - a refatoração</h3>
+
+<p><img src="images/xcyc-size_1000-constant_2-colors_200.png" alt="Imagem de uma fórmula matemática gerada pelo genart"></p>
+
+<blockquote>
+<p>Imagem gerada pelo genart, com os parâmetros fórmula:xcyc, size:1000, constant:2, colors:200</p>
+</blockquote>
+
+<h4>Historinha</h4>
+
+<p>Recentemente, para aprender um pouco mais de <em>Go</em>, e fazer algo divertido, criei um novo repositório com um projeto para desenhar imagens baseadas em fórmulas (anteriormente tinha usado <a href="https://racket-lang.org/">racket</a>:</p>
+
+<blockquote>
+<p>https://github.com/paulohrpinheiro/genart/</p>
+</blockquote>
+
+<p>Mas da forma como estava, era muito difícil alterar de forma simples, para incluir novas fórmulas. E o código estava bem zoado em sua organização. Agora, depois de refatorar, está apenas zoado :)</p>
+
+<h4>Explorando o resultado final</h4>
+
+<p>Depois de muito bater a cabeça, cheguei à versão <code class="prettyprint">v0.0.1</code>. A primeira versão está com a <em>tag</em> <code class="prettyprint">v0.0.0</code>.</p>
+
+<p>Aqui, todas as alterações feitas:</p>
+
+<blockquote>
+<p>https://github.com/paulohrpinheiro/genart/compare/v0.0.0...v0.0.1</p>
+</blockquote>
+
+<p>Os arquivos <code class="prettyprint">ccxy/ccxy.go</code> e <code class="prettyprint">types/types.go</code> foram apagados. A pasta <code class="prettyprint">formula/</code> agora contém o pacote de mesmo nome, em que o arquivo <code class="prettyprint">formula/formula.go</code> contém as funções principais e os novos <code class="prettyprint">formula/ccxy.go</code> e <code class="prettyprint">formula/xcyc.go</code>, que comparados à estrutura anterior, agora contém apenas as funções de aplicação das fórmulas específicas para geração das imagens.</p>
+
+<p>A estrutura de arquivos e diretórios ficou dessa forma:</p>
+<pre><code class="language-go">
+$ tree
+.
+├── cmd
+│   ├── api
+│   │   └── main.go
+│   └── cli
+│       └── main.go
+├── formula
+│   ├── ccxy.go
+│   ├── formula.go
+│   └── xcyc.go
+├── go.mod
+├── images
+│   ├── ccxy_size:1000_constant:10_colors:100.png
+│   ├── ccxy_size:1000_constant:20_colors:200.png
+│   ├── ccxy_size:1000_constant:2_colors:70.png
+│   └── xcyc_size:1000_constant:2_colors:70.png
+├── LICENSE
+├── Makefile
+└── README.md
+
+</code></pre>
+<p>Uma primeira alteração, foi atualizar o <em>release cadidate</em> da versão <code class="prettyprint">1.22</code> para o <code class="prettyprint">rc2</code>:</p>
+<pre><code class="language-go">
+$ git diff go.mod
+diff --git a&#x2F;go.mod b&#x2F;go.mod
+index 73586c8..4e887c3 100644
+--- a&#x2F;go.mod
++++ b&#x2F;go.mod
+@@ -1,3 +1,3 @@
+ module genart
+
+-go 1.22rc1
++go 1.22rc2
+
+</code></pre>
+<p>Já no uso, uma primeira alteração foi realizada no <em>cli</em>:</p>
+<pre><code class="language-go">
+diff --git a&#x2F;cmd&#x2F;cli&#x2F;main.go b&#x2F;cmd&#x2F;cli&#x2F;main.go
+index 5866133..40d7dfd 100644
+--- a&#x2F;cmd&#x2F;cli&#x2F;main.go
++++ b&#x2F;cmd&#x2F;cli&#x2F;main.go
+@@ -6,7 +6,7 @@ import (
+    &quot;image&#x2F;color&#x2F;palette&quot;
+    &quot;os&quot;
+
+-   &quot;genart&#x2F;ccxy&quot;
++   &quot;genart&#x2F;formula&quot;
+ )
+
+ const (
+@@ -19,6 +19,7 @@ const (
+ func main() {
+    colors := palette.WebSafe
+
++   formulaName := flag.String(&quot;formula&quot;, &quot;ccxy&quot;, &quot;formula to use&quot;)
+    fileName := flag.String(&quot;filename&quot;, defaultFileName, &quot;filename to save image (.png)&quot;)
+    imageSize := flag.Int(&quot;size&quot;, defaultImageSize, &quot;size of image&quot;)
+    constant := flag.Int(&quot;constant&quot;, defaultConstant, &quot;constant for formula (c): c-c*x*y&quot;)
+@@ -26,8 +27,9 @@ func main() {
+
+    flag.Parse()
+
+-   newImage := ccxy.CcxyStruct{}
+-   newImage.Init(*imageSize, *constant, *maxColors, colors)
++   newImage := formula.New()
++
++   newImage.Init(*formulaName, *imageSize, *constant, *maxColors, colors)
+    newImage.Draw()
+
+    f, err := os.Create(*fileName)
+
+</code></pre>
+<p>Como se pode ler, os <em>imports</em> foram adaptados, acrescentou-se um novo parâmetro (o nome da fórmula ser usada), e adaptou-se o uso do <em>package</em> <code class="prettyprint">formula</code>, que ao invés de chamar diretamente a fórmula, passa seu nome como parâmetro na inicialização, que determina a função a ser utilizada.</p>
+
+<p>Outra alteração importante, foi refatorar o <em>server</em> para a nova estrutura:</p>
+<pre><code class="language-go">
+$ git --no-pager diff cmd&#x2F;api&#x2F;main.go
+diff --git a&#x2F;cmd&#x2F;api&#x2F;main.go b&#x2F;cmd&#x2F;api&#x2F;main.go
+index 8c466ac..e89e4b4 100644
+--- a&#x2F;cmd&#x2F;api&#x2F;main.go
++++ b&#x2F;cmd&#x2F;api&#x2F;main.go
+@@ -1,6 +1,7 @@
+ package main
+
+ import (
++   &quot;fmt&quot;
+    &quot;image&#x2F;png&quot;
+    &quot;image&#x2F;color&#x2F;palette&quot;
+    &quot;log&quot;
+@@ -8,7 +9,7 @@ import (
+    &quot;os&quot;
+    &quot;strconv&quot;
+
+-   &quot;genart&#x2F;ccxy&quot;
++   &quot;genart&#x2F;formula&quot;
+ )
+
+ func sendError(w http.ResponseWriter, msg string) {
+@@ -17,7 +18,8 @@ func sendError(w http.ResponseWriter, msg string) {
+    return
+ }
+
+-func ccxyHandler(w http.ResponseWriter, r *http.Request) {
++func formulaHandler(w http.ResponseWriter, r *http.Request) {
++   formulaName := r.PathValue(&quot;formulaName&quot;)
+    size, err := strconv.Atoi(r.PathValue(&quot;size&quot;))
+    if err != nil {
+        sendError(w, &quot;Invalid size value&quot;)
+@@ -32,12 +34,12 @@ func ccxyHandler(w http.ResponseWriter, r *http.Request) {
+
+    colors, err := strconv.Atoi(r.PathValue(&quot;colors&quot;))
+    if err != nil {
+-       sendError(w, &quot;Invalid colors value&quot;)
++           sendError(w, &quot;Invalid colors value&quot;)
+        return
+    }
+
+-   newImage := ccxy.CcxyStruct{}
+-   newImage.Init(size, constant, colors, palette.WebSafe)
++   newImage := formula.New()
++   newImage.Init(formulaName, size, constant, colors, palette.WebSafe)
+    newImage.Draw()
+
+    w.Header().Set(&quot;Content-Type&quot;, &quot;image&#x2F;png&quot;)
+@@ -52,8 +54,8 @@ func main() {
+
+    mux := http.NewServeMux()
+    mux.HandleFunc(
+-       &quot;GET &#x2F;ccxy&#x2F;size&#x2F;{size}&#x2F;constant&#x2F;{constant}&#x2F;colors&#x2F;{colors}&#x2F;&quot;,
+-       ccxyHandler,
++       &quot;GET &#x2F;{formulaName}&#x2F;size&#x2F;{size}&#x2F;constant&#x2F;{constant}&#x2F;colors&#x2F;{colors}&#x2F;&quot;,
++       formulaHandler,
+    )
+
+    fmt.Printf(&quot;Listening on %s\n&quot;, listenStr)
+
+</code></pre>
+<p>No <em>server</em>, basicamente foram as mesmas alterações do <em>cli</em>.</p>
+
+<h4>O package formula</h4>
+
+<p>Cada fórmula deve estar contida em um arquivo, com sua própria função de desenho, por exemplo <code class="prettyprint">formula/ccxy.go</code>:</p>
+<pre><code class="language-go">
+package formula
+
+import (
+    &quot;image&quot;
+)
+
+func CcxyDraw(fs *FormulaStruct) {
+    rect := image.Rect(0, 0, fs.ImageSize, fs.ImageSize)
+    img := image.NewPaletted(rect, fs.Palette)
+
+    for x := range fs.ImageSize {
+        for y := range fs.ImageSize {
+            value := (fs.Constant - fs.Constant*x*y)
+            color := uint8(value % fs.MaxColors)
+
+            img.SetColorIndex(x, y, color)
+        }
+    }
+
+    fs.Image = img
+}
+
+</code></pre>
+<p>A função recebe a estrutura que contém os dados, para acessar os parâmetros necessários aos cálculos, e armazenamento da imagem.</p>
+
+<p>E, no <code class="prettyprint">formula/formula.go</code>, temos o código que relaciona a função a seu nome. Cada nova fórmula, além de seu arquivo, deve incluir um elemento nesse mapeamento:</p>
+<pre><code class="language-go">
+func functionByName(name string) (fn, error) {
+    formulasMap := map[string]fn{
+        &quot;ccxy&quot;: CcxyDraw,
+        &quot;xcyc&quot;: XcycDraw,
+    }
+
+    newFunction := formulasMap[name]
+    if newFunction == nil {
+        return nil, errors.New(&quot;Unknown formula.&quot;)
+    }
+
+    return newFunction, nil
+}
+
+</code></pre>
+<h4>Planos</h4>
+
+<p>O código está bem frágil, sem verificações sobre os dados informados, mas o cerne está aí. É possível adicionar novas fórmulas sem grande esforço. Outras questão que está em minha cabeça, para facilitar a vida, é no cli, quando não informar o nome do arquivo em que a imagem deve ser salva, gerar um nome significativo que informe os parâmetros usados.</p>
+
+    </div>
+  </article>
+
+
+    <footer>
+        <div>
+            <p>
+                O conteúdo e opiniões publicados nesse site são de inteira responsabilidade minha, e não refletem as opiniões e nem são endossados pelo meu empregador.
+            </p>
+                Este blog é gerido pelo <a target="_blank" href="https://github.com/paulohrpinheiro/gerablog">GeraBlog</a>.
+            <address>
+                Copyright © 2016-2024, <a target="_blank" href="https://bolha.us/@paulohrpinheiro" rel="me">Paulo Henrique Rodrigues Pinheiro</a>.
+            </address>
+        </div>
+    </footer>
+
+</body>
+</html>
